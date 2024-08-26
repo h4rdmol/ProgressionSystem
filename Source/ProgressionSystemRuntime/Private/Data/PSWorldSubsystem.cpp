@@ -54,6 +54,16 @@ const FPSRowData& UPSWorldSubsystem::GetCurrentRow() const
 	return SaveGameInstance->GetCurrentRow();
 }
 
+// Set current row of progression system by tag
+void UPSWorldSubsystem::SetCurrentRowByTag(FPlayerTag NewRowPlayerTag)
+{
+	UPSSaveGameData* SaveGameInstance = GetCurrentSaveGameData();
+	checkf(SaveGameInstance, TEXT("ERROR: 'SaveGameInstanceInternal' is null"));
+
+	SaveGameInstance->SetRowByTag(NewRowPlayerTag);
+	OnCurrentRowDataChanged.Broadcast(NewRowPlayerTag);
+}
+
 // Returns previous row of progression system
 const FPSRowData& UPSWorldSubsystem::GetPreviousRow() const
 {
@@ -87,7 +97,7 @@ void UPSWorldSubsystem::RegisterSpotComponent(UPSSpotComponent* MyHUDComponent)
 void UPSWorldSubsystem::SetCurrentSpotComponent(UPSSpotComponent* MyHUDComponent)
 {
 	checkf(MyHUDComponent, TEXT("%s: My progression system component is null"), *FString(__FUNCTION__));
-	PSSpotComponentInternal = MyHUDComponent;
+	PSCurrentSpotComponentInternal = MyHUDComponent;
 	UpdateProgressionActorsForSpot();
 }
 
@@ -125,7 +135,7 @@ void UPSWorldSubsystem::Deinitialize()
 {
 	Super::Deinitialize();
 	PSHUDComponentInternal = nullptr;
-	PSSpotComponentInternal = nullptr;
+	PSCurrentSpotComponentInternal = nullptr;
 	SaveGameInstanceInternal = nullptr;
 	SpawnedStarActorsInternal.Empty();
 	StarDynamicProgressMaterial = nullptr;
@@ -134,14 +144,13 @@ void UPSWorldSubsystem::Deinitialize()
 // Is called when a player has been changed
 void UPSWorldSubsystem::OnPlayerTypeChanged(FPlayerTag PlayerTag)
 {
-	SaveGameInstanceInternal->SetRowByTag(PlayerTag);
-	OnCurrentRowDataChanged.Broadcast(PlayerTag);
+	SetCurrentRowByTag(PlayerTag);
 
 	for (UPSSpotComponent* SpotComponent : PSSpotComponentArrayInternal)
 	{
 		if (SpotComponent->GetMeshChecked().GetPlayerTag() == PlayerTag)
 		{
-			PSSpotComponentInternal = SpotComponent;
+			PSCurrentSpotComponentInternal = SpotComponent;
 		}
 	}
 	CheckAndSetCharacterUnlockStatus();
@@ -316,7 +325,7 @@ void UPSWorldSubsystem::OnSpotComponentLoad(UPSSpotComponent* SpotComponent)
 {
 	if (SpotComponent)
 	{
-		PSSpotComponentInternal = SpotComponent;
+		PSCurrentSpotComponentInternal = SpotComponent;
 		UpdateProgressionActorsForSpot();
 	}
 }
@@ -327,11 +336,32 @@ void UPSWorldSubsystem::OnGameStateChanged(ECurrentGameState CurrentGameState)
 	switch (CurrentGameState)
 	{
 	case ECurrentGameState::Menu:
+		SwitchToLastSpotCharacter();
+		// refresh 3D Stars actors
 		UpdateProgressionActorsForSpot();
 	case ECurrentGameState::GameStarting:
 		// Show Progression Menu widget in Main Menu
 		CheckAndSetCharacterUnlockStatus();
 	default: return;
+	}
+}
+
+// Updates the chosen player mesh on the level and switch current save game row
+void UPSWorldSubsystem::ChangeCurrentPlayer(UPSSpotComponent* SpotComponent)
+{
+	APlayerCharacter* LocalPlayerCharacter = UMyBlueprintFunctionLibrary::GetLocalPlayerCharacter();
+	if (!ensureMsgf(LocalPlayerCharacter, TEXT("ASSERT: 'LocalPlayerState' is not valid")))
+	{
+		return;
+	}
+
+	PSCurrentSpotComponentInternal = SpotComponent;
+	// Update the chosen player mesh on the level and switch current save game row
+	const FCustomPlayerMeshData& CustomPlayerMeshData = PSCurrentSpotComponentInternal ? PSCurrentSpotComponentInternal->GetMeshChecked().GetCustomPlayerMeshData() : FCustomPlayerMeshData::Empty;
+	if (CustomPlayerMeshData.IsValid())
+	{
+		LocalPlayerCharacter->SetCustomPlayerMeshData(CustomPlayerMeshData);
+		SetCurrentRowByTag(SpotComponent->GetMeshChecked().GetPlayerTag());
 	}
 }
 
@@ -344,26 +374,26 @@ void UPSWorldSubsystem::CheckAndSetCharacterUnlockStatus()
 		const FPSRowData& CurrentRowData = GetCurrentRow();
 		if (CurrentRowData.IsLevelLocked)
 		{
-			APlayerCharacter* LocalPlayerCharacter = UMyBlueprintFunctionLibrary::GetLocalPlayerCharacter();
-			if (!ensureMsgf(LocalPlayerCharacter, TEXT("ASSERT: 'LocalPlayerState' is not valid")))
-			{
-				return;
-			}
-
+			PSLastSpotComponentInternal = PSCurrentSpotComponentInternal;
 			for (UPSSpotComponent* SpotComponent : PSSpotComponentArrayInternal)
 			{
 				if (SpotComponent->GetMeshChecked().GetPlayerTag() == GetPreviousRow().Character)
 				{
-					PSSpotComponentInternal = SpotComponent;
-					// Update the chosen player mesh on the level
-					const FCustomPlayerMeshData& CustomPlayerMeshData = PSSpotComponentInternal ? PSSpotComponentInternal->GetMeshChecked().GetCustomPlayerMeshData() : FCustomPlayerMeshData::Empty;
-					if (CustomPlayerMeshData.IsValid())
-					{
-						LocalPlayerCharacter->SetCustomPlayerMeshData(CustomPlayerMeshData);
-					}
+					// Update the chosen player mesh on the level and switch current save game row
+					ChangeCurrentPlayer(SpotComponent);
 				}
 			}
 		}
+	}
+}
+
+// Switches back to the last spot character in case of player tried to play with locked character as client
+void UPSWorldSubsystem::SwitchToLastSpotCharacter()
+{
+	if (PSLastSpotComponentInternal && PSCurrentSpotComponentInternal && PSLastSpotComponentInternal != PSCurrentSpotComponentInternal)
+	{
+		ChangeCurrentPlayer(PSLastSpotComponentInternal);
+		PSLastSpotComponentInternal = nullptr; //reset value in order to not repeat execution
 	}
 }
 
