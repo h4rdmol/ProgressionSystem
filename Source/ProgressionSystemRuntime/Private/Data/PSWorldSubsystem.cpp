@@ -57,6 +57,12 @@ const FPSRowData& UPSWorldSubsystem::GetCurrentRow() const
 // Set current row of progression system by tag
 void UPSWorldSubsystem::SetCurrentRowByTag(FPlayerTag NewRowPlayerTag)
 {
+	// check if current row is similar
+	if (GetCurrentRow().Character == NewRowPlayerTag)
+	{
+		return;
+	}
+
 	UPSSaveGameData* SaveGameInstance = GetCurrentSaveGameData();
 	checkf(SaveGameInstance, TEXT("ERROR: 'SaveGameInstanceInternal' is null"));
 
@@ -337,12 +343,15 @@ void UPSWorldSubsystem::OnGameStateChanged(ECurrentGameState CurrentGameState)
 	{
 	case ECurrentGameState::Menu:
 		SwitchToLastSpotCharacter();
-		// refresh 3D Stars actors
+	// refresh 3D Stars actors
 		UpdateProgressionActorsForSpot();
+		break;
 	case ECurrentGameState::GameStarting:
 		// Show Progression Menu widget in Main Menu
 		CheckAndSetCharacterUnlockStatus();
-	default: return;
+		break;
+	default:
+		return;
 	}
 }
 
