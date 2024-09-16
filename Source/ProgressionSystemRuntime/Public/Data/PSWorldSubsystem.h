@@ -70,7 +70,7 @@ public:
 	/** Unlocks all levels of the Progression System */
 	UFUNCTION(BlueprintCallable, Category = "C++")
 	void UnlockAllLevels();
-	
+
 	/** Returns difficultyMultiplier */
 	UFUNCTION(BlueprintCallable, Category="C++")
 	float GetDifficultyMultiplier();
@@ -106,7 +106,7 @@ protected:
 	/** Array of actors spawned */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Spawned Actors Internal"))
 	TArray<AActor*> SpawnedStarActorsInternal;
-	
+
 	/** Checks if spawned actor are hidden due to cinematic played */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Spawned Actors Is Hidden"))
 	bool bStarActorsHidden = false;
@@ -114,7 +114,7 @@ protected:
 	/** Store the material for dynamic progress materil fill for a star actor */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Star Dynamic Progress Material"))
 	TObjectPtr<UMaterialInstanceDynamic> StarDynamicProgressMaterial = nullptr;
-	
+
 	/*********************************************************************************************
 	* Protected functions
 	********************************************************************************************* */
@@ -135,7 +135,7 @@ protected:
 
 	/** Is called when a main menu state has been changed */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
-	void OnMainMenuStateChanged(ENMMState  NewState);
+	void OnMainMenuStateChanged(ENMMState NewState);
 
 	/** Load game from save file or create a new one (does initial load from data table) */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
@@ -152,7 +152,7 @@ protected:
 	/** Spawn/add the stars actors for a spot */
 	UFUNCTION(Blueprintable, Category="C++", meta=(BlueprintProtected))
 	void AddProgressionStarActors(float AmountOfUnlockedPoints, float AmountOfLockedPoints, float MaxLevelPoints);
-	
+
 	/**
 	 * Dynamically adds Star actors which representing unlocked and locked progression above the character
 	 * @param CreatedObjects - Handles of objects from Pool Manager
@@ -181,5 +181,4 @@ protected:
 	/** Checks if the current character is unlocked and the player is allowed to play, and if not allowed, sets the previous character. */
 	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
 	void CheckAndSetCharacterUnlockStatus();
-	
 };

@@ -348,19 +348,19 @@ void UPSWorldSubsystem::OnGameStateChanged(ECurrentGameState CurrentGameState)
 	switch (CurrentGameState)
 	{
 	case ECurrentGameState::Menu:
-		
-		if(bStarActorsHidden)
+
+		if (bStarActorsHidden)
 		{
 			for (AActor* Actor : SpawnedStarActorsInternal)
+			{
+				if (Actor)
 				{
-					if (Actor)
-						{
-							Actor->SetActorHiddenInGame(false);
-						}
+					Actor->SetActorHiddenInGame(false);
 				}
-				bStarActorsHidden = false;
+			}
+			bStarActorsHidden = false;
 		}
-		
+
 		UpdateProgressionActorsForSpot();
 	case ECurrentGameState::GameStarting:
 		// Show Progression Menu widget in Main Menu
