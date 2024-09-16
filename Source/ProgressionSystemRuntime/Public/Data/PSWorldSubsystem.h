@@ -106,6 +106,10 @@ protected:
 	/** Array of actors spawned */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Spawned Actors Internal"))
 	TArray<AActor*> SpawnedStarActorsInternal;
+	
+	/** Checks if spawned actor are hidden due to cinematic played */
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Spawned Actors Is Hidden"))
+	bool bStarActorsHidden = false;
 
 	/** Store the material for dynamic progress materil fill for a star actor */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Star Dynamic Progress Material"))
@@ -128,6 +132,10 @@ protected:
 	/** Is called when a player character is ready */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void OnCharacterReady(APlayerCharacter* PlayerCharacter, int32 CharacterID);
+
+	/** Is called when a main menu state has been changed */
+	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
+	void OnMainMenuStateChanged(ENMMState  NewState);
 
 	/** Load game from save file or create a new one (does initial load from data table) */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
