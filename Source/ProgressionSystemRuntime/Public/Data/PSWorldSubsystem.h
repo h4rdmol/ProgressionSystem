@@ -133,10 +133,6 @@ protected:
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void OnCharacterReady(APlayerCharacter* PlayerCharacter, int32 CharacterID);
 
-	/** Is called when a main menu state has been changed */
-	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
-	void OnMainMenuStateChanged(ENMMState NewState);
-
 	/** Load game from save file or create a new one (does initial load from data table) */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void LoadGameFromSave();

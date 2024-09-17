@@ -36,10 +36,6 @@
 		{
 			"Name": "MetaCheatManager",
 			"Enabled": true
-		},
-		{
-			"Name": "NewMainMenu",
-			"Enabled": true
 		}
 	]
 }

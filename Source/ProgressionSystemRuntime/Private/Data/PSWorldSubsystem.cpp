@@ -21,7 +21,6 @@
 #include "MyUtilsLibraries/GameplayUtilsLibrary.h"
 #include "Subsystems/GameDifficultySubsystem.h"
 #include "Subsystems/GlobalEventsSubsystem.h"
-#include "NewMainMenu/Public/Subsystems/NMMBaseSubsystem.h"
 #include "UtilityLibraries/MyBlueprintFunctionLibrary.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(PSWorldSubsystem)
@@ -119,10 +118,7 @@ void UPSWorldSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 			checkf(StarDynamicProgressMaterial, TEXT("ERROR: 'StarDynamicProgressMaterial' is null"));
 		}
 	}
-
-	// Listen Main Menu states
-	UNMMBaseSubsystem& BaseSubsystem = UNMMBaseSubsystem::Get();
-	BaseSubsystem.OnMainMenuStateChanged.AddUniqueDynamic(this, &ThisClass::OnMainMenuStateChanged);
+	
 }
 
 // Clears all transient data created by this subsystem
@@ -155,22 +151,6 @@ void UPSWorldSubsystem::OnPlayerTypeChanged(FPlayerTag PlayerTag)
 void UPSWorldSubsystem::OnCharacterReady(APlayerCharacter* PlayerCharacter, int32 CharacterID)
 {
 	PlayerCharacter->OnPlayerTypeChanged.AddUniqueDynamic(this, &ThisClass::OnPlayerTypeChanged);
-}
-
-//  Is called when a main menu state has been changed
-void UPSWorldSubsystem::OnMainMenuStateChanged(ENMMState NewState)
-{
-	if (NewState == ENMMState::Cinematic)
-	{
-		for (AActor* Actor : SpawnedStarActorsInternal)
-		{
-			if (Actor)
-			{
-				Actor->SetActorHiddenInGame(true);
-			}
-		}
-		bStarActorsHidden = true;
-	}
 }
 
 // Load game from save file or create a new one (does initial load from data table)
