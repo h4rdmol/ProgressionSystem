@@ -27,6 +27,10 @@ public:
 	/** Returns current row of progression system */
 	const FPSRowData& GetCurrentRow() const;
 
+	/** Set current row of progression system by tag*/
+	UFUNCTION(BlueprintCallable, Category = "C++")
+	void SetCurrentRowByTag(FPlayerTag NewRowPlayerTag);
+
 	/** Returns previous row of progression system */
 	const FPSRowData& GetPreviousRow() const;
 
@@ -70,7 +74,7 @@ public:
 	/** Unlocks all levels of the Progression System */
 	UFUNCTION(BlueprintCallable, Category = "C++")
 	void UnlockAllLevels();
-
+	
 	/** Returns difficultyMultiplier */
 	UFUNCTION(BlueprintCallable, Category="C++")
 	float GetDifficultyMultiplier();
@@ -87,13 +91,13 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Progression System HUD Component"))
 	TObjectPtr<class UPSHUDComponent> PSHUDComponentInternal = nullptr;
 
-	/** Progression System Spot Component reference*/
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Progression System HUD Component"))
+	/** Progression System Array of Spot Components */
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Progression System Spot Array"))
 	TArray<class UPSSpotComponent*> PSSpotComponentArrayInternal;
 
 	/** Progression System Spot Component reference*/
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Progression System HUD Component"))
-	TObjectPtr<class UPSSpotComponent> PSSpotComponentInternal = nullptr;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Progression System Spot Component"))
+	TObjectPtr<class UPSSpotComponent> PSCurrentSpotComponentInternal = nullptr;
 
 	/** Store the current save game instance */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Save Game Instance"))
@@ -107,14 +111,10 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Spawned Actors Internal"))
 	TArray<AActor*> SpawnedStarActorsInternal;
 
-	/** Checks if spawned actor are hidden due to cinematic played */
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Spawned Actors Is Hidden"))
-	bool bStarActorsHidden = false;
-
 	/** Store the material for dynamic progress materil fill for a star actor */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Star Dynamic Progress Material"))
 	TObjectPtr<UMaterialInstanceDynamic> StarDynamicProgressMaterial = nullptr;
-
+	
 	/*********************************************************************************************
 	* Protected functions
 	********************************************************************************************* */
@@ -148,7 +148,7 @@ protected:
 	/** Spawn/add the stars actors for a spot */
 	UFUNCTION(Blueprintable, Category="C++", meta=(BlueprintProtected))
 	void AddProgressionStarActors(float AmountOfUnlockedPoints, float AmountOfLockedPoints, float MaxLevelPoints);
-
+	
 	/**
 	 * Dynamically adds Star actors which representing unlocked and locked progression above the character
 	 * @param CreatedObjects - Handles of objects from Pool Manager
@@ -173,8 +173,5 @@ protected:
 	/** Called when the current game state was changed. */
 	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
 	void OnGameStateChanged(ECurrentGameState CurrentGameState);
-
-	/** Checks if the current character is unlocked and the player is allowed to play, and if not allowed, sets the previous character. */
-	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
-	void CheckAndSetCharacterUnlockStatus();
+	
 };
