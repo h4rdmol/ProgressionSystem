@@ -103,10 +103,6 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Save Game Instance"))
 	TObjectPtr<class UPSSaveGameData> SaveGameInstanceInternal = nullptr;
 
-	/** Store the previous save row (previous not by count but last used, could different incerment */
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Progression System Last Spot Component"))
-	TObjectPtr<class UPSSpotComponent> PSLastSpotComponentInternal = nullptr;
-
 	/** Array of pool actors handlers which should be released */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Pool Actors Handlers"))
 	TArray<FPoolObjectHandle> PoolActorHandlersInternal;
@@ -177,17 +173,5 @@ protected:
 	/** Called when the current game state was changed. */
 	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
 	void OnGameStateChanged(ECurrentGameState CurrentGameState);
-
-	/** Updates the chosen player mesh on the level and switch current save game row */
-	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
-	void ChangeCurrentPlayer(UPSSpotComponent* SpotComponent);
-	
-	/** Checks if the current character is unlocked and the player is allowed to play, and if not allowed, sets the previous character. */
-	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
-	void CheckAndSetCharacterUnlockStatus();
-
-	/** Switches back to the last spot character in case of player tried to play with locked character as client */
-	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
-	void SwitchToLastSpotCharacter();
 	
 };
