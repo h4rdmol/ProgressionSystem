@@ -25,15 +25,35 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Starting time to hide stars"))
 	float StartTimeHideStarsInternal = 0.0f;
 
+	/** Stores the starting time to animate stars in menu */
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Starting time to hide stars"))
+	float ElapsedTime = 0.0f;
+
 	/** When a local character load finished */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void OnLocalCharacterReady(APlayerCharacter* Character, int32 CharacterID);
+
+	/** Called when the current  player was changed */
+	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
+	void OnPlayerTypeChanged(FPlayerTag PlayerTag);
+
+	/** Called when the current game state was changed */
+	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
+	void OnGameStateChanged(ECurrentGameState GameState);
 
 	/** Is called when any cinematic started */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void OnAnyCinematicStarted(const UObject* LevelSequence, const UObject* FromInstigator);
 
+	/** Called to initialize the Star menu animation */
+	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
+	void InitStarMenuAnimation();
+
 	/** Hiding stars with animation */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void TryPlayHideStarAnimation();
+
+	/** Menu stars with animation */
+	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
+	void TryPlayMenuStarAnimation(float DeltaTime);
 };
