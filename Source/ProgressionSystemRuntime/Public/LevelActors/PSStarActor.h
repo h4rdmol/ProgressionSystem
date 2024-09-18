@@ -14,18 +14,12 @@ public:
 	// Sets default values for this actor's properties
 	APSStarActor();
 
-	UFUNCTION()
-	void SetStaticMesh(UStaticMesh* Mesh);
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	/** Function called every frame on this Actor */
 	virtual void Tick(float DeltaTime) override;
-	/** Static mesh of actor */
-	UPROPERTY()
-	TObjectPtr<class UStaticMeshComponent> MeshComponentInternal = nullptr;
 
 	/** Stores the starting time to hide stars */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Starting time to hide stars"))

@@ -22,14 +22,6 @@ APSStarActor::APSStarActor()
 	PrimaryActorTick.bStartWithTickEnabled = false;
 }
 
-void APSStarActor::SetStaticMesh(UStaticMesh* Mesh)
-{
-	if (Mesh)
-	{
-		MeshComponentInternal->SetStaticMesh(Mesh);
-	}
-}
-
 // Called when the game starts or when spawned
 void APSStarActor::BeginPlay()
 {
