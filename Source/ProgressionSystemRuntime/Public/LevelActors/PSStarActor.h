@@ -26,10 +26,6 @@ protected:
 	float StartTimeHideStarsInternal = 0.0f;
 
 	/** Stores the starting time to animate stars in menu */
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Starting time to animate stars in menu"))
-	float StartTimeMenuStarsInternal = 0.0f;
-
-	/** Stores the starting time to animate stars in menu */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Starting time to hide stars"))
 	float ElapsedTime = 0.0f;
 
@@ -49,10 +45,6 @@ protected:
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void OnAnyCinematicStarted(const UObject* LevelSequence, const UObject* FromInstigator);
 
-	/** Is called to set a start time for animations */
-	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
-	void SetAnimationStartTime(float& StartTime);
-
 	/** Called to initialize the Star menu animation */
 	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
 	void InitStarMenuAnimation();
@@ -63,9 +55,5 @@ protected:
 
 	/** Menu stars with animation */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
-	void TryPlayMenuStarAnimation();
-
-	/** Playing star animation  */
-	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
-	void TryPlayStarAnimation(float& StartTime, UCurveTable* AnimationCurveTable);
+	void TryPlayMenuStarAnimation(float DeltaTime);
 };
