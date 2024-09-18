@@ -46,7 +46,7 @@ void APSStarActor::Tick(float DeltaTime)
 	{
 		TryPlayHideStarAnimation();
 	}
-	else if (StartTimeMenuStarsInternal && UMyBlueprintFunctionLibrary::GetMyGameState()->GetCurrentGameState() == ECurrentGameState::Menu)
+	else if (StartTimeMenuStarsInternal)
 	{
 		TryPlayMenuStarAnimation();
 	}
@@ -62,7 +62,6 @@ void APSStarActor::OnLocalCharacterReady(APlayerCharacter* Character, int32 Char
 		Character->OnPlayerTypeChanged.AddUniqueDynamic(this, &ThisClass::OnPlayerTypeChanged);
 	}
 }
-
 
 // Called when the current  player was changed
 void APSStarActor::OnPlayerTypeChanged(FPlayerTag PlayerTag)
@@ -98,7 +97,8 @@ void APSStarActor::SetAnimationStartTime(float& StartTime)
 // Called to initialize the Star menu animation
 void APSStarActor::InitStarMenuAnimation()
 {
-	if (UMyBlueprintFunctionLibrary::GetMyGameState()->GetCurrentGameState() == ECurrentGameState::Menu)
+	if (ensureMsgf(UMyBlueprintFunctionLibrary::GetMyGameState()->GetCurrentGameState(), TEXT("%s: 'GetMyGameState' is null"), *FString(__FUNCTION__))
+		&& UMyBlueprintFunctionLibrary::GetMyGameState()->GetCurrentGameState() == ECurrentGameState::Menu)
 	{
 		SetAnimationStartTime(StartTimeMenuStarsInternal);
 		TryPlayMenuStarAnimation();
