@@ -23,7 +23,7 @@ public class ProgressionSystemRuntime : ModuleRules
 				// Bomber modules 
 				"MyUtils" 
 				, "PoolManager" // Star and Widget Actors
-				, "MetaCheatManager",  // PSCheatExtension
+				, "MetaCheatManager"  // PSCheatExtension
 			}
 		);
 	}

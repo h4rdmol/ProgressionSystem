@@ -63,5 +63,5 @@ struct FPSRowData : public FTableRowBase
 
 	/** Defines the star animation for each character */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="C++")
-	TObjectPtr<class UCurveTable> HideStarsAnimation;
+	TObjectPtr<class UCurveTable> HideStarsAnimation = nullptr;
 };
