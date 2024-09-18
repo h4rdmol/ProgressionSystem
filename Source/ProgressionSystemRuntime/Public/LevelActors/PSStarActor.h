@@ -42,6 +42,4 @@ protected:
 	/** Hiding stars with animation */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void TryPlayHideStarAnimation();
-
-public:
 };
