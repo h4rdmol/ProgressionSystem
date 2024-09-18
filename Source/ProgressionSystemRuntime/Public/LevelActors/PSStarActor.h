@@ -9,21 +9,39 @@ UCLASS()
 class PROGRESSIONSYSTEMRUNTIME_API APSStarActor : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	APSStarActor();
 
 	UFUNCTION()
 	void SetStaticMesh(UStaticMesh* Mesh);
-	
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	/** Function called every frame on this Actor */
+	virtual void Tick(float DeltaTime) override;
+	/** Static mesh of actor */
 	UPROPERTY()
 	TObjectPtr<class UStaticMeshComponent> MeshComponentInternal = nullptr;
 
-public:
+	/** Stores the starting time to hide stars */
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Starting time to hide stars"))
+	float StartTimeHideStarsInternal = 0.0f;
 
-	
+	/** When a local character load finished */
+	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
+	void OnLocalCharacterReady(APlayerCharacter* Character, int32 CharacterID);
+
+	/** When a cinematicStarted */
+	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
+	void OnAnyCinematicStarted(const UObject* LevelSequence, const UObject* FromInstigator);
+
+	/** Hiding stars with animation */
+	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
+	void TryPlayHideStarAnimation();
+
+public:
 };
