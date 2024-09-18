@@ -48,7 +48,7 @@ void APSStarActor::OnLocalCharacterReady(APlayerCharacter* Character, int32 Char
 	}
 }
 
-// When a cinematicStarted
+// Is called when any cinematic started
 void APSStarActor::OnAnyCinematicStarted(const UObject* LevelSequence, const UObject* FromInstigator)
 {
 	const UWorld* World = GetWorld();

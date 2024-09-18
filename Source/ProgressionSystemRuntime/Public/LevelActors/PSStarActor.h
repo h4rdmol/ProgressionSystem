@@ -29,7 +29,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void OnLocalCharacterReady(APlayerCharacter* Character, int32 CharacterID);
 
-	/** When a cinematicStarted */
+	/** Is called when any cinematic started */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void OnAnyCinematicStarted(const UObject* LevelSequence, const UObject* FromInstigator);
 
