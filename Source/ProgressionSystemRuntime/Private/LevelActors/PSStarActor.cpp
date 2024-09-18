@@ -41,13 +41,14 @@ void APSStarActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	// play only if cinematic is started
+	// else play menu animation
 	if (StartTimeHideStarsInternal)
 	{
 		TryPlayHideStarAnimation();
 	}
-	if (UMyBlueprintFunctionLibrary::GetMyGameState()->GetCurrentGameState() == ECurrentGameState::Menu)
+	else if (StartTimeMenuStarsInternal && UMyBlueprintFunctionLibrary::GetMyGameState()->GetCurrentGameState() == ECurrentGameState::Menu)
 	{
-		TryPlayMenuStarAnimation(DeltaTime);
+		TryPlayMenuStarAnimation();
 	}
 }
 
@@ -78,14 +79,20 @@ void APSStarActor::OnGameStateChanged(ECurrentGameState GameState)
 // Is called when any cinematic started
 void APSStarActor::OnAnyCinematicStarted(const UObject* LevelSequence, const UObject* FromInstigator)
 {
+	SetAnimationStartTime(StartTimeHideStarsInternal);
+	TryPlayHideStarAnimation();
+}
+
+// Is called to set a start time for animations
+void APSStarActor::SetAnimationStartTime(float& StartTime)
+{
 	const UWorld* World = GetWorld();
 	check(World);
 
-	StartTimeHideStarsInternal = World->GetTimeSeconds();
+	StartTime = World->GetTimeSeconds();
 
-	// Enable tick and process this frame
+	// Enable tick for the actor
 	SetActorTickEnabled(true);
-	TryPlayHideStarAnimation();
 }
 
 // Called to initialize the Star menu animation
@@ -93,73 +100,55 @@ void APSStarActor::InitStarMenuAnimation()
 {
 	if (UMyBlueprintFunctionLibrary::GetMyGameState()->GetCurrentGameState() == ECurrentGameState::Menu)
 	{
-		// Enable tick and start main menu animation
-		SetActorTickEnabled(true);
-		TryPlayMenuStarAnimation(0);
+		SetAnimationStartTime(StartTimeMenuStarsInternal);
+		TryPlayMenuStarAnimation();
 	}
 	else
 	{
 		SetActorTickEnabled(false);
+		StartTimeMenuStarsInternal = 0.f;
 	}
 }
 
 // Hiding stars with animation
 void APSStarActor::TryPlayHideStarAnimation()
 {
-	if (!StartTimeHideStarsInternal)
-	{
-		return;
-	}
-
 	const FPSRowData& CurrentRow = UPSWorldSubsystem::Get().GetCurrentRow();
-	if (!CurrentRow.MenuStarsAnimation)
-	{
-		SetActorTickEnabled(false);
-		StartTimeHideStarsInternal = 0.f;
-		return;
-	}
-
-	const float SecondsSinceStart = GetWorld()->GetTimeSeconds() - StartTimeHideStarsInternal;
-
-	const bool bIsFinished = !UGameplayUtilsLibrary::ApplyTransformFromCurveTable(this, CurrentRow.HideStarsAnimation, SecondsSinceStart);
-	if (bIsFinished)
-	{
-		SetActorTickEnabled(false);
-		StartTimeHideStarsInternal = 0.f;
-	}
+	TryPlayStarAnimation(StartTimeHideStarsInternal, CurrentRow.HideStarsAnimation);
 }
 
 // Menu stars with animation 
-void APSStarActor::TryPlayMenuStarAnimation(float DeltaTime)
+void APSStarActor::TryPlayMenuStarAnimation()
 {
 	const FPSRowData& CurrentRow = UPSWorldSubsystem::Get().GetCurrentRow();
-	if (!CurrentRow.MenuStarsAnimation)
+	TryPlayStarAnimation(StartTimeMenuStarsInternal, CurrentRow.MenuStarsAnimation);
+}
+
+// Playing star animation
+void APSStarActor::TryPlayStarAnimation(float& StartTime, UCurveTable* AnimationCurveTable)
+{
+	if (!StartTime || !AnimationCurveTable)
 	{
 		SetActorTickEnabled(false);
+		StartTime = 0.f;
 		return;
 	}
 
-	FCurveTableRowHandle Handle;
-	Handle.CurveTable = CurrentRow.MenuStarsAnimation;
-	Handle.RowName = FName("RotationYaw");
+	const float SecondsSinceStart = GetWorld()->GetTimeSeconds() - StartTime;
 
-	const FRealCurve* Curve = CurrentRow.MenuStarsAnimation ? Handle.CurveTable->FindCurve(Handle.RowName, TEXT("Rotation")) : nullptr;
-	if (!Curve)
+	const bool bIsFinished = !UGameplayUtilsLibrary::ApplyTransformFromCurveTable(this, AnimationCurveTable, SecondsSinceStart);
+	if (bIsFinished)
 	{
-		return;
-	}
-
-	float MinTime = 0.f;
-	float MaxTime = 0.f;
-	Curve->GetTimeRange(MinTime, MaxTime);
-
-	// Update elapsed time
-	ElapsedTime += DeltaTime;
-
-	UGameplayUtilsLibrary::ApplyTransformFromCurveTable(this, CurrentRow.MenuStarsAnimation, ElapsedTime);
-
-	if (ElapsedTime > MaxTime)
-	{
-		ElapsedTime = 0.f;
+		// if it's looped menu star animation then reset
+		// if it's one-time cinematic animation - disable tick and stop
+		if (AnimationCurveTable == UPSWorldSubsystem::Get().GetCurrentRow().MenuStarsAnimation)
+		{
+			StartTime = 0.f;
+		}
+		else
+		{
+			SetActorTickEnabled(false);
+			StartTime = 0.f;
+		}
 	}
 }
