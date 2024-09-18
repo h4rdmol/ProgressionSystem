@@ -110,14 +110,14 @@ void APSStarActor::InitStarMenuAnimation()
 	}
 }
 
-// Hiding stars with animation
+// Hiding stars with animation in main menu when cinematic is start to play
 void APSStarActor::TryPlayHideStarAnimation()
 {
 	const FPSRowData& CurrentRow = UPSWorldSubsystem::Get().GetCurrentRow();
 	TryPlayStarAnimation(StartTimeHideStarsInternal, CurrentRow.HideStarsAnimation);
 }
 
-// Menu stars with animation 
+// Menu stars with animation in main menu idle 
 void APSStarActor::TryPlayMenuStarAnimation()
 {
 	const FPSRowData& CurrentRow = UPSWorldSubsystem::Get().GetCurrentRow();
