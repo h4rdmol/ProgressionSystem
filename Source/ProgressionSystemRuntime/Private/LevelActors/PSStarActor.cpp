@@ -119,13 +119,9 @@ bool APSStarActor::TryPlayStarAnimation(UPARAM(ref) float& StartTimeRef, UCurveT
 	const bool bIsFinished = !UGameplayUtilsLibrary::ApplyTransformFromCurveTable(this, AnimationCurveTable, SecondsSinceStart);
 	if (bIsFinished)
 	{
-		StartTimeRef = GetWorld()->GetTimeSeconds();
-		return true;
+		return UGameplayUtilsLibrary::ApplyTransformFromCurveTable(this, AnimationCurveTable, GetWorld()->GetTimeSeconds());
 	}
-	else
-	{
 		return false;
-	}
 }
 
 // Set the start time for hiding stars
