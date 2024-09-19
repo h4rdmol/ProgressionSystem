@@ -66,7 +66,7 @@ void APSStarActor::OnLocalCharacterReady(APlayerCharacter* Character, int32 Char
 // Called when the current game state was changed
 void APSStarActor::OnGameStateChanged(ECurrentGameState GameState)
 {
-	if (AMyGameStateBase::Get().GetCurrentGameState() == ECurrentGameState::Menu)
+	if (AMyGameStateBase::GetCurrentGameState() == ECurrentGameState::Menu)
 	{
 		SetStartTimeMenuStars();
 		TryPlayMenuStarAnimation();
