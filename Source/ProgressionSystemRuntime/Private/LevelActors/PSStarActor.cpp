@@ -54,7 +54,7 @@ void APSStarActor::Tick(float DeltaTime)
 }
 
 // When a local character load finished
-void APSStarActor::OnLocalCharacterReady(APlayerCharacter* Character, int32 CharacterID)
+void APSStarActor::OnLocalCharacterReady(class APlayerCharacter* Character, int32 CharacterID)
 {
 	AMyPlayerController* LocalPC = Character ? Character->GetController<AMyPlayerController>() : nullptr;
 	if (ensureMsgf(LocalPC, TEXT("ASSERT: [%i] %hs:\n'LocalPC' is null!"), __LINE__, __FUNCTION__))

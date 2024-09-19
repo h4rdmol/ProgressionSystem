@@ -86,21 +86,21 @@ const UPSDataAsset* UPSWorldSubsystem::GetPSDataAsset() const
 }
 
 // Set the progression system component
-void UPSWorldSubsystem::SetHUDComponent(UPSHUDComponent* MyHUDComponent)
+void UPSWorldSubsystem::SetHUDComponent(class UPSHUDComponent* MyHUDComponent)
 {
 	checkf(MyHUDComponent, TEXT("%s: My progression system component is null"), *FString(__FUNCTION__));
 	PSHUDComponentInternal = MyHUDComponent;
 }
 
 // Set the progression system spot component
-void UPSWorldSubsystem::RegisterSpotComponent(UPSSpotComponent* MyHUDComponent)
+void UPSWorldSubsystem::RegisterSpotComponent(class UPSSpotComponent* MyHUDComponent)
 {
 	checkf(MyHUDComponent, TEXT("%s: My progression system component is null"), *FString(__FUNCTION__));
 	PSSpotComponentArrayInternal.AddUnique(MyHUDComponent);
 	MyHUDComponent->OnSpotComponentReady.AddDynamic(this, &UPSWorldSubsystem::OnSpotComponentLoad);
 }
 
-void UPSWorldSubsystem::SetCurrentSpotComponent(UPSSpotComponent* MyHUDComponent)
+void UPSWorldSubsystem::SetCurrentSpotComponent(class UPSSpotComponent* MyHUDComponent)
 {
 	checkf(MyHUDComponent, TEXT("%s: My progression system component is null"), *FString(__FUNCTION__));
 	PSCurrentSpotComponentInternal = MyHUDComponent;
@@ -161,7 +161,7 @@ void UPSWorldSubsystem::OnPlayerTypeChanged(FPlayerTag PlayerTag)
 	}
 }
 
-void UPSWorldSubsystem::OnCharacterReady(APlayerCharacter* PlayerCharacter, int32 CharacterID)
+void UPSWorldSubsystem::OnCharacterReady(class APlayerCharacter* PlayerCharacter, int32 CharacterID)
 {
 	PlayerCharacter->OnPlayerTypeChanged.AddUniqueDynamic(this, &ThisClass::OnPlayerTypeChanged);
 }
@@ -326,7 +326,7 @@ void UPSWorldSubsystem::UpdateStarActor(const FPoolObjectData& CreatedData, floa
 }
 
 // Triggers when a spot is loaded
-void UPSWorldSubsystem::OnSpotComponentLoad(UPSSpotComponent* SpotComponent)
+void UPSWorldSubsystem::OnSpotComponentLoad(class UPSSpotComponent* SpotComponent)
 {
 	if (SpotComponent)
 	{

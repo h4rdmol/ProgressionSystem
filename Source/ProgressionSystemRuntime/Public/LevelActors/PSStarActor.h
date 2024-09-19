@@ -5,6 +5,8 @@
 #include "GameFramework/Actor.h"
 #include "PSStarActor.generated.h"
 
+enum class ECurrentGameState : uint8;
+
 UCLASS()
 class PROGRESSIONSYSTEMRUNTIME_API APSStarActor : public AActor
 {
@@ -16,7 +18,7 @@ public:
 
 	/** Static helper function that plays any given star animation from various places. */
 	UFUNCTION(BlueprintCallable, Category= "C++")
-	bool TryPlayStarAnimation(UPARAM(ref) float& StartTimeRef, UCurveTable* AnimationCurveTable);
+	bool TryPlayStarAnimation(UPARAM(ref) float& StartTimeRef, class UCurveTable* AnimationCurveTable);
 
 	/** Set the start time for hiding stars in the main menu */
 	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
@@ -43,7 +45,7 @@ protected:
 
 	/** When a local character load finished */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
-	void OnLocalCharacterReady(APlayerCharacter* Character, int32 CharacterID);
+	void OnLocalCharacterReady(class APlayerCharacter* Character, int32 CharacterID);
 
 	/** Called when the current game state was changed */
 	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
