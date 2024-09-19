@@ -16,7 +16,7 @@ public:
 	// Sets default values for this actor's properties
 	APSStarActor();
 
-	/** Static helper function that plays any given star animation from various places. */
+	/** Helper function that plays any given star animation from various places. */
 	UFUNCTION(BlueprintCallable, Category= "C++")
 	bool TryPlayStarAnimation(UPARAM(ref) float& StartTimeRef, class UCurveTable* AnimationCurveTable);
 
