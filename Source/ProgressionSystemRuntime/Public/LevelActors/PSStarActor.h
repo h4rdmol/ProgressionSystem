@@ -14,6 +14,18 @@ public:
 	// Sets default values for this actor's properties
 	APSStarActor();
 
+	/** Static helper function that plays any given star animation from various places. */
+	UFUNCTION(BlueprintCallable, Category= "C++")
+	bool TryPlayStarAnimation(UPARAM(ref) float& StartTimeRef, UCurveTable* AnimationCurveTable);
+
+	/** Set the start time for hiding stars in the main menu */
+	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
+	void SetStartTimeHideStars();
+
+	/** Set the start time for main menu stars animation */
+	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
+	void SetStartTimeMenuStars();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -33,10 +45,6 @@ protected:
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void OnLocalCharacterReady(APlayerCharacter* Character, int32 CharacterID);
 
-	/** Called when the current player was changed */
-	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
-	void OnPlayerTypeChanged(FPlayerTag PlayerTag);
-
 	/** Called when the current game state was changed */
 	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
 	void OnGameStateChanged(ECurrentGameState GameState);
@@ -45,14 +53,6 @@ protected:
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void OnAnyCinematicStarted(const UObject* LevelSequence, const UObject* FromInstigator);
 
-	/** Is called to set a start time for animations */
-	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
-	void SetAnimationStartTime(float& StartTime);
-
-	/** Called to initialize the Star animation in the main menu */
-	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
-	void InitStarMenuAnimation();
-
 	/** Hiding stars with animation in main menu when cinematic is start to play */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void TryPlayHideStarAnimation();
@@ -60,8 +60,4 @@ protected:
 	/** Menu stars with animation in main menu idle */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void TryPlayMenuStarAnimation();
-
-	/** Playing star animation */
-	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
-	void TryPlayStarAnimation(float& StartTime, UCurveTable* AnimationCurveTable);
 };

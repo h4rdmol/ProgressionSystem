@@ -60,48 +60,15 @@ void APSStarActor::OnLocalCharacterReady(APlayerCharacter* Character, int32 Char
 	if (ensureMsgf(LocalPC, TEXT("ASSERT: [%i] %hs:\n'LocalPC' is null!"), __LINE__, __FUNCTION__))
 	{
 		LocalPC->OnAnyCinematicStarted.AddDynamic(this, &APSStarActor::OnAnyCinematicStarted);
-		Character->OnPlayerTypeChanged.AddUniqueDynamic(this, &ThisClass::OnPlayerTypeChanged);
 	}
-}
-
-// Called when the current  player was changed
-void APSStarActor::OnPlayerTypeChanged(FPlayerTag PlayerTag)
-{
-	InitStarMenuAnimation();
 }
 
 // Called when the current game state was changed
 void APSStarActor::OnGameStateChanged(ECurrentGameState GameState)
 {
-	InitStarMenuAnimation();
-}
-
-// Is called when any cinematic started
-void APSStarActor::OnAnyCinematicStarted(const UObject* LevelSequence, const UObject* FromInstigator)
-{
-	SetAnimationStartTime(StartTimeHideStarsInternal);
-	TryPlayHideStarAnimation();
-}
-
-// Is called to set a start time for animations
-void APSStarActor::SetAnimationStartTime(float& StartTime)
-{
-	const UWorld* World = GetWorld();
-	check(World);
-
-	StartTime = World->GetTimeSeconds();
-
-	// Enable tick for the actor
-	SetActorTickEnabled(true);
-}
-
-// Called to initialize the Star menu animation
-void APSStarActor::InitStarMenuAnimation()
-{
-	if (ensureMsgf(UMyBlueprintFunctionLibrary::GetMyGameState()->GetCurrentGameState(), TEXT("%s: 'GetMyGameState' is null"), *FString(__FUNCTION__))
-		&& UMyBlueprintFunctionLibrary::GetMyGameState()->GetCurrentGameState() == ECurrentGameState::Menu)
+	if (AMyGameStateBase::Get().GetCurrentGameState() == ECurrentGameState::Menu)
 	{
-		SetAnimationStartTime(StartTimeMenuStarsInternal);
+		SetStartTimeMenuStars();
 		TryPlayMenuStarAnimation();
 	}
 	else
@@ -111,11 +78,23 @@ void APSStarActor::InitStarMenuAnimation()
 	}
 }
 
+// Is called when any cinematic started
+void APSStarActor::OnAnyCinematicStarted(const UObject* LevelSequence, const UObject* FromInstigator)
+{
+	SetStartTimeHideStars();
+	TryPlayHideStarAnimation();
+}
+
 // Hiding stars with animation in main menu when cinematic is start to play
 void APSStarActor::TryPlayHideStarAnimation()
 {
 	const FPSRowData& CurrentRow = UPSWorldSubsystem::Get().GetCurrentRow();
-	TryPlayStarAnimation(StartTimeHideStarsInternal, CurrentRow.HideStarsAnimation);
+	const bool bIsFinished = !TryPlayStarAnimation(StartTimeHideStarsInternal, CurrentRow.HideStarsAnimation);
+	if (bIsFinished)
+	{
+		StartTimeHideStarsInternal = 0.f;
+		SetActorTickEnabled(false);
+	}
 }
 
 // Menu stars with animation in main menu idle 
@@ -125,31 +104,48 @@ void APSStarActor::TryPlayMenuStarAnimation()
 	TryPlayStarAnimation(StartTimeMenuStarsInternal, CurrentRow.MenuStarsAnimation);
 }
 
-// Playing star animation
-void APSStarActor::TryPlayStarAnimation(float& StartTime, UCurveTable* AnimationCurveTable)
+// Static helper function that plays any given star animation from various places
+bool APSStarActor::TryPlayStarAnimation(UPARAM(ref) float& StartTimeRef, UCurveTable* AnimationCurveTable)
 {
-	if (!StartTime || !AnimationCurveTable)
+	if (!StartTimeRef || !AnimationCurveTable)
 	{
 		SetActorTickEnabled(false);
-		StartTime = 0.f;
-		return;
+		StartTimeRef = 0.f;
+		return false;
 	}
 
-	const float SecondsSinceStart = GetWorld()->GetTimeSeconds() - StartTime;
+	const float SecondsSinceStart = GetWorld()->GetTimeSeconds() - StartTimeRef;
 
 	const bool bIsFinished = !UGameplayUtilsLibrary::ApplyTransformFromCurveTable(this, AnimationCurveTable, SecondsSinceStart);
 	if (bIsFinished)
 	{
-		// if it's looped menu star animation then reset
-		// if it's one-time cinematic animation - disable tick and stop
-		if (AnimationCurveTable == UPSWorldSubsystem::Get().GetCurrentRow().MenuStarsAnimation)
-		{
-			StartTime = 0.f;
-		}
-		else
-		{
-			SetActorTickEnabled(false);
-			StartTime = 0.f;
-		}
+		StartTimeRef = GetWorld()->GetTimeSeconds();
+		return true;
 	}
+	else
+	{
+		return false;
+	}
+}
+
+// Set the start time for hiding stars
+void APSStarActor::SetStartTimeHideStars()
+{
+	const UWorld* World = GetWorld();
+	check(World);
+
+	StartTimeHideStarsInternal = World->GetTimeSeconds();
+
+	// Enable tick for the actor
+	SetActorTickEnabled(true);
+}
+
+// Set the start time for main menu stars animation
+void APSStarActor::SetStartTimeMenuStars()
+{
+	const UWorld* World = GetWorld();
+	check(World);
+
+	StartTimeMenuStarsInternal = World->GetTimeSeconds();
+	SetActorTickEnabled(true);
 }
