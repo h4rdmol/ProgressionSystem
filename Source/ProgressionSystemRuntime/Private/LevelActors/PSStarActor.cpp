@@ -7,6 +7,7 @@
 #include "Controllers/MyPlayerController.h"
 #include "Data/PSTypes.h"
 #include "Data/PSWorldSubsystem.h"
+#include "Engine/World.h"
 #include "GameFramework/MyGameStateBase.h"
 #include "LevelActors/PlayerCharacter.h"
 #include "MyUtilsLibraries/GameplayUtilsLibrary.h"
