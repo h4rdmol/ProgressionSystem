@@ -101,7 +101,7 @@ void APSStarActor::TryPlayHideStarAnimation()
 void APSStarActor::TryPlayMenuStarAnimation()
 {
 	const FPSRowData& CurrentRow = UPSWorldSubsystem::Get().GetCurrentRow();
-	bool bIsFinished = !TryPlayStarAnimation(StartTimeMenuStarsInternal, CurrentRow.MenuStarsAnimation);
+	const bool bIsFinished = !TryPlayStarAnimation(StartTimeMenuStarsInternal, CurrentRow.MenuStarsAnimation);
 	if (bIsFinished)
 	{
 		StartTimeMenuStarsInternal = GetWorld()->GetTimeSeconds();
