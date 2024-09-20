@@ -108,7 +108,7 @@ void APSStarActor::TryPlayMenuStarAnimation()
 	}
 }
 
-// Static helper function that plays any given star animation from various places
+// Helper function that plays any given star animation from various places
 bool APSStarActor::TryPlayStarAnimation(float& StartTimeRef, UCurveTable* AnimationCurveTable)
 {
 	if (!StartTimeRef || !AnimationCurveTable)
