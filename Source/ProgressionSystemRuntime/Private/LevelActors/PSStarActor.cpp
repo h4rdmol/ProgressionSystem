@@ -67,7 +67,7 @@ void APSStarActor::OnLocalCharacterReady(class APlayerCharacter* Character, int3
 // Called when the current game state was changed
 void APSStarActor::OnGameStateChanged(ECurrentGameState GameState)
 {
-	if (AMyGameStateBase::GetCurrentGameState() == ECurrentGameState::Menu)
+	if (GameState == ECurrentGameState::Menu)
 	{
 		SetStartTimeMenuStars();
 		TryPlayMenuStarAnimation();
@@ -129,9 +129,6 @@ void APSStarActor::SetStartTimeHideStars()
 	check(World);
 
 	StartTimeHideStarsInternal = World->GetTimeSeconds();
-
-	// Enable tick for the actor
-	SetActorTickEnabled(true);
 }
 
 // Set the start time for main menu stars animation
@@ -141,5 +138,4 @@ void APSStarActor::SetStartTimeMenuStars()
 	check(World);
 
 	StartTimeMenuStarsInternal = World->GetTimeSeconds();
-	SetActorTickEnabled(true);
 }
