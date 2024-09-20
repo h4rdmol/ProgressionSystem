@@ -22,7 +22,7 @@ APSStarActor::APSStarActor()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	PrimaryActorTick.bStartWithTickEnabled = false;
+	PrimaryActorTick.bStartWithTickEnabled = true;
 }
 
 // Called when the game starts or when spawned
@@ -74,7 +74,6 @@ void APSStarActor::OnGameStateChanged(ECurrentGameState GameState)
 	}
 	else
 	{
-		SetActorTickEnabled(false);
 		StartTimeMenuStarsInternal = 0.f;
 	}
 }
@@ -93,7 +92,6 @@ void APSStarActor::TryPlayHideStarAnimation()
 	const bool bIsFinished = !TryPlayStarAnimation(StartTimeHideStarsInternal, CurrentRow.HideStarsAnimation);
 	if (bIsFinished)
 	{
-		// stop playing and return actor to the pool manager as it's not in use
 		StartTimeHideStarsInternal = 0.f;
 		UPoolManagerSubsystem::Get().ReturnToPool(this);
 	}
@@ -103,7 +101,11 @@ void APSStarActor::TryPlayHideStarAnimation()
 void APSStarActor::TryPlayMenuStarAnimation()
 {
 	const FPSRowData& CurrentRow = UPSWorldSubsystem::Get().GetCurrentRow();
-	TryPlayStarAnimation(StartTimeMenuStarsInternal, CurrentRow.MenuStarsAnimation);
+	bool bIsFinished = !TryPlayStarAnimation(StartTimeMenuStarsInternal, CurrentRow.MenuStarsAnimation);
+	if (bIsFinished)
+	{
+		StartTimeMenuStarsInternal = GetWorld()->GetTimeSeconds();
+	}
 }
 
 // Static helper function that plays any given star animation from various places
@@ -111,19 +113,13 @@ bool APSStarActor::TryPlayStarAnimation(UPARAM(ref) float& StartTimeRef, UCurveT
 {
 	if (!StartTimeRef || !AnimationCurveTable)
 	{
-		SetActorTickEnabled(false);
 		StartTimeRef = 0.f;
 		return false;
 	}
 
 	const float SecondsSinceStart = GetWorld()->GetTimeSeconds() - StartTimeRef;
 
-	const bool bIsFinished = !UGameplayUtilsLibrary::ApplyTransformFromCurveTable(this, AnimationCurveTable, SecondsSinceStart);
-	if (bIsFinished)
-	{
-		return UGameplayUtilsLibrary::ApplyTransformFromCurveTable(this, AnimationCurveTable, GetWorld()->GetTimeSeconds());
-	}
-		return false;
+	return UGameplayUtilsLibrary::ApplyTransformFromCurveTable(this, AnimationCurveTable, SecondsSinceStart);
 }
 
 // Set the start time for hiding stars
