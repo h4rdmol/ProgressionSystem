@@ -234,7 +234,6 @@ void UPSWorldSubsystem::UpdateProgressionActorsForSpot()
 void UPSWorldSubsystem::AddProgressionStarActors()
 {
 	const FPSRowData& CurrentRowData = GetCurrentRow();
-	SpawnedStarActorsInternal.Empty();
 	//Return to Pool Manager the list of handles which is not needed (if there are any) 
 	UPoolManagerSubsystem::Get().ReturnToPoolArray(PoolActorHandlersInternal);
 	SpawnedStarActorsInternal.Empty();
