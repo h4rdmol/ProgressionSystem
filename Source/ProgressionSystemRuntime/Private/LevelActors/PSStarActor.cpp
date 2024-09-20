@@ -3,6 +3,7 @@
 
 #include "LevelActors/PSStarActor.h"
 
+#include "PoolManagerSubsystem.h"
 #include "Components/StaticMeshComponent.h"
 #include "Controllers/MyPlayerController.h"
 #include "Data/PSTypes.h"
@@ -92,8 +93,9 @@ void APSStarActor::TryPlayHideStarAnimation()
 	const bool bIsFinished = !TryPlayStarAnimation(StartTimeHideStarsInternal, CurrentRow.HideStarsAnimation);
 	if (bIsFinished)
 	{
+		// stop playing and return actor to the pool manager as it's not in use
 		StartTimeHideStarsInternal = 0.f;
-		SetActorTickEnabled(false);
+		UPoolManagerSubsystem::Get().ReturnToPool(this);
 	}
 }
 
