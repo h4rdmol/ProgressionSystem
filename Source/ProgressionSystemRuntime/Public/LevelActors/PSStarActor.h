@@ -21,11 +21,11 @@ public:
 	bool TryPlayStarAnimation(UPARAM(ref) float& StartTimeRef, class UCurveTable* AnimationCurveTable);
 
 	/** Set the start time for hiding stars in the main menu */
-	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
+	UFUNCTION(BlueprintCallable, Category = "C++")
 	void SetStartTimeHideStars();
 
 	/** Set the start time for main menu stars animation */
-	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
+	UFUNCTION(BlueprintCallable, Category = "C++")
 	void SetStartTimeMenuStars();
 
 protected:
