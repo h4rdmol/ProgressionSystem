@@ -55,7 +55,7 @@ void APSStarActor::Tick(float DeltaTime)
 }
 
 // When a local character load finished
-void APSStarActor::OnLocalCharacterReady(class APlayerCharacter* Character, int32 CharacterID)
+void APSStarActor::OnLocalCharacterReady(APlayerCharacter* Character, int32 CharacterID)
 {
 	AMyPlayerController* LocalPC = Character ? Character->GetController<AMyPlayerController>() : nullptr;
 	if (ensureMsgf(LocalPC, TEXT("ASSERT: [%i] %hs:\n'LocalPC' is null!"), __LINE__, __FUNCTION__))
@@ -109,7 +109,7 @@ void APSStarActor::TryPlayMenuStarAnimation()
 }
 
 // Static helper function that plays any given star animation from various places
-bool APSStarActor::TryPlayStarAnimation(UPARAM(ref) float& StartTimeRef, UCurveTable* AnimationCurveTable)
+bool APSStarActor::TryPlayStarAnimation(float& StartTimeRef, UCurveTable* AnimationCurveTable)
 {
 	if (!StartTimeRef || !AnimationCurveTable)
 	{
