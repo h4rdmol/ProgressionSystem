@@ -283,18 +283,18 @@ void UPSWorldSubsystem::OnTakeActorsFromPoolCompleted(const TArray<FPoolObjectDa
 		float StarAmount = FMath::Clamp(AmountUnlocked, 0.0f, 1.0f);
 		if (AmountUnlocked > 0)
 		{
-			SetOrUpdateStarActorMesh(MeshComponent, StarAmount, false);
+			UpdateStarActorMeshMaterial(MeshComponent, StarAmount, false);
 		}
 		else
 		{
-			SetOrUpdateStarActorMesh(MeshComponent, 1, true);
+			UpdateStarActorMeshMaterial(MeshComponent, 1, true);
 		}
 		AmountUnlocked -= StarAmount;
 	}
 }
 
-// Updates star actor to locked/unlocked according to input amounnt
-void UPSWorldSubsystem::SetOrUpdateStarActorMesh(UStaticMeshComponent* MeshComponent, float AmountOfStars, bool bIsLockedStar)
+//Updates star actors Mesh material to the Locked Star, Unlocked or partially achieved
+void UPSWorldSubsystem::UpdateStarActorMeshMaterial(UStaticMeshComponent* MeshComponent, float AmountOfStars, bool bIsLockedStar)
 {
 	if (!bIsLockedStar) // unlocked stars
 	{
