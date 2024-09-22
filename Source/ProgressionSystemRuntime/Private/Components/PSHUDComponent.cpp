@@ -82,8 +82,8 @@ void UPSHUDComponent::SavePoints(EEndGameState EndGameState)
 	// @h4rdmol to move to Subsystem instead of hud
 	UPSSaveGameData* SaveGameInstance = UPSWorldSubsystem::Get().GetCurrentSaveGameData();
 	checkf(SaveGameInstance, TEXT("ERROR: 'SaveGameInstanceInternal' is null"));
-
-	SaveGameInstance->SavePoints(EndGameState);
+	UPSSaveGameData* SaveGameData = UPSWorldSubsystem::Get().GetCurrentSaveGameData();
+	SaveGameData->SavePoints(EndGameState);
 }
 
 // Listening game states changes events 
@@ -127,20 +127,21 @@ void UPSHUDComponent::OnPlayerTypeChanged(FPlayerTag PlayerTag)
 // Refresh the main menu progression widget player 
 void UPSHUDComponent::UpdateProgressionWidgetForPlayer()
 {
-	const FPSRowData& CurrentRowData = UPSWorldSubsystem::Get().GetCurrentRow();
+	const FPSSaveToDiskData& CurrenSaveToDiskDataRow = UPSWorldSubsystem::Get().GetCurrentSaveToDiskRowByName();
+	const FPSRowData& CurrenProgressionSettingsRow = UPSWorldSubsystem::Get().GetCurrentProgressionSettingsRowByName();
 	// check if empty returned Row from GetCurrentRow 
 	checkf(ProgressionMenuWidgetInternal, TEXT("ERROR: 'ProgressionMenuWidgetInternal' is null"));
 
 	//set updated amount of stars
-	if (CurrentRowData.CurrentLevelProgression >= CurrentRowData.PointsToUnlock)
+	if (CurrenSaveToDiskDataRow.CurrentLevelProgression >= CurrenProgressionSettingsRow.PointsToUnlock)
 	{
 		// set required points (stars)  to achieve for a level  
-		ProgressionMenuWidgetInternal->AddImagesToHorizontalBox(CurrentRowData.PointsToUnlock, 0, CurrentRowData.PointsToUnlock);
+		ProgressionMenuWidgetInternal->AddImagesToHorizontalBox(CurrenProgressionSettingsRow.PointsToUnlock, 0, CurrenProgressionSettingsRow.PointsToUnlock);
 	}
 	else
 	{
 		// Calculate the unlocked against locked points (stars) 
-		ProgressionMenuWidgetInternal->AddImagesToHorizontalBox(CurrentRowData.CurrentLevelProgression, CurrentRowData.PointsToUnlock - CurrentRowData.CurrentLevelProgression, CurrentRowData.PointsToUnlock); // Listen game state changes events 
+		ProgressionMenuWidgetInternal->AddImagesToHorizontalBox(CurrenSaveToDiskDataRow.CurrentLevelProgression, CurrenProgressionSettingsRow.PointsToUnlock - CurrenSaveToDiskDataRow.CurrentLevelProgression, CurrenProgressionSettingsRow.PointsToUnlock); // Listen game state changes events 
 	}
 
 	if (CurrentGameStateInternal == ECurrentGameState::Menu)
@@ -157,7 +158,7 @@ void UPSHUDComponent::UpdateProgressionWidgetForPlayer()
 		}
 	}
 
-	DisplayLevelUIOverlay(CurrentRowData.IsLevelLocked);
+	DisplayLevelUIOverlay(CurrenSaveToDiskDataRow.IsLevelLocked);
 }
 
 // Show or hide the LevelUIOverlay depends on the level lock state for current level

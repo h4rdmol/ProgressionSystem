@@ -35,10 +35,6 @@ void UPSSpotComponent::BeginPlay()
 	// Subscribe events on player type changed and Character spawned
 	BIND_ON_LOCAL_CHARACTER_READY(this, ThisClass::OnCharacterReady);
 
-	// Ensure the save game data is properly loaded and not null.
-	SaveGameInstanceInternal = UPSWorldSubsystem::Get().GetCurrentSaveGameData();
-	checkf(SaveGameInstanceInternal, TEXT("ERROR: 'SaveGameInstanceInternal' is null"));
-
 	ChangeSpotVisibilityStatus();
 
 	// Save reference of this component to the world subsystem
@@ -96,6 +92,7 @@ void UPSSpotComponent::ChangeSpotVisibilityStatus()
 	// Locks and unlocks the spot depends on the current level progression status
 	if (PlayerSpotOnLevelInternal)
 	{
-		PlayerSpotOnLevelInternal->SetActive(!SaveGameInstanceInternal->GetCurrentRow().IsLevelLocked);
+		FPSSaveToDiskData SaveToDiskDataRow = UPSWorldSubsystem::Get().GetCurrentSaveToDiskRowByName();
+		PlayerSpotOnLevelInternal->SetActive(!SaveToDiskDataRow.IsLevelLocked);
 	}
 }

@@ -25,15 +25,8 @@ public:
 	static UPSWorldSubsystem& Get();
 	static UPSWorldSubsystem& Get(const UObject& WorldContextObject);
 
-	/** Returns current row of progression system */
-	const FPSRowData& GetCurrentRow() const;
-
-	/** Set current row of progression system by tag*/
-	UFUNCTION(BlueprintCallable, Category = "C++")
-	void SetCurrentRowByTag(FPlayerTag NewRowPlayerTag);
-
-	/** Returns previous row of progression system */
-	const FPSRowData& GetPreviousRow() const;
+	/** Returns previous row by current name */
+	FPSRowData& GetPreviousRow();
 
 	/* Delegate for informing row data changed */
 	UPROPERTY(BlueprintAssignable, Transient, Category = "C++")
@@ -48,9 +41,33 @@ public:
 	UFUNCTION(BlueprintPure, Category = "C++")
 	FORCEINLINE class UPSHUDComponent* GetProgressionSystemHUDComponent() const { return PSHUDComponentInternal; }
 
-	/** Returns a current save game instance */
+	/** Returns a current progression settings row by name */
 	UFUNCTION(BlueprintPure, Category = "C++")
-	FORCEINLINE class UPSSaveGameData* GetCurrentSaveGameData() const { return SaveGameInstanceInternal; }
+	FORCEINLINE FName GetCurrentRowName() const { return CurrentRowNameInternal; }
+
+	/** Returns a current progression settings row by name */
+	UFUNCTION(BlueprintPure, Category = "C++")
+	FORCEINLINE UPSSaveGameData* GetCurrentSaveGameData() const { return SaveGameDataInternal; }
+
+	/** Returns first save to disk row data */
+	UFUNCTION(BlueprintPure, Category = "C++")
+	const FName GetFirstSaveToDiskRowData() const;
+
+	/** Returns a current save to disk row by name */
+	UFUNCTION(BlueprintPure, Category = "C++")
+	FPSSaveToDiskData& GetCurrentSaveToDiskRowByName();
+
+	/** Returns a current progression settings row by name */
+	UFUNCTION(BlueprintPure, Category = "C++")
+	FPSRowData& GetCurrentProgressionSettingsRowByName();
+
+	/** Set current row of progression system by tag*/
+	UFUNCTION(BlueprintCallable, Category = "C++")
+	void SetCurrentRowByTag(FPlayerTag NewRowPlayerTag);
+
+	/** Set current progression row name by tag */
+	UFUNCTION(BlueprintCallable, Category = "C++")
+	FPSRowData& GetPreviousRowByCurrentName();
 
 	/** Set the progression system component */
 	UFUNCTION(BlueprintCallable, Category = "C++")
@@ -100,9 +117,18 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Progression System Spot Component"))
 	TObjectPtr<class UPSSpotComponent> PSCurrentSpotComponentInternal = nullptr;
 
-	/** Store the current save game instance */
+	/** Store the current save game instance
+	 * Contains the FPSSaveToDiskData which has actual data from save file */
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Save Game Data Internal"))
+	TObjectPtr<class UPSSaveGameData> SaveGameDataInternal = nullptr;
+
+	/** Store the Progression Settings data instance */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Save Game Instance"))
-	TObjectPtr<class UPSSaveGameData> SaveGameInstanceInternal = nullptr;
+	TMap<FName, FPSRowData> ProgressionSettingsDataInternal;
+
+	/** Store the current row name */
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Current Row Name"))
+	FName CurrentRowNameInternal;
 
 	/** Array of pool actors handlers which should be released */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Pool Actors Handlers"))
