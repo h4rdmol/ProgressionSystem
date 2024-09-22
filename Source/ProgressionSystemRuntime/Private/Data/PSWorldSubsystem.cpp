@@ -301,7 +301,7 @@ void UPSWorldSubsystem::UpdateStarActorMeshMaterial(UStaticMeshComponent* MeshCo
 		if (AmountOfStars > 0 && AmountOfStars < 1) // stars with fractional number (e.g. 0.5) 
 		{
 			MeshComponent->SetMaterial(0, StarDynamicProgressMaterial);
-			StarDynamicProgressMaterial->SetScalarParameterValue(TEXT("Percentage2"), AmountOfStars / 3); // 3 is hardcoded value to tweak bad UV to look like it's working
+			StarDynamicProgressMaterial->SetScalarParameterValue(StarMaterialSlotDivisor, AmountOfStars / StarMaterialFractionalDivisor); // StarMaterialFractionalDivisor is hardcoded value to 3 to tweak bad UV to simulate it's working
 		}
 		else // stars with whole number
 		{
