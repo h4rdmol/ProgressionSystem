@@ -262,23 +262,27 @@ void UPSWorldSubsystem::AddProgressionStarActors()
 void UPSWorldSubsystem::OnTakeActorsFromPoolCompleted(const TArray<FPoolObjectData>& CreatedObjects)
 {
 	const FPSRowData& CurrentRowData = GetCurrentRow();
-	float AmountUnlocked = CurrentRowData.CurrentLevelProgression;;
+	float AmountUnlocked = CurrentRowData.CurrentLevelProgression;
+	FVector PreviousActorLocation;
 
 	for (const FPoolObjectData& CreatedObject : CreatedObjects)
 	{
 		AActor& SpawnedActor = CreatedObject.GetChecked<AActor>();
 		UStaticMeshComponent* MeshComponent = SpawnedActor.FindComponentByClass<UStaticMeshComponent>();
 
-		SpawnedStarActorsInternal.Add(&SpawnedActor);
-
-		SpawnedActor.SetActorTransform(CurrentRowData.StarActorTransform);
-
-		// if the actor is the first element it set initial position
-		// from the initial position there is a distance between stars 
-		if (SpawnedStarActorsInternal.Num() > 1)
+		// set offset from previous if it's not first
+		// if the PreviousActorTransform is empty this means it is a first element and set init transform
+		if (PreviousActorLocation.Equals(FVector::ZeroVector))
 		{
-			SpawnedActor.SetActorLocation(SpawnedStarActorsInternal[SpawnedStarActorsInternal.Num() - 2]->GetActorLocation() + CurrentRowData.OffsetBetweenStarActors);
+			SpawnedActor.SetActorTransform(CurrentRowData.StarActorTransform);
 		}
+		else
+		{
+			SpawnedActor.SetActorTransform(CurrentRowData.StarActorTransform);
+			SpawnedActor.SetActorLocation(PreviousActorLocation + CurrentRowData.OffsetBetweenStarActors);
+		}
+
+		PreviousActorLocation = SpawnedActor.GetActorLocation();
 
 		float StarAmount = FMath::Clamp(AmountUnlocked, 0.0f, 1.0f);
 		if (AmountUnlocked > 0)
