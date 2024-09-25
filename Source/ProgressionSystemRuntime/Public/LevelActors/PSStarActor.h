@@ -35,6 +35,8 @@ protected:
 	/** Function called every frame on this Actor */
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditInstanceOnly, Category = "C++", meta = (DisplayName = "Star static mesh component"))
+	TObjectPtr<class UStaticMeshComponent> StarMeshComponent = nullptr;
 	/** Stores the starting time to hide stars in the main menu when cinematic started */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Starting time to hide stars"))
 	float StartTimeHideStarsInternal = 0.0f;

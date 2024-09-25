@@ -17,6 +17,7 @@
 #include "Engine/Engine.h"
 #include "Engine/World.h"
 #include "GameFramework/MyGameStateBase.h"
+#include "LevelActors/PSStarActor.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "MyUtilsLibraries/GameplayUtilsLibrary.h"
 #include "Subsystems/GameDifficultySubsystem.h"
@@ -267,7 +268,7 @@ void UPSWorldSubsystem::OnTakeActorsFromPoolCompleted(const TArray<FPoolObjectDa
 
 	for (const FPoolObjectData& CreatedObject : CreatedObjects)
 	{
-		AActor& SpawnedActor = CreatedObject.GetChecked<AActor>();
+		APSStarActor& SpawnedActor = CreatedObject.GetChecked<APSStarActor>();
 		UStaticMeshComponent* MeshComponent = SpawnedActor.FindComponentByClass<UStaticMeshComponent>();
 
 		// set offset from previous if it's not first
