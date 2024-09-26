@@ -169,17 +169,6 @@ protected:
 	UFUNCTION(BlueprintCallable, Category= "C++")
 	void OnTakeActorsFromPoolCompleted(const TArray<FPoolObjectData>& CreatedObjects);
 
-	/** Updates star actors Mesh material to the Locked Star, Unlocked or partially achieved
-	 * 0 - locked star material
-	 * 1 - unlocked star material
-	 * between 0-1 - partially unlocked material (dynamic) e.g. 0.5
-	 * @param MeshComponent Component received from a star actor (from Pool Manager)  
-	 * @param AmountOfStars The number of stars to be added on top of the character
-	 * * @param bIsLockedStar Defines whether a star is locked or unlocked
-	 */
-	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
-	void UpdateStarActorMeshMaterial(class UStaticMeshComponent* MeshComponent, float AmountOfStars, bool bIsLockedStar);
-
 	/** Triggers when a spot is loaded */
 	UFUNCTION(Blueprintable, Category="C++", meta=(BlueprintProtected))
 	void OnSpotComponentLoad(class UPSSpotComponent* SpotComponent);

@@ -264,58 +264,24 @@ void UPSWorldSubsystem::OnTakeActorsFromPoolCompleted(const TArray<FPoolObjectDa
 {
 	const FPSRowData& CurrentRowData = GetCurrentRow();
 	float AmountUnlocked = CurrentRowData.CurrentLevelProgression;
-	FVector PreviousActorLocation;
+	FVector PreviousActorLocationRef;
 
 	for (const FPoolObjectData& CreatedObject : CreatedObjects)
 	{
 		APSStarActor& SpawnedActor = CreatedObject.GetChecked<APSStarActor>();
-		UStaticMeshComponent* MeshComponent = SpawnedActor.FindComponentByClass<UStaticMeshComponent>();
-
-		// set offset from previous if it's not first
-		// if the PreviousActorTransform is empty this means it is a first element and set init transform
-		if (PreviousActorLocation.Equals(FVector::ZeroVector))
-		{
-			SpawnedActor.SetActorTransform(CurrentRowData.StarActorTransform);
-		}
-		else
-		{
-			SpawnedActor.SetActorTransform(CurrentRowData.StarActorTransform);
-			SpawnedActor.SetActorLocation(PreviousActorLocation + CurrentRowData.OffsetBetweenStarActors);
-		}
-
-		PreviousActorLocation = SpawnedActor.GetActorLocation();
 
 		float StarAmount = FMath::Clamp(AmountUnlocked, 0.0f, 1.0f);
 		if (AmountUnlocked > 0)
 		{
-			UpdateStarActorMeshMaterial(MeshComponent, StarAmount, false);
+			SpawnedActor.UpdateStarActorMeshMaterial(StarDynamicProgressMaterial, StarAmount, false);
 		}
 		else
 		{
-			UpdateStarActorMeshMaterial(MeshComponent, 1, true);
+			SpawnedActor.UpdateStarActorMeshMaterial(StarDynamicProgressMaterial, 1, true);
 		}
 		AmountUnlocked -= StarAmount;
-	}
-}
 
-//Updates star actors Mesh material to the Locked Star, Unlocked or partially achieved
-void UPSWorldSubsystem::UpdateStarActorMeshMaterial(UStaticMeshComponent* MeshComponent, float AmountOfStars, bool bIsLockedStar)
-{
-	if (!bIsLockedStar) // unlocked stars
-	{
-		if (AmountOfStars > 0 && AmountOfStars < 1) // stars with fractional number (e.g. 0.5) 
-		{
-			MeshComponent->SetMaterial(0, StarDynamicProgressMaterial);
-			StarDynamicProgressMaterial->SetScalarParameterValue(StarMaterialSlotDivisor, AmountOfStars / StarMaterialFractionalDivisor); // StarMaterialFractionalDivisor is hardcoded value to 3 to tweak bad UV to simulate it's working
-		}
-		else // stars with whole number
-		{
-			MeshComponent->SetMaterial(0, UPSDataAsset::Get().GetUnlockedProgressionMaterial());
-		}
-	}
-	else // locked stars
-	{
-		MeshComponent->SetMaterial(0, UPSDataAsset::Get().GetLockedProgressionMaterial());
+		SpawnedActor.OnInitialized(PreviousActorLocationRef);
 	}
 }
 
