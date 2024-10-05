@@ -116,6 +116,14 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Star Dynamic Progress Material"))
 	TObjectPtr<UMaterialInstanceDynamic> StarDynamicProgressMaterial = nullptr;
 
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Star Material Slot Divisor"))
+	FName StarMaterialSlotDivisor = TEXT("Percentage2");
+	
+	// Temporary used to tweak the stars with bad UV  to look as expected
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Star Material Fractional Divisor Temporarry"))
+	float StarMaterialFractionalDivisor = 3.f;
+	
+
 	/*********************************************************************************************
 	* Protected functions
 	********************************************************************************************* */
@@ -157,19 +165,9 @@ protected:
 	/**
 	 * Dynamically adds Star actors which representing unlocked and locked progression above the character
 	 * @param CreatedObjects - Handles of objects from Pool Manager
-	 * @param AmountOfUnlockedPoints The number of stars (unlocked-stars as actors) to be added on top of the character
-	 * @param AmountOfLockedPoints The number of stars (locked-stars as actors) to be added on top of the character
 	 */
 	UFUNCTION(BlueprintCallable, Category= "C++")
 	void OnTakeActorsFromPoolCompleted(const TArray<FPoolObjectData>& CreatedObjects);
-
-	/** Updates star actor to locked/unlocked according to input amounnt
-	 * @param CreatedData Object received from Pool Manager which contains the reference to Start Widget 
-	 * @param AmountOfUnlockedPoints The number of stars (unlocked-stars as actors) to be added on top of the character
-	 * @param AmountOfLockedPoints The number of stars (locked-stars as actors) to be added on top of the character
-	 */
-	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
-	void UpdateStarActor(const FPoolObjectData& CreatedData, float AmountOfUnlockedStars, float AmountOfLockedStars);
 
 	/** Triggers when a spot is loaded */
 	UFUNCTION(Blueprintable, Category="C++", meta=(BlueprintProtected))
