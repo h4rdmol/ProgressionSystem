@@ -10,7 +10,7 @@
 #include UE_INLINE_GENERATED_CPP_BY_NAME(PSOverlayWidget)
 
 // Sets the visibility of the overlay elements and playing fade animation if needed
-void UPSOverlayWidget::SetOverlayVisibility(ESlateVisibility VisibilitySlate, bool bShouldPlayFadeAnimation/* = false*/ )
+void UPSOverlayWidget::SetOverlayVisibility(ESlateVisibility VisibilitySlate, bool bShouldPlayFadeAnimation/* = false*/)
 {
 	if (!bShouldPlayFadeAnimation)
 	{
@@ -19,9 +19,17 @@ void UPSOverlayWidget::SetOverlayVisibility(ESlateVisibility VisibilitySlate, bo
 	}
 
 	bShouldPlayFadeAnimationInternal = bShouldPlayFadeAnimation;
-	
+
 	if (VisibilitySlate == ESlateVisibility::Visible)
 	{
+		ESlateVisibility PrevOverlayOpacity = PSCBackgroundOverlay->GetVisibility();
+		ESlateVisibility PrevIconOpacity = PSCBackgroundIconLock->GetVisibility();
+
+		//if new visibility is same as previous animation is not required 
+		if (PrevOverlayOpacity == VisibilitySlate && PrevIconOpacity == VisibilitySlate)
+		{
+			bShouldPlayFadeAnimationInternal = false;
+		}
 		bIsFadeInAnimationInternal = true;
 		SetOverlayItemsVisibility(VisibilitySlate);
 	}
@@ -31,7 +39,10 @@ void UPSOverlayWidget::SetOverlayVisibility(ESlateVisibility VisibilitySlate, bo
 	}
 
 	const UWorld* World = GetWorld();
-	check(World);
+	if (!ensureMsgf(World, TEXT("ASSERT: [%i] %s:\n'World' is not valid!"), __LINE__, *FString(__FUNCTION__)))
+	{
+		return;
+	}
 
 	StartTimeFadeAnimationInternal = World->GetTimeSeconds();
 }
@@ -49,9 +60,8 @@ void UPSOverlayWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime
 			StartTimeFadeAnimationInternal = 0.f;
 			if (!bIsFadeInAnimationInternal)
 			{
-				SetOverlayItemsVisibility(ESlateVisibility::Collapsed);	
+				SetOverlayItemsVisibility(ESlateVisibility::Collapsed);
 			}
-			
 		}
 	}
 }
@@ -71,11 +81,10 @@ bool UPSOverlayWidget::FadeOverlayElementsAnimation(float& StartTimeRef)
 		StartTimeRef = 0.f;
 		return false;
 	}
-	
+
 	const UWorld* World = GetWorld();
 	check(World);
-	
-	float test = World->GetTimeSeconds();
+
 	const float SecondsSinceStart = GetWorld()->GetTimeSeconds() - StartTimeRef;
 	float OpacityValue = FadeCurveFloatInternal->GetFloatValue(SecondsSinceStart);
 
@@ -87,7 +96,7 @@ bool UPSOverlayWidget::FadeOverlayElementsAnimation(float& StartTimeRef)
 		// The curve is finished
 		return false;
 	}
-	
+
 	if (!bIsFadeInAnimationInternal)
 	{
 		OpacityValue = MaxTime - OpacityValue;
