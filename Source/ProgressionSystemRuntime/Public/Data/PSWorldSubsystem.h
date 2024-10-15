@@ -38,11 +38,11 @@ public:
 	UFUNCTION(BlueprintPure, Category = "C++")
 	FORCEINLINE class UPSHUDComponent* GetProgressionSystemHUDComponent() const { return PSHUDComponentInternal; }
 
-	/** Returns a current progression settings row by name */
+	/** Returns a current progression row name */
 	UFUNCTION(BlueprintPure, Category = "C++")
 	FORCEINLINE FName GetCurrentRowName() const { return CurrentRowNameInternal; }
 
-	/** Returns a current progression settings row by name */
+	/** Returns a current progression save game data */
 	UFUNCTION(BlueprintPure, Category = "C++")
 	FORCEINLINE class UPSSaveGameData* GetCurrentSaveGameData() { return SaveGameDataInternal; }
 
@@ -54,7 +54,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "C++")
 	const  FPSSaveToDiskData& GetCurrentSaveToDiskRowByName() const ;
 
-	/** Returns a current progression settings row by name */
+	/** Returns a current progression row settings data row by name */
 	UFUNCTION(BlueprintPure, Category = "C++")
 	const FPSRowData& GetCurrentProgressionSettingsRowByName() const;
 

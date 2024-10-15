@@ -83,7 +83,7 @@ const FPSSaveToDiskData& UPSWorldSubsystem::GetCurrentSaveToDiskRowByName() cons
 	return SaveGameDataInternal->GetSaveToDiskDataByName(CurrentRowNameInternal);
 }
 
-// Returns a current progression settings row by name 
+// Returns a current progression row settings data row by name
 const FPSRowData& UPSWorldSubsystem::GetCurrentProgressionSettingsRowByName() const
 {
 	return *ProgressionSettingsDataInternal.Find(CurrentRowNameInternal);
