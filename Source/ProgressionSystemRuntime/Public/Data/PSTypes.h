@@ -8,8 +8,8 @@
 #include "PSTypes.generated.h"
 
 /**
- * Basic structure for all save data information regarding the progression.
- * Same structure will reflected in the save file. Initial load performed based on the data in the DT Table 
+ * Basic structure for all progression settings data
+ * Initial load performed once based on the data in the DT Table and never changed later
  */
 USTRUCT(BlueprintType)
 struct FPSRowData : public FTableRowBase
@@ -62,6 +62,11 @@ struct FPSRowData : public FTableRowBase
 	TObjectPtr<class UCurveTable> MenuStarsAnimation = nullptr;
 };
 
+/**
+ *  Basic structure for all save data information regarding the progression
+ *  The data can be modified in run-time and saved to the disk
+ *  Same structure will be reflected in the save file. 
+ */
 USTRUCT(BlueprintType)
 struct FPSSaveToDiskData
 {
@@ -71,11 +76,11 @@ struct FPSSaveToDiskData
 
 	/** Default constructor. */
 	FPSSaveToDiskData() = default;
-	
+
 	/** Current progression for each level  */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="C++")
 	float CurrentLevelProgression = 0.f;
-	
+
 	/** Defines if level is locked or not */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="C++")
 	bool IsLevelLocked = true;
