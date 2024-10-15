@@ -120,8 +120,8 @@ protected:
 	TMap<FName, FPSRowData> ProgressionSettingsDataInternal;
 
 	/** Store the current row name */
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Current Row Name"))
-	FName CurrentRowNameInternal;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Current Row Name"))
+	FName CurrentRowNameInternal = NAME_None;
 
 	/** Array of pool actors handlers which should be released */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Pool Actors Handlers"))
