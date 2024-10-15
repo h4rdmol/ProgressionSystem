@@ -61,11 +61,6 @@ void UPSWorldSubsystem::SetCurrentRowByTag(FPlayerTag NewRowPlayerTag)
 	}
 }
 
-// Returns previous row by current name
-FPSRowData& UPSWorldSubsystem::GetPreviousRow()
-{
-	return GetPreviousRowByCurrentName();
-}
 
 // Returns the data asset that contains all the assets of Progression System game feature
 const UPSDataAsset* UPSWorldSubsystem::GetPSDataAsset() const
@@ -92,23 +87,6 @@ FPSSaveToDiskData& UPSWorldSubsystem::GetCurrentSaveToDiskRowByName()
 FPSRowData& UPSWorldSubsystem::GetCurrentProgressionSettingsRowByName()
 {
 	return *ProgressionSettingsDataInternal.Find(CurrentRowNameInternal);
-}
-
-// Get preivous row by current row name 
-FPSRowData& UPSWorldSubsystem::GetPreviousRowByCurrentName()
-{
-	static FPSRowData EmptyData; // Ensure EmptyData is a static member to safely return it by reference
-	FPSRowData* PreviousRow = &EmptyData;
-
-	for (TTuple<FName, FPSRowData>& KeyValue : ProgressionSettingsDataInternal)
-	{
-		if (KeyValue.Key == CurrentRowNameInternal)
-		{
-			return *PreviousRow;
-		}
-		PreviousRow = &KeyValue.Value;
-	}
-	return EmptyData;
 }
 
 // Set the progression system component

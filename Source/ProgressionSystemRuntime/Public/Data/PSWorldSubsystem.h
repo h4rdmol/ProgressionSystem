@@ -25,9 +25,6 @@ public:
 	static UPSWorldSubsystem& Get();
 	static UPSWorldSubsystem& Get(const UObject& WorldContextObject);
 
-	/** Returns previous row by current name */
-	FPSRowData& GetPreviousRow();
-
 	/* Delegate for informing row data changed */
 	UPROPERTY(BlueprintAssignable, Transient, Category = "C++")
 	FCurrentRowDataChanged OnCurrentRowDataChanged;
@@ -64,10 +61,6 @@ public:
 	/** Set current row of progression system by tag*/
 	UFUNCTION(BlueprintCallable, Category = "C++")
 	void SetCurrentRowByTag(FPlayerTag NewRowPlayerTag);
-
-	/** Set current progression row name by tag */
-	UFUNCTION(BlueprintCallable, Category = "C++")
-	FPSRowData& GetPreviousRowByCurrentName();
 
 	/** Set the progression system component */
 	UFUNCTION(BlueprintCallable, Category = "C++")
