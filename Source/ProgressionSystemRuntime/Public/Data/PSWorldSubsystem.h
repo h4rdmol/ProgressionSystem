@@ -44,7 +44,7 @@ public:
 
 	/** Returns a current progression settings row by name */
 	UFUNCTION(BlueprintPure, Category = "C++")
-	FORCEINLINE UPSSaveGameData* GetCurrentSaveGameData() const { return SaveGameDataInternal; }
+	FORCEINLINE UPSSaveGameData* GetCurrentSaveGameData() { return SaveGameDataInternal; }
 
 	/** Returns first save to disk row data */
 	UFUNCTION(BlueprintPure, Category = "C++")
@@ -52,11 +52,11 @@ public:
 
 	/** Returns a current save to disk row by name */
 	UFUNCTION(BlueprintPure, Category = "C++")
-	FPSSaveToDiskData& GetCurrentSaveToDiskRowByName();
+	const  FPSSaveToDiskData& GetCurrentSaveToDiskRowByName() const ;
 
 	/** Returns a current progression settings row by name */
 	UFUNCTION(BlueprintPure, Category = "C++")
-	FPSRowData& GetCurrentProgressionSettingsRowByName();
+	const FPSRowData& GetCurrentProgressionSettingsRowByName() const;
 
 	/** Set current row of progression system by tag*/
 	UFUNCTION(BlueprintCallable, Category = "C++")

@@ -77,14 +77,14 @@ const FName UPSWorldSubsystem::GetFirstSaveToDiskRowData() const
 }
 
 //  Returns a current save to disk row by name
-FPSSaveToDiskData& UPSWorldSubsystem::GetCurrentSaveToDiskRowByName()
+const FPSSaveToDiskData& UPSWorldSubsystem::GetCurrentSaveToDiskRowByName() const
 {
 	ensureMsgf(SaveGameDataInternal, TEXT("ASSERT: [%i] %s:\n'SaveGameDataInternal' is empty!"), __LINE__, *FString(__FUNCTION__));
 	return SaveGameDataInternal->GetSaveToDiskDataByName(CurrentRowNameInternal);
 }
 
 // Returns a current progression settings row by name 
-FPSRowData& UPSWorldSubsystem::GetCurrentProgressionSettingsRowByName()
+const FPSRowData& UPSWorldSubsystem::GetCurrentProgressionSettingsRowByName() const
 {
 	return *ProgressionSettingsDataInternal.Find(CurrentRowNameInternal);
 }

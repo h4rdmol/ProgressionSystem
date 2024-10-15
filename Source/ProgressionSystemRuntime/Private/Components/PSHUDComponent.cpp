@@ -80,7 +80,7 @@ void UPSHUDComponent::OnUnregister()
 void UPSHUDComponent::SavePoints(EEndGameState EndGameState)
 {
 	// @h4rdmol to move to Subsystem instead of hud
-	UPSSaveGameData* SaveGameInstance = UPSWorldSubsystem::Get().GetCurrentSaveGameData();
+	const UPSSaveGameData* SaveGameInstance = UPSWorldSubsystem::Get().GetCurrentSaveGameData();
 	checkf(SaveGameInstance, TEXT("ERROR: 'SaveGameInstanceInternal' is null"));
 	UPSSaveGameData* SaveGameData = UPSWorldSubsystem::Get().GetCurrentSaveGameData();
 	SaveGameData->SavePoints(EndGameState);

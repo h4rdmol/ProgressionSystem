@@ -69,14 +69,15 @@ void UPSSaveGameData::SavePoints(EEndGameState EndGameState)
 	// Check if the current row exists in the map before attempting to update it
 	if (ProgressionSettingsRowDataInternal.Contains(UPSWorldSubsystem::Get().GetCurrentRowName()))
 	{
-		FPSSaveToDiskData& CurrentSaveToDiskDataRowRef = UPSWorldSubsystem::Get().GetCurrentSaveToDiskRowByName();
 		// Increase the current level's progression by the reward from the end game state
-		CurrentSaveToDiskDataRowRef.CurrentLevelProgression += GetProgressionReward(EndGameState);
-
-		FPSRowData& CurrentProgressionSettingsRowData = UPSWorldSubsystem::Get().GetCurrentProgressionSettingsRowByName();
+		FName CurrentRowName = UPSWorldSubsystem::Get().GetCurrentRowName();
+		FPSSaveToDiskData* CurrentSaveToDiskDataRowRef =  ProgressionSettingsRowDataInternal.Find(CurrentRowName);
+		CurrentSaveToDiskDataRowRef->CurrentLevelProgression += GetProgressionReward(EndGameState);
+		
+		const FPSRowData& CurrentProgressionSettingsRowData = UPSWorldSubsystem::Get().GetCurrentProgressionSettingsRowByName();
 
 		// Check if the current level progression has reached or surpassed the points needed to unlock
-		if (CurrentSaveToDiskDataRowRef.CurrentLevelProgression >= CurrentProgressionSettingsRowData.PointsToUnlock)
+		if (CurrentSaveToDiskDataRowRef->CurrentLevelProgression >= CurrentProgressionSettingsRowData.PointsToUnlock)
 		{
 			NextLevelProgressionRowData(); // Advance to the next level's progression data
 		}
