@@ -16,7 +16,7 @@ const FString& UPSSaveGameData::GetSaveSlotName()
 }
 
 // Retrieves the saved game progression row by index from internal saved rows. If the index is out of range, returns a static empty data object. 
-const FName UPSSaveGameData::GetSavedProgressionRowByIndex(int32 Index) const
+FName UPSSaveGameData::GetSavedProgressionRowByIndex(int32 Index) const
 {
 	int32 Idx = 0;
 	for (const TTuple<FName, FPSSaveToDiskData>& It : ProgressionSettingsRowDataInternal)
@@ -27,22 +27,6 @@ const FName UPSSaveGameData::GetSavedProgressionRowByIndex(int32 Index) const
 		}
 	}
 	return FName();
-}
-
-// Sets the current progression row based on the provided index.
-// This updates the CurrentRowNameInternal to the FName corresponding to the InIndex in SavedProgressionRowsInternal.
-void UPSSaveGameData::SetCurrentProgressionRowByIndex(int32 InIndex)
-{
-	int32 Idx = 0;
-	for (const TTuple<FName, FPSSaveToDiskData>& It : ProgressionSettingsRowDataInternal)
-	{
-		if (Idx == InIndex)
-		{
-			// ProgressionSettingsRowDataInternal. = It.Key;
-			return;; // Exit the function once the correct index is found
-		}
-		Idx++;
-	}
 }
 
 // Sets the progression map with a new set of progression rows. Ensures the new map is not empty before assignment.
@@ -120,7 +104,6 @@ void UPSSaveGameData::UnlockAllLevels()
 float UPSSaveGameData::GetProgressionReward(EEndGameState EndGameState)
 {
 	// Verify that the current row exists in the map to prevent creating a new entry
-	const FPSSaveToDiskData& CurrentRowPtr = ProgressionSettingsRowDataInternal.FindChecked(UPSWorldSubsystem::Get().GetCurrentRowName());
 	const FPSRowData& CurrentProgressionSettingsRowData = UPSWorldSubsystem::Get().GetCurrentProgressionSettingsRowByName();
 
 	switch (EndGameState)

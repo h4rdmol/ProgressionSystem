@@ -25,7 +25,7 @@
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(PSWorldSubsystem)
 
-// Returns this Subsystem, is checked and wil crash if can't be obtained
+// Returns this Subsystem, is checked and will crash if it can't be obtained
 UPSWorldSubsystem& UPSWorldSubsystem::Get()
 {
 	const UWorld* World = UUtilsLibrary::GetPlayWorld();
@@ -35,7 +35,7 @@ UPSWorldSubsystem& UPSWorldSubsystem::Get()
 	return *ThisSubsystem;
 }
 
-// Returns this Subsystem, is checked and wil crash if can't be obtained
+// Returns this Subsystem, is checked and will crash if it can't be obtained
 UPSWorldSubsystem& UPSWorldSubsystem::Get(const UObject& WorldContextObject)
 {
 	const UWorld* World = GEngine->GetWorldFromContextObjectChecked(&WorldContextObject);
@@ -70,7 +70,7 @@ const UPSDataAsset* UPSWorldSubsystem::GetPSDataAsset() const
 }
 
 //  Returns a current save to disk row name
-const FName UPSWorldSubsystem::GetFirstSaveToDiskRowData() const
+FName UPSWorldSubsystem::GetFirstSaveToDiskRowData() const
 {
 	ensureMsgf(SaveGameDataInternal, TEXT("ASSERT: [%i] %s:\n'SaveGameDataInternal' is empty!"), __LINE__, *FString(__FUNCTION__));
 	return SaveGameDataInternal->GetSavedProgressionRowByIndex(0);
@@ -217,11 +217,11 @@ void UPSWorldSubsystem::LoadGameFromSave()
 			}
 		}
 	}
-	SetFirstElemetAsCurrent();
+	SetFirstElementAsCurrent();
 }
 
 // Always set first levels as unlocked on begin play
-void UPSWorldSubsystem::SetFirstElemetAsCurrent()
+void UPSWorldSubsystem::SetFirstElementAsCurrent()
 {
 	FName FirstSaveToDiskRow = GetFirstSaveToDiskRowData();
 	if (!FirstSaveToDiskRow.IsNone())
@@ -265,8 +265,8 @@ void UPSWorldSubsystem::OnTakeActorsFromPoolCompleted(const TArray<FPoolObjectDa
 	const FPSRowData& CurrentSettingsRowData = GetCurrentProgressionSettingsRowByName();
 	const FPSSaveToDiskData& CurrentSaveToDiskRowData = GetCurrentSaveToDiskRowByName();
 
-	float CurrentAmountOfUnlocked = 0;
-	float CurrentAmountOfLocked = 0;
+	float CurrentAmountOfUnlocked;
+	float CurrentAmountOfLocked;
 
 	//set updated amount of stars
 	if (CurrentSaveToDiskRowData.CurrentLevelProgression >= CurrentSettingsRowData.PointsToUnlock)
@@ -283,13 +283,12 @@ void UPSWorldSubsystem::OnTakeActorsFromPoolCompleted(const TArray<FPoolObjectDa
 	}
 
 	float integerPart;
-	float fractionalPart;
 	// Setup spawned widget
 	for (const FPoolObjectData& CreatedObject : CreatedObjects)
 	{
 		if (CurrentAmountOfUnlocked > 0)
 		{
-			fractionalPart = modff(CurrentAmountOfUnlocked, &integerPart);
+			float fractionalPart = modff(CurrentAmountOfUnlocked, &integerPart);
 			// check if it has a fractional part and if there is no more fully achieved stars 
 			if (fractionalPart < 1.0f && CurrentAmountOfUnlocked < 1.0f)
 			{
@@ -312,7 +311,7 @@ void UPSWorldSubsystem::OnTakeActorsFromPoolCompleted(const TArray<FPoolObjectDa
 	}
 }
 
-// Updates star actor to locked/unlocked according to input amounnt
+// Updates star actor to locked/unlocked according to input amount
 void UPSWorldSubsystem::UpdateStarActor(const FPoolObjectData& CreatedData, float AmountOfUnlockedStars, float AmountOfLockedStars)
 {
 	AActor& SpawnedActor = CreatedData.GetChecked<AActor>();
@@ -360,7 +359,7 @@ void UPSWorldSubsystem::OnSpotComponentLoad(UPSSpotComponent* SpotComponent)
 }
 
 // Saves the progression to the local files
-void UPSWorldSubsystem::SaveDataAsync()
+void UPSWorldSubsystem::SaveDataAsync() const
 {
 	checkf(SaveGameDataInternal, TEXT("ERROR: 'SaveGameInstanceInternal' is null"));
 	UGameplayStatics::AsyncSaveGameToSlot(SaveGameDataInternal, SaveGameDataInternal->GetSaveSlotName(), SaveGameDataInternal->GetSaveSlotIndex());

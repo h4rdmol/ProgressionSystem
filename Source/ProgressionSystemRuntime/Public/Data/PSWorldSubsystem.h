@@ -21,7 +21,7 @@ class PROGRESSIONSYSTEMRUNTIME_API UPSWorldSubsystem : public UWorldSubsystem
 public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCurrentRowDataChanged, const FPlayerTag, SavedProgressionRowData);
 
-	/** Returns this Subsystem, is checked and wil crash if can't be obtained.*/
+	/** Returns this Subsystem, is checked and will crash if it can't be obtained.*/
 	static UPSWorldSubsystem& Get();
 	static UPSWorldSubsystem& Get(const UObject& WorldContextObject);
 
@@ -44,11 +44,11 @@ public:
 
 	/** Returns a current progression settings row by name */
 	UFUNCTION(BlueprintPure, Category = "C++")
-	FORCEINLINE UPSSaveGameData* GetCurrentSaveGameData() { return SaveGameDataInternal; }
+	FORCEINLINE class UPSSaveGameData* GetCurrentSaveGameData() { return SaveGameDataInternal; }
 
 	/** Returns first save to disk row data */
 	UFUNCTION(BlueprintPure, Category = "C++")
-	const FName GetFirstSaveToDiskRowData() const;
+	FName GetFirstSaveToDiskRowData() const;
 
 	/** Returns a current save to disk row by name */
 	UFUNCTION(BlueprintPure, Category = "C++")
@@ -76,7 +76,7 @@ public:
 
 	/** Saves the progression to the local files */
 	UFUNCTION()
-	void SaveDataAsync();
+	void SaveDataAsync() const;
 
 	/** Removes all saved data of the Progression system and creates a new empty data */
 	UFUNCTION(BlueprintCallable, Category = "C++")
@@ -131,7 +131,7 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Spawned Actors Internal"))
 	TArray<AActor*> SpawnedStarActorsInternal;
 
-	/** Store the material for dynamic progress materil fill for a star actor */
+	/** Store the material for dynamic progress material fill for a star actor */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Star Dynamic Progress Material"))
 	TObjectPtr<UMaterialInstanceDynamic> StarDynamicProgressMaterial = nullptr;
 
@@ -163,7 +163,7 @@ protected:
 
 	/** Set first element as current active */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
-	void SetFirstElemetAsCurrent();
+	void SetFirstElementAsCurrent();
 
 	/** Updates the stars actors for a spot */
 	UFUNCTION(Blueprintable, Category="C++", meta=(BlueprintProtected))
@@ -176,16 +176,14 @@ protected:
 	/**
 	 * Dynamically adds Star actors which representing unlocked and locked progression above the character
 	 * @param CreatedObjects - Handles of objects from Pool Manager
-	 * @param AmountOfUnlockedPoints The number of stars (unlocked-stars as actors) to be added on top of the character
-	 * @param AmountOfLockedPoints The number of stars (locked-stars as actors) to be added on top of the character
 	 */
 	UFUNCTION(BlueprintCallable, Category= "C++")
 	void OnTakeActorsFromPoolCompleted(const TArray<FPoolObjectData>& CreatedObjects);
 
-	/** Updates star actor to locked/unlocked according to input amounnt
+	/** Updates star actor to locked/unlocked according to input amount
 	 * @param CreatedData Object received from Pool Manager which contains the reference to Start Widget 
-	 * @param AmountOfUnlockedPoints The number of stars (unlocked-stars as actors) to be added on top of the character
-	 * @param AmountOfLockedPoints The number of stars (locked-stars as actors) to be added on top of the character
+	 * @param AmountOfUnlockedStars The number of stars (unlocked-stars as actors) to be added on top of the character
+	 * @param AmountOfLockedStars The number of stars (locked-stars as actors) to be added on top of the character
 	 */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void UpdateStarActor(const FPoolObjectData& CreatedData, float AmountOfUnlockedStars, float AmountOfLockedStars);

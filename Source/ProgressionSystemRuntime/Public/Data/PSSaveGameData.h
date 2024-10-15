@@ -3,7 +3,6 @@
 #pragma once
 
 #include "Data/PSTypes.h"
-#include "Templates/Tuple.h"
 #include "GameFramework/SaveGame.h"
 #include "PSSaveGameData.generated.h"
 
@@ -31,11 +30,7 @@ public:
 
 	/** Returns the ProgressionRow by Index */
 	UFUNCTION(BlueprintPure, Category = "C++")
-	const FName GetSavedProgressionRowByIndex(int32 Index) const;
-
-	/** Set element by index */
-	UFUNCTION(BlueprintCallable, Category= "C++")
-	void SetCurrentProgressionRowByIndex(int32 InIndex);
+	FName GetSavedProgressionRowByIndex(int32 Index) const;
 
 	/** Update the ProgressionRows map */
 	UFUNCTION(BlueprintCallable, Category = "C++")
