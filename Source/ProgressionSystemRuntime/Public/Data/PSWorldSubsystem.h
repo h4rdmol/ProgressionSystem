@@ -115,8 +115,8 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Save Game Data Internal"))
 	TObjectPtr<class UPSSaveGameData> SaveGameDataInternal = nullptr;
 
-	/** Store the Progression Settings data instance */
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Save Game Instance"))
+	/** Store default values from the progression settings data table cached once on load and never changed later */
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Save Game Instance"))
 	TMap<FName, FPSRowData> ProgressionSettingsDataInternal;
 
 	/** Store the current row name */
