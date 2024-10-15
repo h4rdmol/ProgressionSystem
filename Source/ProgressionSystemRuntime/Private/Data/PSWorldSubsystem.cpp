@@ -70,7 +70,7 @@ const UPSDataAsset* UPSWorldSubsystem::GetPSDataAsset() const
 }
 
 //  Returns a current save to disk row name
-FName UPSWorldSubsystem::GetFirstSaveToDiskRowData() const
+FName UPSWorldSubsystem::GetFirstSaveToDiskRowName() const
 {
 	ensureMsgf(SaveGameDataInternal, TEXT("ASSERT: [%i] %s:\n'SaveGameDataInternal' is empty!"), __LINE__, *FString(__FUNCTION__));
 	return SaveGameDataInternal->GetSavedProgressionRowByIndex(0);
@@ -223,7 +223,7 @@ void UPSWorldSubsystem::LoadGameFromSave()
 // Always set first levels as unlocked on begin play
 void UPSWorldSubsystem::SetFirstElementAsCurrent()
 {
-	FName FirstSaveToDiskRow = GetFirstSaveToDiskRowData();
+	FName FirstSaveToDiskRow = GetFirstSaveToDiskRowName();
 	if (!FirstSaveToDiskRow.IsNone())
 	{
 		CurrentRowNameInternal = FirstSaveToDiskRow;

@@ -48,7 +48,7 @@ public:
 
 	/** Returns first save to disk row data */
 	UFUNCTION(BlueprintPure, Category = "C++")
-	FName GetFirstSaveToDiskRowData() const;
+	FName GetFirstSaveToDiskRowName() const;
 
 	/** Returns a current save to disk row by name */
 	UFUNCTION(BlueprintPure, Category = "C++")
