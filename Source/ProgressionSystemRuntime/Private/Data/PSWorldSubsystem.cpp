@@ -92,21 +92,30 @@ const FPSRowData& UPSWorldSubsystem::GetCurrentProgressionSettingsRowByName() co
 // Set the progression system component
 void UPSWorldSubsystem::SetHUDComponent(UPSHUDComponent* MyHUDComponent)
 {
-	checkf(MyHUDComponent, TEXT("%s: My progression system component is null"), *FString(__FUNCTION__));
+	if (!ensureMsgf(MyHUDComponent, TEXT("ASSERT: [%i] %hs:\n'MyHUDComponent' is null!"), __LINE__, __FUNCTION__))
+	{
+		return;
+	}
 	PSHUDComponentInternal = MyHUDComponent;
 }
 
 // Set the progression system spot component
 void UPSWorldSubsystem::RegisterSpotComponent(UPSSpotComponent* MyHUDComponent)
 {
-	checkf(MyHUDComponent, TEXT("%s: My progression system component is null"), *FString(__FUNCTION__));
+	if (!ensureMsgf(MyHUDComponent, TEXT("ASSERT: [%i] %hs:\n'MyHUDComponent' is null!"), __LINE__, __FUNCTION__))
+	{
+		return;
+	}
 	PSSpotComponentArrayInternal.AddUnique(MyHUDComponent);
 	MyHUDComponent->OnSpotComponentReady.AddDynamic(this, &UPSWorldSubsystem::OnSpotComponentLoad);
 }
 
 void UPSWorldSubsystem::SetCurrentSpotComponent(UPSSpotComponent* MyHUDComponent)
 {
-	checkf(MyHUDComponent, TEXT("%s: My progression system component is null"), *FString(__FUNCTION__));
+	if (!ensureMsgf(MyHUDComponent, TEXT("ASSERT: [%i] %hs:\n'MyHUDComponent' is null!"), __LINE__, __FUNCTION__))
+	{
+		return;
+	}
 	PSCurrentSpotComponentInternal = MyHUDComponent;
 	UpdateProgressionActorsForSpot();
 }
@@ -135,7 +144,10 @@ void UPSWorldSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 			LoadGameFromSave();
 
 			StarDynamicProgressMaterial = UMaterialInstanceDynamic::Create(UPSDataAsset::Get().GetDynamicProgressionMaterial(), this);
-			checkf(StarDynamicProgressMaterial, TEXT("ERROR: 'StarDynamicProgressMaterial' is null"));
+			if (!ensureMsgf(StarDynamicProgressMaterial, TEXT("ASSERT: [%i] %hs:\n'StarDynamicProgressMaterial' is null!"), __LINE__, __FUNCTION__))
+			{
+				return;
+			}
 		}
 	}
 }
@@ -198,7 +210,10 @@ void UPSWorldSubsystem::LoadGameFromSave()
 {
 	// load from data table
 	const UDataTable* ProgressionDataTable = UPSDataAsset::Get().GetProgressionDataTable();
-	checkf(ProgressionDataTable, TEXT("ERROR: 'ProgressionDataTableInternal' is null"));
+	if (!ensureMsgf(ProgressionDataTable, TEXT("ASSERT: [%i] %hs:\n'ProgressionDataTable' is null!"), __LINE__, __FUNCTION__))
+	{
+		return;
+	}
 	UMyDataTable::GetRows(*ProgressionDataTable, ProgressionSettingsDataInternal);
 
 	// Check if the save game file exists
@@ -370,7 +385,10 @@ void UPSWorldSubsystem::OnSpotComponentLoad(UPSSpotComponent* SpotComponent)
 // Saves the progression to the local files
 void UPSWorldSubsystem::SaveDataAsync() const
 {
-	checkf(SaveGameDataInternal, TEXT("ERROR: 'SaveGameInstanceInternal' is null"));
+	if (!ensureMsgf(SaveGameDataInternal, TEXT("ASSERT: [%i] %hs:\n'SaveGameDataInternal' is null!"), __LINE__, __FUNCTION__))
+	{
+		return;
+	}
 	UGameplayStatics::AsyncSaveGameToSlot(SaveGameDataInternal, SaveGameDataInternal->GetSaveSlotName(), SaveGameDataInternal->GetSaveSlotIndex());
 }
 
@@ -385,7 +403,10 @@ void UPSWorldSubsystem::ResetSaveGameData()
 	// Re-load a new save game object. Load game from save creates a save file if there is no such
 	LoadGameFromSave();
 	UPSHUDComponent* PSHUDComponent = GetProgressionSystemHUDComponent();
-	checkf(PSHUDComponent, TEXT("ERROR: 'PSHUDComponent' is null"));
+	if (!ensureMsgf(PSHUDComponent, TEXT("ASSERT: [%i] %hs:\n'PSHUDComponent' is null!"), __LINE__, __FUNCTION__))
+	{
+		return;
+	}
 	PSHUDComponent->UpdateProgressionWidgetForPlayer();
 	UpdateProgressionActorsForSpot();
 }
@@ -400,7 +421,10 @@ void UPSWorldSubsystem::UnlockAllLevels()
 	SaveGameDataInternal->UnlockAllLevels();
 	SaveDataAsync();
 	UPSHUDComponent* PSHUDComponent = GetProgressionSystemHUDComponent();
-	checkf(PSHUDComponent, TEXT("ERROR: 'PSHUDComponent' is null"));
+	if (!ensureMsgf(PSHUDComponent, TEXT("ASSERT: [%i] %hs:\n'PSHUDComponent' is null!"), __LINE__, __FUNCTION__))
+	{
+		return;
+	}
 	PSHUDComponent->UpdateProgressionWidgetForPlayer();
 	UpdateProgressionActorsForSpot();
 }

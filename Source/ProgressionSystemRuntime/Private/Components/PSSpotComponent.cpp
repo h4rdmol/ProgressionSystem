@@ -58,7 +58,7 @@ UMySkeletalMeshComponent* UPSSpotComponent::GetMySkeletalMeshComponent() const
 UMySkeletalMeshComponent& UPSSpotComponent::GetMeshChecked() const
 {
 	UMySkeletalMeshComponent* Mesh = GetMySkeletalMeshComponent();
-	checkf(Mesh, TEXT("'Mesh' is nullptr, can not get mesh for '%s' spot."), *GetNameSafe(this));
+	ensureMsgf(Mesh, TEXT("ASSERT: [%i] %hs:\n'Mesh' is nullptr, can not get mesh for spot.!"), __LINE__, __FUNCTION__);
 	return *Mesh;
 }
 
