@@ -48,7 +48,7 @@ UPSWorldSubsystem& UPSWorldSubsystem::Get(const UObject& WorldContextObject)
 // Set current row of progression system by tag
 void UPSWorldSubsystem::SetCurrentRowByTag(FPlayerTag NewRowPlayerTag)
 {
-	for (const auto& KeyValue : ProgressionSettingsDataInternal)
+	for (const TTuple<FName, FPSRowData>& KeyValue : ProgressionSettingsDataInternal)
 	{
 		const FPSRowData& RowData = KeyValue.Value;
 
@@ -215,7 +215,7 @@ void UPSWorldSubsystem::LoadGameFromSave()
 
 		if (SaveGameDataInternal)
 		{
-			for (auto Row : ProgressionSettingsDataInternal)
+			for (TTuple<FName, FPSRowData> Row : ProgressionSettingsDataInternal)
 			{
 				SaveGameDataInternal->SetProgressionMap(Row.Key, FPSSaveToDiskData::EmptyData);
 			}
