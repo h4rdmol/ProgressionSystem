@@ -154,6 +154,10 @@ void UPSWorldSubsystem::Deinitialize()
 // Is called when a player character is ready
 void UPSWorldSubsystem::OnCharacterReady(APlayerCharacter* PlayerCharacter, int32 CharacterID)
 {
+	if (!ensureMsgf(PlayerCharacter, TEXT("ASSERT: [%i] %s:\n'PlayerCharacter' is not valid!"), __LINE__, *FString(__FUNCTION__)))
+	{
+		return;
+	}
 	PlayerCharacter->OnPlayerTypeChanged.AddUniqueDynamic(this, &ThisClass::OnPlayerTypeChanged);
 }
 
@@ -316,7 +320,10 @@ void UPSWorldSubsystem::UpdateStarActor(const FPoolObjectData& CreatedData, floa
 {
 	AActor& SpawnedActor = CreatedData.GetChecked<AActor>();
 	UStaticMeshComponent* MeshComponent = SpawnedActor.FindComponentByClass<UStaticMeshComponent>();
-
+	if (!ensureMsgf(MeshComponent, TEXT("ASSERT: [%i] %s:\n'MeshComponent' is not valid!"), __LINE__, *FString(__FUNCTION__)))
+	{
+		return;
+	}
 	const FPSRowData& CurrentSettingsRowData = GetCurrentProgressionSettingsRowByName();
 
 	SpawnedStarActorsInternal.Add(&SpawnedActor);
@@ -352,10 +359,12 @@ void UPSWorldSubsystem::UpdateStarActor(const FPoolObjectData& CreatedData, floa
 // Triggers when a spot is loaded
 void UPSWorldSubsystem::OnSpotComponentLoad(UPSSpotComponent* SpotComponent)
 {
-	if (SpotComponent)
+	if (!ensureMsgf(SpotComponent, TEXT("ASSERT: [%i] %s:\n'SpotComponent' is not valid!"), __LINE__, *FString(__FUNCTION__)))
 	{
-		PSCurrentSpotComponentInternal = SpotComponent;
+		return;
 	}
+
+	PSCurrentSpotComponentInternal = SpotComponent;
 }
 
 // Saves the progression to the local files
@@ -384,6 +393,10 @@ void UPSWorldSubsystem::ResetSaveGameData()
 // Unlocks all levels of the Progression System
 void UPSWorldSubsystem::UnlockAllLevels()
 {
+	if (!ensureMsgf(SaveGameDataInternal, TEXT("ASSERT: [%i] %s:\n'SaveGameDataInternal' is not valid!"), __LINE__, *FString(__FUNCTION__)))
+	{
+		return;
+	}
 	SaveGameDataInternal->UnlockAllLevels();
 	SaveDataAsync();
 	UPSHUDComponent* PSHUDComponent = GetProgressionSystemHUDComponent();
@@ -396,7 +409,10 @@ void UPSWorldSubsystem::UnlockAllLevels()
 float UPSWorldSubsystem::GetDifficultyMultiplier()
 {
 	TMap<EGameDifficulty, float> DifficultyMap = UPSDataAsset::Get().GetProgressionDifficultyMultiplier();
-	ensureMsgf(!DifficultyMap.IsEmpty(), TEXT("ASSERT: DifficultyMap is empty"));
+	if (!ensureMsgf(DifficultyMap.IsEmpty(), TEXT("ASSERT: [%i] %s:\n'DifficultyMap' is empty!"), __LINE__, *FString(__FUNCTION__)))
+	{
+		return 1.0f;
+	}
 
 	switch (UGameDifficultySubsystem::GetGameDifficultySubsystem()->GetDifficultyType())
 	{
