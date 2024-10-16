@@ -65,21 +65,30 @@ void UPSWorldSubsystem::SetCurrentRowByTag(FPlayerTag NewRowPlayerTag)
 // Returns the data asset that contains all the assets of Progression System game feature
 const UPSDataAsset* UPSWorldSubsystem::GetPSDataAsset() const
 {
-	ensureMsgf(PSDataAssetInternal, TEXT("ASSERT: [%i] %s:\n'PSDataAssetInternal' is empty!"), __LINE__, *FString(__FUNCTION__));
+	if (!ensureMsgf(PSDataAssetInternal, TEXT("ASSERT: [%i] %s:\n'PSDataAssetInternal' is empty!"), __LINE__, *FString(__FUNCTION__)))
+	{
+		return nullptr;
+	}
 	return PSDataAssetInternal.LoadSynchronous();
 }
 
 //  Returns a current save to disk row name
 FName UPSWorldSubsystem::GetFirstSaveToDiskRowName() const
 {
-	ensureMsgf(SaveGameDataInternal, TEXT("ASSERT: [%i] %s:\n'SaveGameDataInternal' is empty!"), __LINE__, *FString(__FUNCTION__));
+	if (!ensureMsgf(SaveGameDataInternal, TEXT("ASSERT: [%i] %s:\n'SaveGameDataInternal' is empty!"), __LINE__, *FString(__FUNCTION__)))
+	{
+		return NAME_None;
+	}
 	return SaveGameDataInternal->GetSavedProgressionRowByIndex(0);
 }
 
 //  Returns a current save to disk row by name
 const FPSSaveToDiskData& UPSWorldSubsystem::GetCurrentSaveToDiskRowByName() const
 {
-	ensureMsgf(SaveGameDataInternal, TEXT("ASSERT: [%i] %s:\n'SaveGameDataInternal' is empty!"), __LINE__, *FString(__FUNCTION__));
+	if (!ensureMsgf(SaveGameDataInternal, TEXT("ASSERT: [%i] %s:\n'SaveGameDataInternal' is empty!"), __LINE__, *FString(__FUNCTION__)))
+	{
+		return FPSSaveToDiskData::EmptyData;
+	}
 	return SaveGameDataInternal->GetSaveToDiskDataByName(CurrentRowNameInternal);
 }
 
