@@ -44,7 +44,7 @@ public:
 
 	/** Returns a current progression save game data */
 	UFUNCTION(BlueprintPure, Category = "C++")
-	FORCEINLINE class UPSSaveGameData* GetCurrentSaveGameData() { return SaveGameDataInternal; }
+	FORCEINLINE class UPSSaveGameData* GetCurrentSaveGameData() const { return SaveGameDataInternal; }
 
 	/** Returns first save to disk row data */
 	UFUNCTION(BlueprintPure, Category = "C++")

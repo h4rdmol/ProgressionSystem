@@ -225,10 +225,7 @@ void UPSWorldSubsystem::LoadGameFromSave()
 {
 	// load from data table
 	const UDataTable* ProgressionDataTable = UPSDataAsset::Get().GetProgressionDataTable();
-	if (!ensureMsgf(ProgressionDataTable, TEXT("ASSERT: [%i] %hs:\n'ProgressionDataTable' is null!"), __LINE__, __FUNCTION__))
-	{
-		return;
-	}
+	checkf(ProgressionDataTable, TEXT("ERROR: 'ProgressionDataTableInternal' is null"));
 	UMyDataTable::GetRows(*ProgressionDataTable, ProgressionSettingsDataInternal);
 
 	// Check if the save game file exists
