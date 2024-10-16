@@ -160,6 +160,7 @@ void UPSWorldSubsystem::Deinitialize()
 	PSCurrentSpotComponentInternal = nullptr;
 	SaveGameDataInternal = nullptr;
 	SpawnedStarActorsInternal.Empty();
+	ProgressionSettingsDataInternal.Empty();
 	StarDynamicProgressMaterial = nullptr;
 }
 
