@@ -86,7 +86,12 @@ const FPSSaveToDiskData& UPSWorldSubsystem::GetCurrentSaveToDiskRowByName() cons
 // Returns a current progression row settings data row by name
 const FPSRowData& UPSWorldSubsystem::GetCurrentProgressionSettingsRowByName() const
 {
-	return *ProgressionSettingsDataInternal.Find(CurrentRowNameInternal);
+	if (const FPSRowData* FoundRow = ProgressionSettingsDataInternal.Find(CurrentRowNameInternal))
+	{
+		return *FoundRow;
+	}
+	
+	return FPSRowData::EmptyData;
 }
 
 // Set the progression system component
