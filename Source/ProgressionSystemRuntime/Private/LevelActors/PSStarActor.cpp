@@ -25,6 +25,7 @@ APSStarActor::APSStarActor()
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 	StarMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StarMesh"));
+	RootComponent = StarMeshComponent;
 }
 
 // Called when the game starts or when spawned
