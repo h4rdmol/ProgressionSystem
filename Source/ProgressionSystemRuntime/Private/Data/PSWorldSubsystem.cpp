@@ -65,7 +65,7 @@ void UPSWorldSubsystem::SetCurrentRowByTag(FPlayerTag NewRowPlayerTag)
 // Returns the data asset that contains all the assets of Progression System game feature
 const UPSDataAsset* UPSWorldSubsystem::GetPSDataAsset() const
 {
-	if (!ensureMsgf(PSDataAssetInternal, TEXT("ASSERT: [%i] %s:\n'PSDataAssetInternal' is empty!"), __LINE__, *FString(__FUNCTION__)))
+	if (!ensureMsgf(!PSDataAssetInternal.IsNull(), TEXT("ASSERT: [%i] %s:\n'PSDataAssetInternal' is empty!"), __LINE__, *FString(__FUNCTION__)))
 	{
 		return nullptr;
 	}
@@ -99,7 +99,7 @@ const FPSRowData& UPSWorldSubsystem::GetCurrentProgressionSettingsRowByName() co
 	{
 		return *FoundRow;
 	}
-	
+
 	return FPSRowData::EmptyData;
 }
 
@@ -155,12 +155,6 @@ void UPSWorldSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 			// Listen to handle input for each game state
 			BIND_ON_GAME_STATE_CHANGED(this, ThisClass::OnGameStateChanged);
 
-			// TSoftObjectPtr explicitly load the data asset 
-			if (PSDataAssetInternal.IsValid() == false)
-			{
-				PSDataAssetInternal = PSDataAssetInternal.LoadSynchronous();  // Explicitly load the asset
-			}
-			
 			LoadGameFromSave();
 
 			StarDynamicProgressMaterial = UMaterialInstanceDynamic::Create(UPSDataAsset::Get().GetDynamicProgressionMaterial(), this);
