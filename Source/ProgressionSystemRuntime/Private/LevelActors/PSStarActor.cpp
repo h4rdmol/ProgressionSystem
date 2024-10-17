@@ -6,6 +6,7 @@
 #include "PoolManagerSubsystem.h"
 #include "Components/StaticMeshComponent.h"
 #include "Controllers/MyPlayerController.h"
+#include "Data/PSDataAsset.h"
 #include "Data/PSTypes.h"
 #include "Data/PSWorldSubsystem.h"
 #include "Engine/World.h"
@@ -23,6 +24,8 @@ APSStarActor::APSStarActor()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
+	StarMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StarMesh"));
+	RootComponent = StarMeshComponent;
 }
 
 // Called when the game starts or when spawned
@@ -138,4 +141,43 @@ void APSStarActor::SetStartTimeMenuStars()
 	check(World);
 
 	StartTimeMenuStarsInternal = World->GetTimeSeconds();
+}
+
+//  Is get called when a Star actor is initialized
+void APSStarActor::OnInitialized(const FVector& PreviousActorLocation)
+{
+	const FPSRowData& CurrentRowData = UPSWorldSubsystem::Get().GetCurrentRow();
+
+	// set offset from previous if it's not first
+	// if the PreviousActorTransform is empty this means it is a first element and set init transform
+	if (PreviousActorLocation.Equals(FVector::ZeroVector))
+	{
+		SetActorTransform(CurrentRowData.StarActorTransform);
+	}
+	else
+	{
+		SetActorTransform(CurrentRowData.StarActorTransform);
+		SetActorLocation(PreviousActorLocation + CurrentRowData.OffsetBetweenStarActors);
+	}
+}
+
+//  Updates star actors Mesh material to the Locked Star, Unlocked or partially achieved
+void APSStarActor::UpdateStarActorMeshMaterial(UMaterialInstanceDynamic* StarDynamicProgressMaterial, float AmountOfStars, bool bIsLockedStar)
+{
+	if (!bIsLockedStar) // unlocked stars
+	{
+		if (AmountOfStars > 0 && AmountOfStars < 1) // stars with fractional number (e.g. 0.5) 
+		{
+			StarMeshComponent->SetMaterial(0, StarDynamicProgressMaterial);
+			StarDynamicProgressMaterial->SetScalarParameterValue(StarMaterialSlotName, AmountOfStars / StarMaterialFractionalDivisor); // StarMaterialFractionalDivisor is hardcoded value to 3 to tweak bad UV to simulate it's working
+		}
+		else // stars with whole number
+		{
+			StarMeshComponent->SetMaterial(0, UPSDataAsset::Get().GetUnlockedProgressionMaterial());
+		}
+	}
+	else // locked stars
+	{
+		StarMeshComponent->SetMaterial(0, UPSDataAsset::Get().GetLockedProgressionMaterial());
+	}
 }
