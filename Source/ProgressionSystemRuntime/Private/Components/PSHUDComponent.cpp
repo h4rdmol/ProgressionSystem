@@ -165,14 +165,15 @@ void UPSHUDComponent::UpdateProgressionWidgetForPlayer()
 void UPSHUDComponent::DisplayLevelUIOverlay(bool IsLevelLocked)
 {
 	checkf(ProgressionMenuWidgetInternal, TEXT("ERROR: 'ProgressionMenuWidgetInternal' is null"));
+	constexpr bool bShouldPlayFadeAnimation = true;
 	if (IsLevelLocked)
 	{
 		// Level is locked show the blocking overlay
-		ProgressionMenuOverlayWidgetInternal->SetOverlayVisibility(ESlateVisibility::Visible, true);
+		ProgressionMenuOverlayWidgetInternal->SetOverlayVisibility(ESlateVisibility::Visible, bShouldPlayFadeAnimation);
 	}
 	else
 	{
 		// Level is unlocked hide the blocking overlay
-		ProgressionMenuOverlayWidgetInternal->SetOverlayVisibility(ESlateVisibility::Collapsed, true);
+		ProgressionMenuOverlayWidgetInternal->SetOverlayVisibility(ESlateVisibility::Collapsed, bShouldPlayFadeAnimation);
 	}
 }
