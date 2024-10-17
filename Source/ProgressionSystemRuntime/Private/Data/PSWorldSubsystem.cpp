@@ -155,6 +155,12 @@ void UPSWorldSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 			// Listen to handle input for each game state
 			BIND_ON_GAME_STATE_CHANGED(this, ThisClass::OnGameStateChanged);
 
+			// TSoftObjectPtr explicitly load the data asset 
+			if (PSDataAssetInternal.IsValid() == false)
+			{
+				PSDataAssetInternal = PSDataAssetInternal.LoadSynchronous();  // Explicitly load the asset
+			}
+			
 			LoadGameFromSave();
 
 			StarDynamicProgressMaterial = UMaterialInstanceDynamic::Create(UPSDataAsset::Get().GetDynamicProgressionMaterial(), this);
