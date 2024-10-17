@@ -262,7 +262,7 @@ void UPSWorldSubsystem::OnTakeActorsFromPoolCompleted(const TArray<FPoolObjectDa
 {
 	const FPSRowData& CurrentRowData = GetCurrentRow();
 	float AmountUnlocked = CurrentRowData.CurrentLevelProgression;
-	FVector PreviousActorLocationRef;
+	FVector PreviousActorLocation;
 
 	for (const FPoolObjectData& CreatedObject : CreatedObjects)
 	{
@@ -279,7 +279,8 @@ void UPSWorldSubsystem::OnTakeActorsFromPoolCompleted(const TArray<FPoolObjectDa
 		}
 		AmountUnlocked -= StarAmount;
 
-		SpawnedActor.OnInitialized(PreviousActorLocationRef);
+		SpawnedActor.OnInitialized(PreviousActorLocation);
+		PreviousActorLocation = SpawnedActor.GetActorLocation();
 	}
 }
 

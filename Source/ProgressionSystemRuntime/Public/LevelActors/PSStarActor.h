@@ -30,10 +30,10 @@ public:
 
 	/** Automatically set the transform and location of actor 
 	 * when a Star actor is initialized
-	* @param PreviousActorLocationRef Previous star actor location reference
+	* @param PreviousActorLocation Previous star actor location reference
 	*/
 	UFUNCTION(BlueprintCallable, Category = "C++")
-	void OnInitialized(FVector& PreviousActorLocationRef);
+	void OnInitialized(const FVector& PreviousActorLocation);
 
 	/** Updates star actors Mesh material to the Locked Star, Unlocked or partially achieved
 	 * 0 - locked star material

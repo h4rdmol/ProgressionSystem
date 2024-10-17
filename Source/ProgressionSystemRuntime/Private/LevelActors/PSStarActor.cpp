@@ -144,27 +144,25 @@ void APSStarActor::SetStartTimeMenuStars()
 }
 
 //  Is get called when a Star actor is initialized
-void APSStarActor::OnInitialized(FVector& PreviousActorLocationRef)
+void APSStarActor::OnInitialized(const FVector& PreviousActorLocation)
 {
 	const FPSRowData& CurrentRowData = UPSWorldSubsystem::Get().GetCurrentRow();
 
 	// set offset from previous if it's not first
 	// if the PreviousActorTransform is empty this means it is a first element and set init transform
-	if (PreviousActorLocationRef.Equals(FVector::ZeroVector))
+	if (PreviousActorLocation.Equals(FVector::ZeroVector))
 	{
 		SetActorTransform(CurrentRowData.StarActorTransform);
 	}
 	else
 	{
 		SetActorTransform(CurrentRowData.StarActorTransform);
-		SetActorLocation(PreviousActorLocationRef + CurrentRowData.OffsetBetweenStarActors);
+		SetActorLocation(PreviousActorLocation + CurrentRowData.OffsetBetweenStarActors);
 	}
-
-	PreviousActorLocationRef = GetActorLocation();
 }
 
 //  Updates star actors Mesh material to the Locked Star, Unlocked or partially achieved
-void APSStarActor::UpdateStarActorMeshMaterial(UMaterialInstanceDynamic* StarDynamicProgressMaterial,float AmountOfStars, bool bIsLockedStar)
+void APSStarActor::UpdateStarActorMeshMaterial(UMaterialInstanceDynamic* StarDynamicProgressMaterial, float AmountOfStars, bool bIsLockedStar)
 {
 	if (!bIsLockedStar) // unlocked stars
 	{
