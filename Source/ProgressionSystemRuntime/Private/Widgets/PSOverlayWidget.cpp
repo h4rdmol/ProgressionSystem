@@ -22,6 +22,14 @@ void UPSOverlayWidget::SetOverlayVisibility(ESlateVisibility VisibilitySlate, bo
 
 	if (VisibilitySlate == ESlateVisibility::Visible)
 	{
+		if (!ensureMsgf(PSCBackgroundOverlay, TEXT("ASSERT: [%i] %s:\n'PSCBackgroundOverlay' is not valid!"), __LINE__, *FString(__FUNCTION__)))
+		{
+			return;
+		}
+		if (!ensureMsgf(PSCBackgroundIconLock, TEXT("ASSERT: [%i] %s:\n'PSCBackgroundIconLock' is not valid!"), __LINE__, *FString(__FUNCTION__)))
+		{
+			return;
+		}
 		ESlateVisibility PrevOverlayOpacity = PSCBackgroundOverlay->GetVisibility();
 		ESlateVisibility PrevIconOpacity = PSCBackgroundIconLock->GetVisibility();
 
