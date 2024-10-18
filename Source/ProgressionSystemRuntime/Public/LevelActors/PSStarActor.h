@@ -65,13 +65,6 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Starting time to animate stars in menu"))
 	float StartTimeMenuStarsInternal = 0.0f;
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Star Material Slot Divisor"))
-	FName StarMaterialSlotName = TEXT("Percentage2");
-
-	// Temporary used to tweak the stars with bad UV  to look as expected
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Star Material Fractional Divisor Temporarry"))
-	float StarMaterialFractionalDivisor = 3.f;
-
 	/** When a local character load finished */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void OnLocalCharacterReady(class APlayerCharacter* Character, int32 CharacterID);

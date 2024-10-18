@@ -179,7 +179,7 @@ void APSStarActor::UpdateStarActorMeshMaterial(UMaterialInstanceDynamic* StarDyn
 	if (AmountOfStars > 0 && AmountOfStars < 1)
 	{
 		StarMeshComponent->SetMaterial(0, StarDynamicProgressMaterial);
-		StarDynamicProgressMaterial->SetScalarParameterValue(StarMaterialSlotName, AmountOfStars / StarMaterialFractionalDivisor); // StarMaterialFractionalDivisor is hardcoded value to 3 to tweak bad UV to simulate it's working
+		StarDynamicProgressMaterial->SetScalarParameterValue(UPSDataAsset::Get().GetStarMaterialSlotName(), AmountOfStars / UPSDataAsset::Get().GetStarMaterialFractionalDivisor()); // StarMaterialFractionalDivisor is hardcoded value to 3 to tweak bad UV to simulate it's working
 		return; // Early return for fractional stars
 	}
 

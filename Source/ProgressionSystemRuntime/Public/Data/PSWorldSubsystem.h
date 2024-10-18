@@ -112,14 +112,6 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Star Dynamic Progress Material"))
 	TObjectPtr<UMaterialInstanceDynamic> StarDynamicProgressMaterial = nullptr;
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Star Material Slot Divisor"))
-	FName StarMaterialSlotDivisor = TEXT("Percentage2");
-	
-	// Temporary used to tweak the stars with bad UV  to look as expected
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Star Material Fractional Divisor Temporarry"))
-	float StarMaterialFractionalDivisor = 3.f;
-	
-
 	/*********************************************************************************************
 	* Protected functions
 	********************************************************************************************* */

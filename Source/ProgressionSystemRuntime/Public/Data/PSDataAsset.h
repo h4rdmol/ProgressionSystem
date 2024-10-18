@@ -61,6 +61,14 @@ public:
 	UFUNCTION(BlueprintPure, Category = "C++")
 	FORCEINLINE TMap<EGameDifficulty, float> GetProgressionDifficultyMultiplier() const { return ProgressionDifficultyMultiplierInternal; }
 
+	/** Star Material Slot name to change the dynamic fill-in based on the progression */
+	UFUNCTION(BlueprintPure, Category = "C++")
+	FORCEINLINE FName GetStarMaterialSlotName() const { return StarMaterialSlotNameInternal; }
+
+	/** Returns temp value to tweak the stars with bad UV  to look as expected. Could not be 0 */
+	UFUNCTION(BlueprintPure, Category = "C++")
+	FORCEINLINE float GetStarMaterialFractionalDivisor() const { return StarMaterialFractionalDivisorInternal; }
+
 protected:
 	/** The Progression Data Table that is responsible for progression configuration. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BlueprintProtected, DisplayName = "Progression Data Table", ShowOnlyInnerProperties))
@@ -105,4 +113,13 @@ protected:
 	/** The Progression difficulty multiplier. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BlueprintProtected, DisplayName = "Progression Multiplier", ShowOnlyInnerProperties))
 	TMap<EGameDifficulty, float> ProgressionDifficultyMultiplierInternal;
+
+	/** Star Material Slot name to change the dynamic fill-in based on the progression */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Star Material Slot Name"))
+	FName StarMaterialSlotNameInternal = NAME_None;
+
+	/** Temporary used to tweak the stars with bad UV  to look as expected
+	 * Since it's a divisor couldn't be 0 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Star Material Fractional Divisor Temporary"))
+	float StarMaterialFractionalDivisorInternal = 1.f;
 };
