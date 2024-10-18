@@ -78,7 +78,10 @@ void UPSOverlayWidget::TickPlayFadeOverlayAnimation()
 	}
 
 	const UWorld* World = GetWorld();
-	check(World);
+	if (!ensureMsgf(World, TEXT("ASSERT: 'World' is not valid")))
+	{
+		return;
+	}
 
 	const float SecondsSinceStart = GetWorld()->GetTimeSeconds() - StartTimeFadeAnimationInternal;
 	float OpacityValue = UPSDataAsset::Get().GetFadeCurveFloat()->GetFloatValue(SecondsSinceStart);
