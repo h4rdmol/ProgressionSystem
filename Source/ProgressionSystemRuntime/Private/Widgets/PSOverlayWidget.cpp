@@ -88,6 +88,11 @@ void UPSOverlayWidget::TickPlayFadeOverlayAnimation()
 
 	float MinTime = 0.f;
 	float MaxTime = 0.f;
+	if (!ensureMsgf(UPSDataAsset::Get().GetFadeCurveFloat(), TEXT("ASSERT: 'CurveFloat' is not valid")))
+	{
+		return;
+	}
+
 	UPSDataAsset::Get().GetFadeCurveFloat()->GetTimeRange(MinTime, MaxTime);
 	if (SecondsSinceStart >= MaxTime)
 	{
