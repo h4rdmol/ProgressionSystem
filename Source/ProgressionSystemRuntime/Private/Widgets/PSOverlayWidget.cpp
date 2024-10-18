@@ -67,13 +67,12 @@ void UPSOverlayWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime
 void UPSOverlayWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-	FadeCurveFloatInternal = UPSDataAsset::Get().GetFadeCurveFloat();
 }
 
 // Play the overlay elements fade-in/fade-out animation. Uses the internal FadeCurveFloatInternal initialized in NativeConstruct
 void UPSOverlayWidget::TickPlayFadeOverlayAnimation()
 {
-	if (!FadeCurveFloatInternal || !bShouldPlayFadeAnimationInternal)
+	if (!UPSDataAsset::Get().GetFadeCurveFloat() || !bShouldPlayFadeAnimationInternal)
 	{
 		return;
 	}
@@ -82,11 +81,11 @@ void UPSOverlayWidget::TickPlayFadeOverlayAnimation()
 	check(World);
 
 	const float SecondsSinceStart = GetWorld()->GetTimeSeconds() - StartTimeFadeAnimationInternal;
-	float OpacityValue = FadeCurveFloatInternal->GetFloatValue(SecondsSinceStart);
+	float OpacityValue = UPSDataAsset::Get().GetFadeCurveFloat()->GetFloatValue(SecondsSinceStart);
 
 	float MinTime = 0.f;
 	float MaxTime = 0.f;
-	FadeCurveFloatInternal->GetTimeRange(MinTime, MaxTime);
+	UPSDataAsset::Get().GetFadeCurveFloat()->GetTimeRange(MinTime, MaxTime);
 	if (SecondsSinceStart >= MaxTime)
 	{
 		// The curve is finished

@@ -24,7 +24,7 @@ public:
 	void SetOverlayVisibility(ESlateVisibility VisibilitySlate, bool bShouldPlayFadeAnimation);
 
 protected:
-	/** overrides NativeTick to make the user widget tickable **/ 
+	/** overrides NativeTick to make the user widget tickable **/
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	/** Event to execute when widget is ready */
 	virtual void NativeConstruct() override;
@@ -41,7 +41,7 @@ protected:
 	*/
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void SetOverlayItemsVisibility(ESlateVisibility VisibilitySlate);
-	
+
 	/** Background overlay for tint effect */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, BindWidget))
 	TObjectPtr<class UImage> PSCBackgroundOverlay = nullptr;
@@ -61,9 +61,4 @@ protected:
 	/** if the fade-in/fade-out overlay animation in the main menu when cinematic started should be played */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Starting time to hide stars"))
 	bool bIsFadeInAnimationInternal = false;
-
-	/** Stores the default fade-in/fade-out curve float animation */
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Starting time to hide stars"))
-	TObjectPtr<class UCurveFloat> FadeCurveFloatInternal = nullptr;
-	
 };
