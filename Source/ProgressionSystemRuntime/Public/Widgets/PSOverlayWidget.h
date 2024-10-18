@@ -21,7 +21,7 @@ public:
 	* @param VisibilitySlate The visibility state (e.g., Visible, Collapsed) to apply to the overlay and icon.
 	* @param bShouldPlayFadeAnimation Defines if the fade animation should be played after or before widget is visible
 	*/
-	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
+	UFUNCTION(BlueprintCallable, Category= "C++")
 	void SetOverlayVisibility(ESlateVisibility VisibilitySlate, bool bShouldPlayFadeAnimation);
 
 protected:
