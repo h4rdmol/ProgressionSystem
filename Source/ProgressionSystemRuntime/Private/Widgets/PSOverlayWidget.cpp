@@ -22,11 +22,7 @@ void UPSOverlayWidget::SetOverlayVisibility(ESlateVisibility VisibilitySlate, bo
 
 	if (VisibilitySlate == ESlateVisibility::Visible)
 	{
-		if (!ensureMsgf(PSCBackgroundOverlay, TEXT("ASSERT: [%i] %s:\n'PSCBackgroundOverlay' is not valid!"), __LINE__, *FString(__FUNCTION__)))
-		{
-			return;
-		}
-		if (!ensureMsgf(PSCBackgroundIconLock, TEXT("ASSERT: [%i] %s:\n'PSCBackgroundIconLock' is not valid!"), __LINE__, *FString(__FUNCTION__)))
+		if (!ensureMsgf(PSCOverlay, TEXT("ASSERT: [%i] %s:\n'PSCOverlay' is not valid!"), __LINE__, *FString(__FUNCTION__)))
 		{
 			return;
 		}
@@ -37,12 +33,11 @@ void UPSOverlayWidget::SetOverlayVisibility(ESlateVisibility VisibilitySlate, bo
 		{
 			bShouldPlayFadeAnimationInternal = false;
 		}
-		bIsFadeInAnimationInternal = true;
 		SetOverlayItemsVisibility(VisibilitySlate);
 	}
 	else
 	{
-		bIsFadeInAnimationInternal = false;
+		SetOverlayItemsVisibility(VisibilitySlate);
 	}
 
 	const UWorld* World = GetWorld();
@@ -71,44 +66,25 @@ void UPSOverlayWidget::NativeConstruct()
 // Play the overlay elements fade-in/fade-out animation. Uses the internal FadeCurveFloatInternal initialized in NativeConstruct
 void UPSOverlayWidget::TickPlayFadeOverlayAnimation()
 {
-	if (!UPSDataAsset::Get().GetFadeCurveFloat() || !bShouldPlayFadeAnimationInternal)
-	{
-		return;
-	}
-
 	const UWorld* World = GetWorld();
-	if (!ensureMsgf(World, TEXT("ASSERT: 'World' is not valid")))
+
+	if (!bShouldPlayFadeAnimationInternal
+		|| !World
+		|| !ensureMsgf(FadeDuration > 0.0f, TEXT("ASSERT: [%i] %hs:\n'FadeDuration' must be greater than 0"), __LINE__, __FUNCTION__))
 	{
 		return;
 	}
 
 	const float SecondsSinceStart = GetWorld()->GetTimeSeconds() - StartTimeFadeAnimationInternal;
-	float OpacityValue = UPSDataAsset::Get().GetFadeCurveFloat()->GetFloatValue(SecondsSinceStart);
+	const float OpacityValue = FMath::Clamp(SecondsSinceStart / FadeDuration, 0.0f, 1.0f);
 
-	float MinTime = 0.f;
-	float MaxTime = 0.f;
-	if (!ensureMsgf(UPSDataAsset::Get().GetFadeCurveFloat(), TEXT("ASSERT: 'CurveFloat' is not valid")))
+	if (SecondsSinceStart >= FadeDuration)
 	{
-		return;
-	}
-
-	UPSDataAsset::Get().GetFadeCurveFloat()->GetTimeRange(MinTime, MaxTime);
-	if (SecondsSinceStart >= MaxTime)
-	{
-		// The curve is finished
-		if (!bIsFadeInAnimationInternal)
-		{
-			SetOverlayItemsVisibility(ESlateVisibility::Collapsed);
-		}
+		//SetOverlayItemsVisibility(ESlateVisibility::Collapsed);
 		bShouldPlayFadeAnimationInternal = false;
 		return;
 	}
-
-	if (!bIsFadeInAnimationInternal)
-	{
-		OpacityValue = MaxTime - OpacityValue;
-	}
-
+	
 	if (PSCOverlay)
 	{
 		PSCOverlay->SetRenderOpacity(OpacityValue);

@@ -61,10 +61,6 @@ public:
 	UFUNCTION(BlueprintPure, Category = "C++")
 	FORCEINLINE TMap<EGameDifficulty, float> GetProgressionDifficultyMultiplier() const { return ProgressionDifficultyMultiplierInternal; }
 
-	/** Returns curve float for fade-in/fade-out animation */
-	UFUNCTION(BlueprintPure, Category = "C++")
-	FORCEINLINE class UCurveFloat* GetFadeCurveFloat() const { return FadeCurveFloatInternal; }
-
 protected:
 	/** The Progression Data Table that is responsible for progression configuration. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BlueprintProtected, DisplayName = "Progression Data Table", ShowOnlyInnerProperties))
@@ -109,8 +105,4 @@ protected:
 	/** The Progression difficulty multiplier. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BlueprintProtected, DisplayName = "Progression Multiplier", ShowOnlyInnerProperties))
 	TMap<EGameDifficulty, float> ProgressionDifficultyMultiplierInternal;
-
-	/** Material applied for dynamic progression material (star is filled partially depends on progression) */
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<class UCurveFloat> FadeCurveFloatInternal = nullptr;
 };

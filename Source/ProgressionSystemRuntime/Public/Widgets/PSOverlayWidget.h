@@ -46,24 +46,16 @@ protected:
 	/** Overlay widget which is a root for all fade-in/out overlay elements */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, BindWidget))
 	TObjectPtr<class UOverlay> PSCOverlay = nullptr;
-	
-	/** Background overlay for tint effect */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, BindWidget))
-	TObjectPtr<class UImage> PSCBackgroundOverlay = nullptr;
-
-	/** Background overlay lock icon */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, BindWidget))
-	TObjectPtr<class UImage> PSCBackgroundIconLock = nullptr;
 
 	/** Stores the starting time to fade-in/fade-out overlay in the main menu when cinematic started */
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Starting time to hide stars"))
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Starting time to fade overlay"))
 	float StartTimeFadeAnimationInternal = 0.0f;
 
-	/** if the fade-in/fade-out overlay animation in the main menu when cinematic started should be played */
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Starting time to hide stars"))
-	bool bShouldPlayFadeAnimationInternal = false;
+	/** Stores the starting time to fade-in/fade-out overlay in the main menu when cinematic started */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Fade duration"))
+	float FadeDuration = 0.0f;
 
 	/** if the fade-in/fade-out overlay animation in the main menu when cinematic started should be played */
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Starting time to hide stars"))
-	bool bIsFadeInAnimationInternal = false;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Should fade animation to be played"))
+	bool bShouldPlayFadeAnimationInternal = false;
 };
