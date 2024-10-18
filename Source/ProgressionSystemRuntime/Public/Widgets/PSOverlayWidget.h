@@ -30,11 +30,10 @@ protected:
 	virtual void NativeConstruct() override;
 
 	/**
-	* Play the overlay elemetns fade-in/fade-out animation.
+	* Play the overlay elements fade-in/fade-out animation.
 	* Uses the internal FadeCurveFloatInternal initialized in NativeConstruct
-	* @param StartTimeRef The start timer to calculate time elapsed
 	*/
-	bool FadeOverlayElementsAnimation(float& StartTimeRef);
+	void TickPlayFadeOverlayAnimation();
 
 	/**
 	* Sets the visibility of the background overlay and lock icon.

@@ -59,19 +59,8 @@ void UPSOverlayWidget::SetOverlayVisibility(ESlateVisibility VisibilitySlate, bo
 void UPSOverlayWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
-	if (bShouldPlayFadeAnimationInternal)
-	{
-		const bool bIsFinished = !FadeOverlayElementsAnimation(StartTimeFadeAnimationInternal);
-		if (bIsFinished)
-		{
-			bShouldPlayFadeAnimationInternal = false;
-			StartTimeFadeAnimationInternal = 0.f;
-			if (!bIsFadeInAnimationInternal)
-			{
-				SetOverlayItemsVisibility(ESlateVisibility::Collapsed);
-			}
-		}
-	}
+
+	TickPlayFadeOverlayAnimation();
 }
 
 // Event to execute when widget is ready
@@ -81,19 +70,18 @@ void UPSOverlayWidget::NativeConstruct()
 	FadeCurveFloatInternal = UPSDataAsset::Get().GetFadeCurveFloat();
 }
 
-// Play the overlay elemetns fade-in/fade-out animation. Uses the internal FadeCurveFloatInternal initialized in NativeConstruct
-bool UPSOverlayWidget::FadeOverlayElementsAnimation(float& StartTimeRef)
+// Play the overlay elements fade-in/fade-out animation. Uses the internal FadeCurveFloatInternal initialized in NativeConstruct
+void UPSOverlayWidget::TickPlayFadeOverlayAnimation()
 {
-	if (!StartTimeRef || !FadeCurveFloatInternal || !bShouldPlayFadeAnimationInternal)
+	if (!FadeCurveFloatInternal || !bShouldPlayFadeAnimationInternal)
 	{
-		StartTimeRef = 0.f;
-		return false;
+		return;
 	}
 
 	const UWorld* World = GetWorld();
 	check(World);
 
-	const float SecondsSinceStart = GetWorld()->GetTimeSeconds() - StartTimeRef;
+	const float SecondsSinceStart = GetWorld()->GetTimeSeconds() - StartTimeFadeAnimationInternal;
 	float OpacityValue = FadeCurveFloatInternal->GetFloatValue(SecondsSinceStart);
 
 	float MinTime = 0.f;
@@ -102,7 +90,12 @@ bool UPSOverlayWidget::FadeOverlayElementsAnimation(float& StartTimeRef)
 	if (SecondsSinceStart >= MaxTime)
 	{
 		// The curve is finished
-		return false;
+		if (!bIsFadeInAnimationInternal)
+		{
+			SetOverlayItemsVisibility(ESlateVisibility::Collapsed);
+		}
+		bShouldPlayFadeAnimationInternal = false;
+		return;
 	}
 
 	if (!bIsFadeInAnimationInternal)
@@ -115,7 +108,6 @@ bool UPSOverlayWidget::FadeOverlayElementsAnimation(float& StartTimeRef)
 		PSCBackgroundOverlay->SetRenderOpacity(OpacityValue);
 		PSCBackgroundIconLock->SetRenderOpacity(OpacityValue);
 	}
-	return true;
 }
 
 void UPSOverlayWidget::SetOverlayItemsVisibility(ESlateVisibility VisibilitySlate)
