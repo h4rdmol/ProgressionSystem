@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/Overlay.h"
 #include "PSOverlayWidget.generated.h"
 
 /**
@@ -42,6 +43,10 @@ protected:
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void SetOverlayItemsVisibility(ESlateVisibility VisibilitySlate);
 
+	/** Overlay widget which is a root for all fade-in/out overlay elements */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, BindWidget))
+	TObjectPtr<class UOverlay> PSCOverlay = nullptr;
+	
 	/** Background overlay for tint effect */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, BindWidget))
 	TObjectPtr<class UImage> PSCBackgroundOverlay = nullptr;

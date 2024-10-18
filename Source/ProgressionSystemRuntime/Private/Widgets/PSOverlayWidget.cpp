@@ -30,11 +30,10 @@ void UPSOverlayWidget::SetOverlayVisibility(ESlateVisibility VisibilitySlate, bo
 		{
 			return;
 		}
-		ESlateVisibility PrevOverlayOpacity = PSCBackgroundOverlay->GetVisibility();
-		ESlateVisibility PrevIconOpacity = PSCBackgroundIconLock->GetVisibility();
+		ESlateVisibility PrevOverlayOpacity = PSCOverlay->GetVisibility();
 
 		//if new visibility is same as previous animation is not required 
-		if (PrevOverlayOpacity == VisibilitySlate && PrevIconOpacity == VisibilitySlate)
+		if (PrevOverlayOpacity == VisibilitySlate)
 		{
 			bShouldPlayFadeAnimationInternal = false;
 		}
@@ -110,16 +109,14 @@ void UPSOverlayWidget::TickPlayFadeOverlayAnimation()
 		OpacityValue = MaxTime - OpacityValue;
 	}
 
-	if (PSCBackgroundOverlay && PSCBackgroundIconLock)
+	if (PSCOverlay)
 	{
-		PSCBackgroundOverlay->SetRenderOpacity(OpacityValue);
-		PSCBackgroundIconLock->SetRenderOpacity(OpacityValue);
+		PSCOverlay->SetRenderOpacity(OpacityValue);
 	}
 }
 
 void UPSOverlayWidget::SetOverlayItemsVisibility(ESlateVisibility VisibilitySlate)
 {
 	// Level is unlocked hide the blocking overlay
-	PSCBackgroundOverlay->SetVisibility(VisibilitySlate);
-	PSCBackgroundIconLock->SetVisibility(VisibilitySlate);
+	PSCOverlay->SetVisibility(VisibilitySlate);
 }
