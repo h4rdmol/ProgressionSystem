@@ -22,7 +22,7 @@ public:
 	* @param bShouldPlayFadeAnimation Defines if the fade animation should be played after or before widget is visible
 	*/
 	UFUNCTION(BlueprintCallable, Category= "C++")
-	void SetOverlayVisibility(ESlateVisibility VisibilitySlate, bool bShouldPlayFadeAnimation);
+	void SetOverlayVisibility(ESlateVisibility VisibilitySlate, bool bShouldPlayFadeAnimation = false);
 
 protected:
 	/** overrides NativeTick to make the user widget tickable **/
