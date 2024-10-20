@@ -34,6 +34,7 @@ protected:
 	* Play the overlay elements fade-in/fade-out animation.
 	* Uses the internal FadeCurveFloatInternal initialized in NativeConstruct
 	*/
+	UFUNCTION(BlueprintCallable, Category="C++")
 	void TickPlayFadeOverlayAnimation();
 
 	/**
