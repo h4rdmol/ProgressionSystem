@@ -52,10 +52,6 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Starting time to fade overlay"))
 	float StartTimeFadeAnimationInternal = 0.0f;
 
-	/** Stores the starting time to fade-in/fade-out overlay in the main menu when cinematic started */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Fade duration"))
-	float FadeDuration = 0.0f;
-
 	/** if the fade-in/fade-out overlay animation in the main menu when cinematic started should be played */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Should fade animation to be played"))
 	bool bShouldPlayFadeAnimationInternal = false;

@@ -70,15 +70,15 @@ void UPSOverlayWidget::TickPlayFadeOverlayAnimation()
 
 	if (!bShouldPlayFadeAnimationInternal
 		|| !World
-		|| !ensureMsgf(FadeDuration > 0.0f, TEXT("ASSERT: [%i] %hs:\n'FadeDuration' must be greater than 0"), __LINE__, __FUNCTION__))
+		|| !ensureMsgf(UPSDataAsset::Get().GetOverlayFadeDuration() > 0.0f, TEXT("ASSERT: [%i] %hs:\n'FadeDuration' must be greater than 0"), __LINE__, __FUNCTION__))
 	{
 		return;
 	}
 
 	const float SecondsSinceStart = GetWorld()->GetTimeSeconds() - StartTimeFadeAnimationInternal;
-	const float OpacityValue = FMath::Clamp(SecondsSinceStart / FadeDuration, 0.0f, 1.0f);
+	const float OpacityValue = FMath::Clamp(SecondsSinceStart / UPSDataAsset::Get().GetOverlayFadeDuration(), 0.0f, 1.0f);
 
-	if (SecondsSinceStart >= FadeDuration)
+	if (SecondsSinceStart >= UPSDataAsset::Get().GetOverlayFadeDuration())
 	{
 		//SetOverlayItemsVisibility(ESlateVisibility::Collapsed);
 		bShouldPlayFadeAnimationInternal = false;
