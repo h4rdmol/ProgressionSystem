@@ -61,7 +61,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "C++")
 	FORCEINLINE TMap<EGameDifficulty, float> GetProgressionDifficultyMultiplier() const { return ProgressionDifficultyMultiplierInternal; }
 
-	// Returns the duration of fade-in/fade-out overlay animation in the main menu when cinematic started
+	/** Returns the duration of fade-in/fade-out overlay animation in the main menu when cinematic started */
 	UFUNCTION(BlueprintPure, Category = "C++")
 	FORCEINLINE float GetOverlayFadeDuration() const { return FadeDurationInternal; }
 
