@@ -33,10 +33,15 @@ void UPSOverlayWidget::SetOverlayVisibility(ESlateVisibility VisibilitySlate, bo
 		if (PrevOverlayOpacity == VisibilitySlate)
 		{
 			bShouldPlayFadeAnimationInternal = false;
+			OverlayWidgetFadeStateInternal = EPSOverlayWidgetFadeState::None;
 		}
+		OverlayWidgetFadeStateInternal = EPSOverlayWidgetFadeState::FadeIn;
+		SetOverlayItemsVisibility(VisibilitySlate);
 	}
-
-	SetOverlayItemsVisibility(VisibilitySlate);
+	else
+	{
+		OverlayWidgetFadeStateInternal = EPSOverlayWidgetFadeState::FadeOut;
+	}
 
 	const UWorld* World = GetWorld();
 	if (!ensureMsgf(World, TEXT("ASSERT: [%i] %s:\n'World' is not valid!"), __LINE__, *FString(__FUNCTION__)))
@@ -74,12 +79,18 @@ void UPSOverlayWidget::TickPlayFadeOverlayAnimation()
 		return;
 	}
 
+	const bool bIsFadeOutAnimation = OverlayWidgetFadeStateInternal == EPSOverlayWidgetFadeState::FadeOut;
 	const float SecondsSinceStart = GetWorld()->GetTimeSeconds() - StartTimeFadeAnimationInternal;
-	const float OpacityValue = FMath::Clamp(SecondsSinceStart / FadeDuration, 0.0f, 1.0f);
+	const float NormalizedTime = FMath::Clamp(SecondsSinceStart / FadeDuration, 0.0f, 1.0f);
+	const float OpacityValue = bIsFadeOutAnimation ? 1.0f - NormalizedTime : NormalizedTime;
 
 	if (SecondsSinceStart >= FadeDuration)
 	{
 		bShouldPlayFadeAnimationInternal = false;
+		if (OverlayWidgetFadeStateInternal == EPSOverlayWidgetFadeState::FadeOut)
+		{
+			PSCOverlay->SetVisibility(ESlateVisibility::Collapsed);
+		}
 		return;
 	}
 

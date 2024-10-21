@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Data/PSTypes.h"
 #include "PSOverlayWidget.generated.h"
 
 /**
@@ -54,4 +55,8 @@ protected:
 	/** if the fade-in/fade-out overlay animation in the main menu when cinematic started should be played */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Should fade animation to be played"))
 	bool bShouldPlayFadeAnimationInternal = false;
+
+	/** Current overlay widget fade state. */
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, AdvancedDisplay, Category = "C++", meta = (BlueprintProtected, DisplayName = "Overlay Widget Fade State"))
+	EPSOverlayWidgetFadeState OverlayWidgetFadeStateInternal = EPSOverlayWidgetFadeState::None;
 };
