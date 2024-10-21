@@ -80,11 +80,10 @@ void UPSOverlayWidget::TickPlayFadeOverlayAnimation()
 
 	if (SecondsSinceStart >= UPSDataAsset::Get().GetOverlayFadeDuration())
 	{
-		//SetOverlayItemsVisibility(ESlateVisibility::Collapsed);
 		bShouldPlayFadeAnimationInternal = false;
 		return;
 	}
-	
+
 	if (PSCOverlay)
 	{
 		PSCOverlay->SetRenderOpacity(OpacityValue);
