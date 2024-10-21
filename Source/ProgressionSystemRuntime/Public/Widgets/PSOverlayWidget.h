@@ -9,7 +9,7 @@
 
 /**
  * 
- * Overlay widget which is displayed for the locked/unlocked levels
+ * Overlay widget which is displayed for the locked/unlocked levels in the main menu
  * If level is locked overlay is displayed. Is unlocked - no overlay 
  */
 UCLASS()
