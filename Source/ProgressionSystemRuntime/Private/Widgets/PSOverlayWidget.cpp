@@ -6,6 +6,7 @@
 #include "Components/Image.h"
 #include "Curves/CurveFloat.h"
 #include "Data/PSDataAsset.h"
+#include "Components/Overlay.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(PSOverlayWidget)
 

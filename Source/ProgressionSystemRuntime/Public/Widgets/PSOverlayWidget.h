@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Components/Overlay.h"
 #include "PSOverlayWidget.generated.h"
 
 /**
