@@ -68,18 +68,19 @@ void UPSOverlayWidget::NativeConstruct()
 void UPSOverlayWidget::TickPlayFadeOverlayAnimation()
 {
 	const UWorld* World = GetWorld();
-
+	const float FadeDuration = UPSDataAsset::Get().GetOverlayFadeDuration();
+	
 	if (!bShouldPlayFadeAnimationInternal
 		|| !World
-		|| !ensureMsgf(UPSDataAsset::Get().GetOverlayFadeDuration() > 0.0f, TEXT("ASSERT: [%i] %hs:\n'FadeDuration' must be greater than 0"), __LINE__, __FUNCTION__))
+		|| !ensureMsgf(FadeDuration > 0.0f, TEXT("ASSERT: [%i] %hs:\n'FadeDuration' must be greater than 0"), __LINE__, __FUNCTION__))
 	{
 		return;
 	}
 
 	const float SecondsSinceStart = GetWorld()->GetTimeSeconds() - StartTimeFadeAnimationInternal;
-	const float OpacityValue = FMath::Clamp(SecondsSinceStart / UPSDataAsset::Get().GetOverlayFadeDuration(), 0.0f, 1.0f);
+	const float OpacityValue = FMath::Clamp(SecondsSinceStart / FadeDuration, 0.0f, 1.0f);
 
-	if (SecondsSinceStart >= UPSDataAsset::Get().GetOverlayFadeDuration())
+	if (SecondsSinceStart >= FadeDuration)
 	{
 		bShouldPlayFadeAnimationInternal = false;
 		return;
