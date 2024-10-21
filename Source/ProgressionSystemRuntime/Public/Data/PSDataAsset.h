@@ -111,6 +111,6 @@ protected:
 	TMap<EGameDifficulty, float> ProgressionDifficultyMultiplierInternal;
 
 	/** Stores the duration of fade-in/fade-out overlay animation in the main menu when cinematic started */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Fade duration"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Fade duration"))
 	float FadeDurationInternal = 1.0f;
 };
