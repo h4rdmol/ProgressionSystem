@@ -9,6 +9,8 @@
 
 /**
  * 
+ * Overlay widget which is displayed for the locked/unlocked levels
+ * If level is locked overlay is displayed. Is unlocked - no overlay 
  */
 UCLASS()
 class PROGRESSIONSYSTEMRUNTIME_API UPSOverlayWidget : public UUserWidget
