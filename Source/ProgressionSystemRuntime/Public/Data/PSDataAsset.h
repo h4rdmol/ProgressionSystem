@@ -61,6 +61,10 @@ public:
 	UFUNCTION(BlueprintPure, Category = "C++")
 	FORCEINLINE TMap<EGameDifficulty, float> GetProgressionDifficultyMultiplier() const { return ProgressionDifficultyMultiplierInternal; }
 
+	/** Returns the duration of fade-in/fade-out overlay animation in the main menu when cinematic started */
+	UFUNCTION(BlueprintPure, Category = "C++")
+	FORCEINLINE float GetOverlayFadeDuration() const { return FadeDurationInternal; }
+
 	/** Star Material Slot name to change the dynamic fill-in based on the progression */
 	UFUNCTION(BlueprintPure, Category = "C++")
 	FORCEINLINE FName GetStarMaterialSlotName() const { return StarMaterialSlotNameInternal; }
@@ -113,6 +117,10 @@ protected:
 	/** The Progression difficulty multiplier. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BlueprintProtected, DisplayName = "Progression Multiplier", ShowOnlyInnerProperties))
 	TMap<EGameDifficulty, float> ProgressionDifficultyMultiplierInternal;
+
+	/** Stores the duration of fade-in/fade-out overlay animation in the main menu when cinematic started */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Fade duration"))
+	float FadeDurationInternal = 1.0;
 
 	/** Star Material Slot name to change the dynamic fill-in based on the progression */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Star Material Slot Name"))

@@ -21,12 +21,9 @@ class PROGRESSIONSYSTEMRUNTIME_API UPSWorldSubsystem : public UWorldSubsystem
 public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCurrentRowDataChanged, const FPlayerTag, SavedProgressionRowData);
 
-	/** Returns this Subsystem, is checked and wil crash if can't be obtained.*/
+	/** Returns this Subsystem, is checked and will crash if it can't be obtained.*/
 	static UPSWorldSubsystem& Get();
 	static UPSWorldSubsystem& Get(const UObject& WorldContextObject);
-
-	/** Returns current row of progression system */
-	const FPSRowData& GetCurrentRow() const;
 
 	/** Set current row of progression system by tag*/
 	UFUNCTION(BlueprintCallable, Category = "C++")
@@ -48,9 +45,25 @@ public:
 	UFUNCTION(BlueprintPure, Category = "C++")
 	FORCEINLINE class UPSHUDComponent* GetProgressionSystemHUDComponent() const { return PSHUDComponentInternal; }
 
-	/** Returns a current save game instance */
+	/** Returns a current progression row name */
 	UFUNCTION(BlueprintPure, Category = "C++")
-	FORCEINLINE class UPSSaveGameData* GetCurrentSaveGameData() const { return SaveGameInstanceInternal; }
+	FORCEINLINE FName GetCurrentRowName() const { return CurrentRowNameInternal; }
+
+	/** Returns a current progression save game data */
+	UFUNCTION(BlueprintPure, Category = "C++")
+	FORCEINLINE class UPSSaveGameData* GetCurrentSaveGameData() const { return SaveGameDataInternal; }
+
+	/** Returns first save to disk row data */
+	UFUNCTION(BlueprintPure, Category = "C++")
+	FName GetFirstSaveToDiskRowName() const;
+
+	/** Returns a current save to disk row by name */
+	UFUNCTION(BlueprintPure, Category = "C++")
+	const FPSSaveToDiskData& GetCurrentSaveToDiskRowByName() const;
+
+	/** Returns a current progression row settings data row by name */
+	UFUNCTION(BlueprintPure, Category = "C++")
+	const FPSRowData& GetCurrentProgressionSettingsRowByName() const;
 
 	/** Set the progression system component */
 	UFUNCTION(BlueprintCallable, Category = "C++")
@@ -66,7 +79,7 @@ public:
 
 	/** Saves the progression to the local files */
 	UFUNCTION()
-	void SaveDataAsync();
+	void SaveDataAsync() const;
 
 	/** Removes all saved data of the Progression system and creates a new empty data */
 	UFUNCTION(BlueprintCallable, Category = "C++")
@@ -100,15 +113,28 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Progression System Spot Component"))
 	TObjectPtr<class UPSSpotComponent> PSCurrentSpotComponentInternal = nullptr;
 
-	/** Store the current save game instance */
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Save Game Instance"))
-	TObjectPtr<class UPSSaveGameData> SaveGameInstanceInternal = nullptr;
+	/** Store the current save game instance
+	 * Contains the FPSSaveToDiskData which has actual data from save file */
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Save Game Data Internal"))
+	TObjectPtr<class UPSSaveGameData> SaveGameDataInternal = nullptr;
+
+	/** Store default values from the progression settings data table cached once on load and never changed later */
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Save Game Instance"))
+	TMap<FName, FPSRowData> ProgressionSettingsDataInternal;
+
+	/** Store the current row name */
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Current Row Name"))
+	FName CurrentRowNameInternal = NAME_None;
 
 	/** Array of pool actors handlers which should be released */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Pool Actors Handlers"))
 	TArray<FPoolObjectHandle> PoolActorHandlersInternal;
 
-	/** Store the material for dynamic progress materil fill for a star actor */
+	/** Array of actors spawned */
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Transient, Category = "C++", meta = (BlueprintProtected, DisplayName = "Spawned Actors Internal"))
+	TArray<AActor*> SpawnedStarActorsInternal;
+
+	/** Store the material for dynamic progress material fill for a star actor */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Star Dynamic Progress Material"))
 	TObjectPtr<UMaterialInstanceDynamic> StarDynamicProgressMaterial = nullptr;
 
@@ -140,7 +166,7 @@ protected:
 
 	/** Set first element as current active */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
-	void SetFirstElemetAsCurrent();
+	void SetFirstElementAsCurrent();
 
 	/** Updates the stars actors for a spot */
 	UFUNCTION(Blueprintable, Category="C++", meta=(BlueprintProtected))

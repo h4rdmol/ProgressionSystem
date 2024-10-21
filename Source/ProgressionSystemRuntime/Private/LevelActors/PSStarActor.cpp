@@ -91,8 +91,8 @@ void APSStarActor::OnAnyCinematicStarted(const UObject* LevelSequence, const UOb
 // Hiding stars with animation in main menu when cinematic is start to play
 void APSStarActor::TryPlayHideStarAnimation()
 {
-	const FPSRowData& CurrentRow = UPSWorldSubsystem::Get().GetCurrentRow();
-	const bool bIsFinished = !TryPlayStarAnimation(StartTimeHideStarsInternal, CurrentRow.HideStarsAnimation);
+	const FPSRowData& CurrentProgressionSettingsRow = UPSWorldSubsystem::Get().GetCurrentProgressionSettingsRowByName();
+	const bool bIsFinished = !TryPlayStarAnimation(StartTimeHideStarsInternal, CurrentProgressionSettingsRow.HideStarsAnimation);
 	if (bIsFinished)
 	{
 		StartTimeHideStarsInternal = 0.f;
@@ -103,8 +103,8 @@ void APSStarActor::TryPlayHideStarAnimation()
 // Menu stars with animation in main menu idle 
 void APSStarActor::TryPlayMenuStarAnimation()
 {
-	const FPSRowData& CurrentRow = UPSWorldSubsystem::Get().GetCurrentRow();
-	const bool bIsFinished = !TryPlayStarAnimation(StartTimeMenuStarsInternal, CurrentRow.MenuStarsAnimation);
+	const FPSRowData& CurrentProgressionSettingsRow = UPSWorldSubsystem::Get().GetCurrentProgressionSettingsRowByName();
+	const bool bIsFinished = !TryPlayStarAnimation(StartTimeMenuStarsInternal, CurrentProgressionSettingsRow.MenuStarsAnimation);
 	if (bIsFinished)
 	{
 		StartTimeMenuStarsInternal = GetWorld()->GetTimeSeconds();
@@ -146,14 +146,14 @@ void APSStarActor::SetStartTimeMenuStars()
 //  Is get called when a Star actor is initialized
 void APSStarActor::OnInitialized(const FVector& PreviousActorLocation)
 {
-	const FPSRowData& CurrentRowData = UPSWorldSubsystem::Get().GetCurrentRow();
-	FTransform DesiredTransform = CurrentRowData.StarActorTransform;
+	const FPSRowData& CurrentProgressionSettingsRow = UPSWorldSubsystem::Get().GetCurrentProgressionSettingsRowByName();
+	FTransform DesiredTransform = CurrentProgressionSettingsRow.StarActorTransform;
 
 	// set offset from previous if it's not first
 	// if the PreviousActorTransform is empty this means it is a first element and set init transform
 	if (!PreviousActorLocation.Equals(FVector::ZeroVector))
 	{
-		DesiredTransform.SetLocation(PreviousActorLocation + CurrentRowData.OffsetBetweenStarActors);
+		DesiredTransform.SetLocation(PreviousActorLocation + CurrentProgressionSettingsRow.OffsetBetweenStarActors);
 	}
 
 	SetActorTransform(DesiredTransform);
