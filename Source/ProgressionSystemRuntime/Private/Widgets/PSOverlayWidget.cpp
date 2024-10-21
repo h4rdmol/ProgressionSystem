@@ -34,12 +34,9 @@ void UPSOverlayWidget::SetOverlayVisibility(ESlateVisibility VisibilitySlate, bo
 		{
 			bShouldPlayFadeAnimationInternal = false;
 		}
-		SetOverlayItemsVisibility(VisibilitySlate);
 	}
-	else
-	{
-		SetOverlayItemsVisibility(VisibilitySlate);
-	}
+
+	SetOverlayItemsVisibility(VisibilitySlate);
 
 	const UWorld* World = GetWorld();
 	if (!ensureMsgf(World, TEXT("ASSERT: [%i] %s:\n'World' is not valid!"), __LINE__, *FString(__FUNCTION__)))
@@ -69,7 +66,7 @@ void UPSOverlayWidget::TickPlayFadeOverlayAnimation()
 {
 	const UWorld* World = GetWorld();
 	const float FadeDuration = UPSDataAsset::Get().GetOverlayFadeDuration();
-	
+
 	if (!bShouldPlayFadeAnimationInternal
 		|| !World
 		|| !ensureMsgf(FadeDuration > 0.0f, TEXT("ASSERT: [%i] %hs:\n'FadeDuration' must be greater than 0"), __LINE__, __FUNCTION__))
