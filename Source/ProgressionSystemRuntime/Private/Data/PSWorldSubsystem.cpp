@@ -174,7 +174,6 @@ void UPSWorldSubsystem::Deinitialize()
 	PSHUDComponentInternal = nullptr;
 	PSCurrentSpotComponentInternal = nullptr;
 	SaveGameDataInternal = nullptr;
-	SpawnedStarActorsInternal.Empty();
 	ProgressionSettingsDataInternal.Empty();
 	StarDynamicProgressMaterial = nullptr;
 }
@@ -276,7 +275,6 @@ void UPSWorldSubsystem::AddProgressionStarActors()
 	const FPSRowData& CurrentSettingsRowData = GetCurrentProgressionSettingsRowByName();
 	//Return to Pool Manager the list of handles which is not needed (if there are any) 
 	UPoolManagerSubsystem::Get().ReturnToPoolArray(PoolActorHandlersInternal);
-	SpawnedStarActorsInternal.Empty();
 	// --- Prepare spawn request
 	const TWeakObjectPtr<ThisClass> WeakThis = this;
 	const FOnSpawnAllCallback OnTakeActorsFromPoolCompleted = [WeakThis](const TArray<FPoolObjectData>& CreatedObjects)
