@@ -54,8 +54,13 @@ protected:
 	* Protected functions
 	********************************************************************************************* */
 protected:
+	/** Called when progression module ready
+	 * Once the save file is loaded it activates the functionality of this class */
+	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
+	void OnInitialized(); 
+	
 	/** Subscribes to the end game state change notification on the player state. */
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
 	void OnLocalPlayerStateReady(AMyPlayerState* PlayerState, int32 CharacterID);
 
 	/** Called when the game starts. */

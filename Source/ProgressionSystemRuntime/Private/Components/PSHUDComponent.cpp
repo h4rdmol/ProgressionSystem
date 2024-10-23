@@ -27,22 +27,9 @@ UPSHUDComponent::UPSHUDComponent()
 	PrimaryComponentTick.bStartWithTickEnabled = false;
 }
 
-// Subscribes to the end game state change notification on the player state.
-void UPSHUDComponent::OnLocalPlayerStateReady(AMyPlayerState* PlayerState, int32 CharacterID)
+// Called when main save game file is loaded
+void UPSHUDComponent::OnInitialized()
 {
-	// Ensure that PlayerState is not null before subscribing to the event
-	if (!ensureMsgf(PlayerState, TEXT("ASSERT: [%i] %hs:\n'PlayerState' is null!"), __LINE__, __FUNCTION__))
-	{
-		return;
-	}
-	PlayerState->OnEndGameStateChanged.AddUniqueDynamic(this, &ThisClass::OnEndGameStateChanged);
-}
-
-// Called when the game starts
-void UPSHUDComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
 	ProgressionMenuWidgetInternal = Cast<UPSMenuWidget>(FWidgetUtilsLibrary::CreateWidgetChecked(UPSDataAsset::Get().GetProgressionMenuWidget(), true, -10));
 
 	ProgressionMenuOverlayWidgetInternal = Cast<UPSOverlayWidget>(FWidgetUtilsLibrary::CreateWidgetChecked(UPSDataAsset::Get().GetProgressionOverlayWidget(), true, 1));
@@ -61,6 +48,25 @@ void UPSHUDComponent::BeginPlay()
 
 	// Update the progression widget based on current player state
 	UpdateProgressionWidgetForPlayer();
+}
+
+// Subscribes to the end game state change notification on the player state.
+void UPSHUDComponent::OnLocalPlayerStateReady(AMyPlayerState* PlayerState, int32 CharacterID)
+{
+	// Ensure that PlayerState is not null before subscribing to the event
+	if (!ensureMsgf(PlayerState, TEXT("ASSERT: [%i] %hs:\n'PlayerState' is null!"), __LINE__, __FUNCTION__))
+	{
+		return;
+	}
+	PlayerState->OnEndGameStateChanged.AddUniqueDynamic(this, &ThisClass::OnEndGameStateChanged);
+}
+
+// Called when the game starts
+void UPSHUDComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	UPSWorldSubsystem::Get().OnInitialize.AddDynamic(this, &ThisClass::OnInitialized);
 }
 
 // Called when the component is unregistered, used to clean up resources
@@ -136,6 +142,11 @@ void UPSHUDComponent::OnPlayerTypeChanged(FPlayerTag PlayerTag)
 // Refresh the main menu progression widget player 
 void UPSHUDComponent::UpdateProgressionWidgetForPlayer()
 {
+	UPSSaveGameData* SaveGameData = UPSWorldSubsystem::Get().GetCurrentSaveGameData();
+	if (!SaveGameData)
+	{
+		return;
+	}
 	const FPSSaveToDiskData& CurrenSaveToDiskDataRow = UPSWorldSubsystem::Get().GetCurrentSaveToDiskRowByName();
 	const FPSRowData& CurrenProgressionSettingsRow = UPSWorldSubsystem::Get().GetCurrentProgressionSettingsRowByName();
 	// check if empty returned Row from GetCurrentRow
