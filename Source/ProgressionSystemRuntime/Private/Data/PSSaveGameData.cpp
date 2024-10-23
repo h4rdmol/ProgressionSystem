@@ -105,7 +105,10 @@ float UPSSaveGameData::GetProgressionReward(EEndGameState EndGameState)
 {
 	// Verify that the current row exists in the map to prevent creating a new entry
 	const FPSRowData& CurrentProgressionSettingsRowData = UPSWorldSubsystem::Get().GetCurrentProgressionSettingsRowByName();
-
+	return *CurrentProgressionSettingsRowData.ProgressionEndGameState.Find(EndGameState) * UPSWorldSubsystem::Get().GetDifficultyMultiplier();
+	
+	// GetProgressionEndGameStateMapInternal
+	/*
 	switch (EndGameState)
 	{
 	case EEndGameState::Win:
@@ -117,6 +120,7 @@ float UPSSaveGameData::GetProgressionReward(EEndGameState EndGameState)
 	default:
 		return 0.f; // Return a default reward of 0.f if the row does not exist
 	}
+	*/ 
 }
 
 // Returns the current save to disk data by name

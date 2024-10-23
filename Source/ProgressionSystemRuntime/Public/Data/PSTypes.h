@@ -41,6 +41,12 @@ struct FPSRowData : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="C++")
 	float PointsToUnlock = 0.f;
 
+	
+	/** The Progression End Game States */ 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="C++", meta = (DisplayName = "Progression End Game States"))
+	TMap<EEndGameState, float> ProgressionEndGameState;
+	
+	
 	/** Amount of points to gain after win */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="C++")
 	float WinReward = 0.f;
