@@ -41,23 +41,9 @@ struct FPSRowData : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="C++")
 	float PointsToUnlock = 0.f;
 
-	
-	/** The Progression End Game States */ 
+	/** The Progression End Game States */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="C++", meta = (DisplayName = "Progression End Game States"))
 	TMap<EEndGameState, float> ProgressionEndGameState;
-	
-	
-	/** Amount of points to gain after win */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="C++")
-	float WinReward = 0.f;
-
-	/** Amount of points to gain after draw */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="C++")
-	float DrawReward = 0.f;
-
-	/** Amount of points to gain after loss */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="C++")
-	float LossReward = 0.f;
 
 	/** Defines the star animations for each character called when in-game cinematic played */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="C++")
