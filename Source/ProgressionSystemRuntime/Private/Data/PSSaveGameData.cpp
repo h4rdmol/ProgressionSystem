@@ -55,9 +55,9 @@ void UPSSaveGameData::SavePoints(EEndGameState EndGameState)
 	{
 		// Increase the current level's progression by the reward from the end game state
 		FName CurrentRowName = UPSWorldSubsystem::Get().GetCurrentRowName();
-		FPSSaveToDiskData* CurrentSaveToDiskDataRowRef =  ProgressionSettingsRowDataInternal.Find(CurrentRowName);
+		FPSSaveToDiskData* CurrentSaveToDiskDataRowRef = ProgressionSettingsRowDataInternal.Find(CurrentRowName);
 		CurrentSaveToDiskDataRowRef->CurrentLevelProgression += GetProgressionReward(EndGameState);
-		
+
 		const FPSRowData& CurrentProgressionSettingsRowData = UPSWorldSubsystem::Get().GetCurrentProgressionSettingsRowByName();
 
 		// Check if the current level progression has reached or surpassed the points needed to unlock
@@ -105,18 +105,7 @@ float UPSSaveGameData::GetProgressionReward(EEndGameState EndGameState)
 {
 	// Verify that the current row exists in the map to prevent creating a new entry
 	const FPSRowData& CurrentProgressionSettingsRowData = UPSWorldSubsystem::Get().GetCurrentProgressionSettingsRowByName();
-
-	switch (EndGameState)
-	{
-	case EEndGameState::Win:
-		return CurrentProgressionSettingsRowData.WinReward * UPSWorldSubsystem::Get().GetDifficultyMultiplier();
-	case EEndGameState::Draw:
-		return CurrentProgressionSettingsRowData.DrawReward * UPSWorldSubsystem::Get().GetDifficultyMultiplier();
-	case EEndGameState::Lose:
-		return CurrentProgressionSettingsRowData.LossReward * UPSWorldSubsystem::Get().GetDifficultyMultiplier();
-	default:
-		return 0.f; // Return a default reward of 0.f if the row does not exist
-	}
+	return *CurrentProgressionSettingsRowData.ProgressionEndGameState.Find(EndGameState) * UPSWorldSubsystem::Get().GetDifficultyMultiplier();
 }
 
 // Returns the current save to disk data by name
