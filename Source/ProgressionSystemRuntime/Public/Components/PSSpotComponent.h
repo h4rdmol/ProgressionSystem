@@ -35,6 +35,11 @@ public:
 	FPSSpotComponent OnSpotComponentReady;
 
 protected:
+	/** Called when progression module ready
+	 * Once the save file is loaded it activates the functionality of this class */
+	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
+	void OnInitialized();
+	
 	// Called when the game starts
 	virtual void BeginPlay() override;
 

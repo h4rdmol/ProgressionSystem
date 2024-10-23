@@ -23,11 +23,9 @@ UPSSpotComponent::UPSSpotComponent()
 	PrimaryComponentTick.bStartWithTickEnabled = false;
 }
 
-// Called when the game starts
-void UPSSpotComponent::BeginPlay()
+// Called when progression module ready
+void UPSSpotComponent::OnInitialized()
 {
-	Super::BeginPlay();
-
 	// Ensure the component's mesh is properly assigned and not null.
 	PlayerSpotOnLevelInternal = GetMeshChecked();
 
@@ -39,6 +37,13 @@ void UPSSpotComponent::BeginPlay()
 
 	// Save reference of this component to the world subsystem
 	UPSWorldSubsystem::Get().RegisterSpotComponent(this);
+}
+
+// Called when the game starts
+void UPSSpotComponent::BeginPlay()
+{
+	Super::BeginPlay();
+	UPSWorldSubsystem::Get().OnInitialize.AddDynamic(this, &ThisClass::OnInitialized);
 }
 
 // Clears all transient data created by this component.

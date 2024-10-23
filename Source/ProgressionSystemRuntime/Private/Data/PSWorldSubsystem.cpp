@@ -62,7 +62,6 @@ void UPSWorldSubsystem::SetCurrentRowByTag(FPlayerTag NewRowPlayerTag)
 	}
 }
 
-
 // Returns the data asset that contains all the assets of Progression System game feature
 const UPSDataAsset* UPSWorldSubsystem::GetPSDataAsset() const
 {
@@ -135,6 +134,24 @@ void UPSWorldSubsystem::SetCurrentSpotComponent(UPSSpotComponent* MyHUDComponent
 	UpdateProgressionActorsForSpot();
 }
 
+// Called when progression module ready
+void UPSWorldSubsystem::OnInitialized()
+{
+	// Subscribe events on player type changed and Character spawned
+	BIND_ON_LOCAL_CHARACTER_READY(this, ThisClass::OnCharacterReady);
+
+	// Listen to handle input for each game state
+	BIND_ON_GAME_STATE_CHANGED(this, ThisClass::OnGameStateChanged);
+
+	// LoadGameFromSave();
+
+	StarDynamicProgressMaterial = UMaterialInstanceDynamic::Create(UPSDataAsset::Get().GetDynamicProgressionMaterial(), this);
+	if (!ensureMsgf(StarDynamicProgressMaterial, TEXT("ASSERT: [%i] %hs:\n'StarDynamicProgressMaterial' is null!"), __LINE__, __FUNCTION__))
+	{
+		return;
+	}
+}
+
 // Called when world is ready to start gameplay before the game mode transitions to the correct state and call BeginPlay on all actors 
 void UPSWorldSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 {
@@ -150,19 +167,12 @@ void UPSWorldSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 
 		if (GameFeatureName == "ProgressionSystem")
 		{
-			// Subscribe events on player type changed and Character spawned
-			BIND_ON_LOCAL_CHARACTER_READY(this, ThisClass::OnCharacterReady);
-
-			// Listen to handle input for each game state
-			BIND_ON_GAME_STATE_CHANGED(this, ThisClass::OnGameStateChanged);
-
-			LoadGameFromSave();
-
-			StarDynamicProgressMaterial = UMaterialInstanceDynamic::Create(UPSDataAsset::Get().GetDynamicProgressionMaterial(), this);
-			if (!ensureMsgf(StarDynamicProgressMaterial, TEXT("ASSERT: [%i] %hs:\n'StarDynamicProgressMaterial' is null!"), __LINE__, __FUNCTION__))
-			{
-				return;
-			}
+			OnInitialize.AddDynamic(this, &ThisClass::OnInitialized);
+			
+			// Load save game data of the Main Menu
+			FAsyncLoadGameFromSlotDelegate AsyncLoadGameFromSlotDelegate;
+			AsyncLoadGameFromSlotDelegate.BindUObject(this, &ThisClass::OnAsyncLoadGameFromSlotCompleted);
+			UGameplayStatics::AsyncLoadGameFromSlot(SaveGameDataInternal->GetSaveSlotName(), SaveGameDataInternal->GetSaveSlotIndex(), AsyncLoadGameFromSlotDelegate);
 		}
 	}
 }
@@ -331,6 +341,34 @@ void UPSWorldSubsystem::OnSpotComponentLoad(UPSSpotComponent* SpotComponent)
 	}
 
 	PSCurrentSpotComponentInternal = SpotComponent;
+}
+
+// Is called from AsyncLoadGameFromSlot once Save Game is loaded, or null if it failed to load.
+void UPSWorldSubsystem::OnAsyncLoadGameFromSlotCompleted_Implementation(const FString& SlotName, int32 UserIndex, USaveGame* SaveGame)
+{
+	// load from data table
+	const UDataTable* ProgressionDataTable = UPSDataAsset::Get().GetProgressionDataTable();
+	checkf(ProgressionDataTable, TEXT("ERROR: 'ProgressionDataTableInternal' is null"));
+	UMyDataTable::GetRows(*ProgressionDataTable, ProgressionSettingsDataInternal);
+
+	SaveGameDataInternal = Cast<UPSSaveGameData>(SaveGame);
+	if (!SaveGameDataInternal)
+	{
+		//  there is no save game file, or it is corrupted, create a new onew
+		SaveGameDataInternal = Cast<UPSSaveGameData>(UGameplayStatics::CreateSaveGameObject(UPSSaveGameData::StaticClass()));
+
+		if (SaveGameDataInternal)
+		{
+			for (TTuple<FName, FPSRowData> Row : ProgressionSettingsDataInternal)
+			{
+				SaveGameDataInternal->SetProgressionMap(Row.Key, FPSSaveToDiskData::EmptyData);
+			}
+		}
+	}
+
+	SetFirstElementAsCurrent();
+
+	OnInitialize.Broadcast();
 }
 
 // Saves the progression to the local files
