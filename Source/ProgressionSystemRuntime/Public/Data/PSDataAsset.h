@@ -135,7 +135,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Star Material Fractional Divisor Temporary"))
 	float StarMaterialFractionalDivisorInternal = 1.f;
 
-	/** Setting tag required */
+	/** Instant character switch tag. Required to get the value from settings */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++", AdvancedDisplay, meta = (BlueprintProtected, DisplayName = "Instant Character Switch Tag"))
 	FSettingTag InstantCharacterSwitchTagInternal;
 };
