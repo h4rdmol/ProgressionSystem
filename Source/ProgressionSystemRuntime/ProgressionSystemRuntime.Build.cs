@@ -24,6 +24,7 @@ public class ProgressionSystemRuntime : ModuleRules
 				"MyUtils" 
 				, "PoolManager" // Star and Widget Actors
 				, "MetaCheatManager" // PSCheatExtension
+				, "SettingsWidgetConstructor" // SettingWidgetConsturctor
 			}
 		);
 	}
