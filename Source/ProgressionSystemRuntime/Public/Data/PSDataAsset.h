@@ -2,6 +2,7 @@
 
 #pragma once
 #include "Engine/DataAsset.h"
+#include "SettingsWidgetConstructor/Public/Data/SettingTag.h"
 #include "PSDataAsset.generated.h"
 
 /**
@@ -73,6 +74,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "C++")
 	FORCEINLINE float GetStarMaterialFractionalDivisor() const { return StarMaterialFractionalDivisorInternal; }
 
+	/** Returns Instant Character Switch Tag to find in the settings widget constructor */
+	UFUNCTION(BlueprintPure, Category = "C++")
+	FORCEINLINE FSettingTag GetInstantCharacterSwitchTag() const { return InstantCharacterSwitchTagInternal; }
 protected:
 	/** The Progression Data Table that is responsible for progression configuration. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BlueprintProtected, DisplayName = "Progression Data Table", ShowOnlyInnerProperties))
@@ -130,4 +134,8 @@ protected:
 	 * Since it's a divisor couldn't be 0 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Star Material Fractional Divisor Temporary"))
 	float StarMaterialFractionalDivisorInternal = 1.f;
+
+	/** Setting tag required */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++", AdvancedDisplay, meta = (BlueprintProtected, DisplayName = "Instant Character Switch Tag"))
+	FSettingTag InstantCharacterSwitchTagInternal;
 };
