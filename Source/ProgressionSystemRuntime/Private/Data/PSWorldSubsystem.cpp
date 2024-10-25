@@ -2,6 +2,7 @@
 
 #include "Data/PSWorldSubsystem.h"
 
+#include "GameFeaturesSubsystem.h"
 #include "PoolManagerSubsystem.h"
 #include "Components/MySkeletalMeshComponent.h"
 #include "Components/PSHUDComponent.h"
@@ -150,19 +151,7 @@ void UPSWorldSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 
 		if (GameFeatureName == "ProgressionSystem")
 		{
-			// Subscribe events on player type changed and Character spawned
-			BIND_ON_LOCAL_CHARACTER_READY(this, ThisClass::OnCharacterReady);
-
-			// Listen to handle input for each game state
-			BIND_ON_GAME_STATE_CHANGED(this, ThisClass::OnGameStateChanged);
-
-			LoadGameFromSave();
-
-			StarDynamicProgressMaterial = UMaterialInstanceDynamic::Create(UPSDataAsset::Get().GetDynamicProgressionMaterial(), this);
-			if (!ensureMsgf(StarDynamicProgressMaterial, TEXT("ASSERT: [%i] %hs:\n'StarDynamicProgressMaterial' is null!"), __LINE__, __FUNCTION__))
-			{
-				return;
-			}
+			WolrdSubSystemInitialize();
 		}
 	}
 }
@@ -171,11 +160,47 @@ void UPSWorldSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 void UPSWorldSubsystem::Deinitialize()
 {
 	Super::Deinitialize();
-	PSHUDComponentInternal = nullptr;
-	PSCurrentSpotComponentInternal = nullptr;
-	SaveGameDataInternal = nullptr;
-	ProgressionSettingsDataInternal.Empty();
-	StarDynamicProgressMaterial = nullptr;
+}
+
+// Invoked after a game feature plugin is unloaded
+void UPSWorldSubsystem::OnGameFeatureUnloading(const UGameFeatureData* GameFeatureData, const FString& PluginURL)
+{
+	DestroyStarActors();
+	IGameFeatureStateChangeObserver::OnGameFeatureUnloading(GameFeatureData, PluginURL);
+}
+
+// Invoked in the early stages of the game feature plugin loading phase
+void UPSWorldSubsystem::OnGameFeatureLoading(const UGameFeatureData* GameFeatureData, const FString& PluginURL)
+{
+	const FString ProgressionPlugin = TEXT("/ProgressionSystem/ProgressionSystem");
+	if (PluginURL.Contains(ProgressionPlugin))
+	{
+		WolrdSubSystemInitialize();
+	}
+
+	IGameFeatureStateChangeObserver::OnGameFeatureLoading(GameFeatureData, PluginURL);
+}
+
+// Is called to initialize the world subsystem
+void UPSWorldSubsystem::WolrdSubSystemInitialize()
+{
+	UGameFeaturesSubsystem::Get().AddObserver(this);
+
+	UPSDataAsset::Get();
+	// Subscribe events on player type changed and Character spawned
+	BIND_ON_LOCAL_CHARACTER_READY(this, ThisClass::OnCharacterReady);
+
+	// Listen to handle input for each game state
+	BIND_ON_GAME_STATE_CHANGED(this, ThisClass::OnGameStateChanged);
+
+	LoadGameFromSave();
+
+	StarDynamicProgressMaterial = UMaterialInstanceDynamic::Create(UPSDataAsset::Get().GetDynamicProgressionMaterial(), this);
+	if (!ensureMsgf(StarDynamicProgressMaterial, TEXT("ASSERT: [%i] %hs:\n'StarDynamicProgressMaterial' is null!"), __LINE__, __FUNCTION__))
+	{
+		return;
+	}
+	UpdateProgressionActorsForSpot();
 }
 
 // Is called when a player character is ready
@@ -331,6 +356,35 @@ void UPSWorldSubsystem::OnSpotComponentLoad(UPSSpotComponent* SpotComponent)
 	}
 
 	PSCurrentSpotComponentInternal = SpotComponent;
+}
+
+// Removes progression system spot that should not be available by other objects anymore.
+void UPSWorldSubsystem::RemoveProgressionSystemSpot(UPSSpotComponent* ProgressionSystemSpotComponent)
+{
+	if (ensureMsgf(ProgressionSystemSpotComponent, TEXT("%s: 'ProgressionSystemSpotComponent' is null"), *FString(__FUNCTION__)))
+	{
+		PSSpotComponentArrayInternal.RemoveSwap(ProgressionSystemSpotComponent);
+	}
+}
+
+// Destroy all star actors that should not be available by other objects anymore.
+void UPSWorldSubsystem::DestroyStarActors()
+{
+	UPoolManagerSubsystem::Get().ReturnToPoolArray(PoolActorHandlersInternal);
+	UPoolManagerSubsystem::Get().EmptyPool(UPSDataAsset::Get().GetStarActorClass());
+	PoolActorHandlersInternal.Empty();
+	ProgressionSettingsDataInternal.Empty();
+	StarDynamicProgressMaterial = nullptr;
+
+	PSDataAssetInternal.Reset();
+	PSHUDComponentInternal = nullptr;
+	PSSpotComponentArrayInternal.Empty();
+	PSCurrentSpotComponentInternal = nullptr;
+	if (SaveGameDataInternal)
+	{
+		SaveGameDataInternal->ConditionalBeginDestroy();
+		SaveGameDataInternal = nullptr;
+	}
 }
 
 // Saves the progression to the local files

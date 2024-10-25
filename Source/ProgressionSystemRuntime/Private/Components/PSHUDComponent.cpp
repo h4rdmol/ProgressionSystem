@@ -66,7 +66,6 @@ void UPSHUDComponent::BeginPlay()
 // Called when the component is unregistered, used to clean up resources
 void UPSHUDComponent::OnUnregister()
 {
-	Super::OnUnregister();
 	if (ProgressionMenuWidgetInternal)
 	{
 		FWidgetUtilsLibrary::DestroyWidget(*ProgressionMenuWidgetInternal);
@@ -77,6 +76,8 @@ void UPSHUDComponent::OnUnregister()
 		FWidgetUtilsLibrary::DestroyWidget(*ProgressionMenuOverlayWidgetInternal);
 		ProgressionMenuOverlayWidgetInternal = nullptr;
 	}
+	CurrentGameStateInternal = ECurrentGameState::None;
+	Super::OnUnregister();
 }
 
 // Save the progression depends on EEndGameState

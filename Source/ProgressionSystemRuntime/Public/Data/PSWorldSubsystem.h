@@ -6,6 +6,7 @@
 #include "Subsystems/WorldSubsystem.h"
 #include "PoolManagerTypes.h"
 #include "Materials/MaterialInstanceDynamic.h"
+#include "GameFeatureStateChangeObserver.h"
 #include "PSWorldSubsystem.generated.h"
 
 enum class ECurrentGameState : uint8;
@@ -14,7 +15,7 @@ enum class ECurrentGameState : uint8;
  * Implements the world subsystem to access different components in the module 
  */
 UCLASS(BlueprintType, Blueprintable, Config = "ProgressionSystem", DefaultConfig)
-class PROGRESSIONSYSTEMRUNTIME_API UPSWorldSubsystem : public UWorldSubsystem
+class PROGRESSIONSYSTEMRUNTIME_API UPSWorldSubsystem : public UWorldSubsystem, public IGameFeatureStateChangeObserver
 {
 	GENERATED_BODY()
 
@@ -93,6 +94,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category="C++")
 	float GetDifficultyMultiplier();
 
+	/** Removes progression system spot that should not be available by other objects anymore. */
+	UFUNCTION(BlueprintCallable, Category = "C++")
+	void RemoveProgressionSystemSpot(UPSSpotComponent* ProgressionSystemSpotComponent);
+	
+	/** Destroy all star actors that should not be available by other objects anymore. */
+	UFUNCTION(BlueprintCallable, Category = "C++")
+	void DestroyStarActors();
+
 protected:
 	/** Contains all the assets and tweaks of Progression System game feature.
 	 * Note: Since Subsystem is code-only, there is config property set in BaseProgressionSystem.ini.
@@ -144,6 +153,17 @@ protected:
 	/** Clears all transient data created by this subsystem. */
 	virtual void Deinitialize() override;
 
+	/** Invoked after a game feature plugin is unloaded */
+	virtual void OnGameFeatureUnloading(const UGameFeatureData* GameFeatureData, const FString& PluginURL) override;
+
+	/** Invoked in the early stages of the game feature plugin loading phase */
+	virtual void OnGameFeatureLoading(const UGameFeatureData* GameFeatureData, const FString& PluginURL) override;
+
+	/** Is called to initialize the world subsystem */
+	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
+	void WolrdSubSystemInitialize();
+
+	
 	/** Is called when a player character is ready */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void OnCharacterReady(class APlayerCharacter* PlayerCharacter, int32 CharacterID);
