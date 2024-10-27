@@ -93,10 +93,6 @@ public:
 	/** Returns difficultyMultiplier */
 	UFUNCTION(BlueprintCallable, Category="C++")
 	float GetDifficultyMultiplier();
-
-	/** Removes progression system spot that should not be available by other objects anymore. */
-	UFUNCTION(BlueprintCallable, Category = "C++")
-	void RemoveProgressionSystemSpot(UPSSpotComponent* ProgressionSystemSpotComponent);
 	
 	/** Destroy all star actors that should not be available by other objects anymore. */
 	UFUNCTION(BlueprintCallable, Category = "C++")

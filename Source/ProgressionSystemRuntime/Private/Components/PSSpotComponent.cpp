@@ -58,8 +58,6 @@ void UPSSpotComponent::OnUnregister()
 		SaveGameInstanceInternal = nullptr;
 	}
 
-	UPSWorldSubsystem::Get().RemoveProgressionSystemSpot(this);
-
 	Super::OnUnregister();
 }
 

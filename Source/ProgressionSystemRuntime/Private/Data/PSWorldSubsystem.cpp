@@ -358,15 +358,6 @@ void UPSWorldSubsystem::OnSpotComponentLoad(UPSSpotComponent* SpotComponent)
 	PSCurrentSpotComponentInternal = SpotComponent;
 }
 
-// Removes progression system spot that should not be available by other objects anymore.
-void UPSWorldSubsystem::RemoveProgressionSystemSpot(UPSSpotComponent* ProgressionSystemSpotComponent)
-{
-	if (ensureMsgf(ProgressionSystemSpotComponent, TEXT("%s: 'ProgressionSystemSpotComponent' is null"), *FString(__FUNCTION__)))
-	{
-		PSSpotComponentArrayInternal.RemoveSwap(ProgressionSystemSpotComponent);
-	}
-}
-
 // Destroy all star actors that should not be available by other objects anymore.
 void UPSWorldSubsystem::DestroyStarActors()
 {
