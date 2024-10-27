@@ -166,7 +166,6 @@ void UPSWorldSubsystem::Deinitialize()
 void UPSWorldSubsystem::OnGameFeatureUnloading(const UGameFeatureData* GameFeatureData, const FString& PluginURL)
 {
 	DestroyStarActors();
-	IGameFeatureStateChangeObserver::OnGameFeatureUnloading(GameFeatureData, PluginURL);
 }
 
 // Invoked in the early stages of the game feature plugin loading phase
@@ -177,8 +176,6 @@ void UPSWorldSubsystem::OnGameFeatureLoading(const UGameFeatureData* GameFeature
 	{
 		WolrdSubSystemInitialize();
 	}
-
-	IGameFeatureStateChangeObserver::OnGameFeatureLoading(GameFeatureData, PluginURL);
 }
 
 // Is called to initialize the world subsystem
