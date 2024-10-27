@@ -76,7 +76,6 @@ void UPSHUDComponent::OnUnregister()
 		FWidgetUtilsLibrary::DestroyWidget(*ProgressionMenuOverlayWidgetInternal);
 		ProgressionMenuOverlayWidgetInternal = nullptr;
 	}
-	CurrentGameStateInternal = ECurrentGameState::None;
 	Super::OnUnregister();
 }
 
@@ -96,13 +95,12 @@ void UPSHUDComponent::SavePoints(EEndGameState EndGameState)
 // Listening game states changes events 
 void UPSHUDComponent::OnGameStateChanged(ECurrentGameState CurrentGameState)
 {
-	CurrentGameStateInternal = CurrentGameState;
 	if (!ensureMsgf(ProgressionMenuWidgetInternal, TEXT("ASSERT: [%i] %hs:\n'ProgressionMenuWidgetInternal' is null!"), __LINE__, __FUNCTION__))
 	{
 		return;
 	}
 
-	switch (CurrentGameState)
+	switch (AMyGameStateBase::GetCurrentGameState())
 	{
 	case ECurrentGameState::GameStarting:
 		ProgressionMenuWidgetInternal->SetVisibility(ESlateVisibility::Collapsed);
@@ -157,7 +155,7 @@ void UPSHUDComponent::UpdateProgressionWidgetForPlayer()
 		ProgressionMenuWidgetInternal->AddImagesToHorizontalBox(CurrenSaveToDiskDataRow.CurrentLevelProgression, CurrenProgressionSettingsRow.PointsToUnlock - CurrenSaveToDiskDataRow.CurrentLevelProgression, CurrenProgressionSettingsRow.PointsToUnlock); // Listen game state changes events 
 	}
 
-	if (CurrentGameStateInternal == ECurrentGameState::Menu)
+	if (AMyGameStateBase::GetCurrentGameState() == ECurrentGameState::Menu)
 	{
 		ProgressionMenuWidgetInternal->SetPadding(FMargin(0));
 
