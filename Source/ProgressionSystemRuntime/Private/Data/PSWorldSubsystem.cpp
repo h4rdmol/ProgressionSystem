@@ -169,6 +169,11 @@ void UPSWorldSubsystem::OnGameFeatureUnloading(const UGameFeatureData* GameFeatu
 	if (PluginURL.Contains(ProgressionPlugin))
 	{
 		DestroyStarActors();
+#if !WITH_EDITOR
+		// Execute only if it's editor. In the editor subsystem is not unloaded fully so re-subscribe is not executed
+		UGameFeaturesSubsystem::Get().RemoveObserver(this);
+#endif
+		
 	}
 }
 
