@@ -165,7 +165,7 @@ void UPSWorldSubsystem::Deinitialize()
 // Invoked after a game feature plugin is unloaded
 void UPSWorldSubsystem::OnGameFeatureUnloading(const UGameFeatureData* GameFeatureData, const FString& PluginURL)
 {
-	const FString ProgressionPlugin = TEXT("/ProgressionSystem/ProgressionSystem");
+	const FString ProgressionPlugin = TEXT("ProgressionSystem");
 	if (PluginURL.Contains(ProgressionPlugin))
 	{
 		DestroyStarActors();
@@ -180,7 +180,7 @@ void UPSWorldSubsystem::OnGameFeatureUnloading(const UGameFeatureData* GameFeatu
 // Invoked in the early stages of the game feature plugin loading phase
 void UPSWorldSubsystem::OnGameFeatureLoading(const UGameFeatureData* GameFeatureData, const FString& PluginURL)
 {
-	const FString ProgressionPlugin = TEXT("/ProgressionSystem/ProgressionSystem");
+	const FString ProgressionPlugin = TEXT("ProgressionSystem");
 	if (PluginURL.Contains(ProgressionPlugin))
 	{
 		WolrdSubSystemInitialize();
