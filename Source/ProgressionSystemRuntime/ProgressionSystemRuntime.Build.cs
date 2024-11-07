@@ -14,6 +14,7 @@ public class ProgressionSystemRuntime : ModuleRules
 				"Core", "UMG"
 				// Bomber modules
 				, "Bomber" // Is included in header files
+				, "SettingsWidgetConstructor" // SettingWidgetConstructor
 			}
 		);
 
@@ -24,7 +25,6 @@ public class ProgressionSystemRuntime : ModuleRules
 				"MyUtils" 
 				, "PoolManager" // Star and Widget Actors
 				, "MetaCheatManager" // PSCheatExtension
-				, "SettingsWidgetConstructor" // SettingWidgetConsturctor
 			}
 		);
 	}

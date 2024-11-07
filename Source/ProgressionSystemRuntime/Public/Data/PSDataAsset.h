@@ -2,7 +2,7 @@
 
 #pragma once
 #include "Engine/DataAsset.h"
-#include "SettingsWidgetConstructor/Public/Data/SettingTag.h"
+#include "Data/SettingTag.h"
 #include "PSDataAsset.generated.h"
 
 /**
