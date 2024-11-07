@@ -140,7 +140,7 @@ void UPSWorldSubsystem::SetCurrentSpotComponent(UPSSpotComponent* MyHUDComponent
 void UPSWorldSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 {
 	Super::OnWorldBeginPlay(InWorld);
-	WorldSubSystemInitialize();
+	OnWorldSubSystemInitialize();
 }
 
 // Clears all transient data created by this subsystem
@@ -171,12 +171,12 @@ void UPSWorldSubsystem::OnGameFeatureLoading(const UGameFeatureData* GameFeature
 	const FString ProgressionPlugin = TEXT("ProgressionSystem");
 	if (PluginURL.Contains(ProgressionPlugin))
 	{
-		WorldSubSystemInitialize();
+		OnWorldSubSystemInitialize();
 	}
 }
 
-// Is called to initialize the world subsystem
-void UPSWorldSubsystem::WorldSubSystemInitialize()
+// Is called to initialize the world subsystem. It's a BeginPlay logic for the PS module
+void UPSWorldSubsystem::OnWorldSubSystemInitialize_Implementation()
 {
 	UGameFeaturesSubsystem::Get().AddObserver(this);
 	

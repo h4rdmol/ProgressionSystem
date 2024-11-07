@@ -151,9 +151,9 @@ protected:
 	/** Invoked in the early stages of the game feature plugin loading phase */
 	virtual void OnGameFeatureLoading(const UGameFeatureData* GameFeatureData, const FString& PluginURL) override;
 
-	/** Is called to initialize the world subsystem */
-	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
-	void WorldSubSystemInitialize();
+	/** Is called to initialize the world subsystem. It's a BeginPlay logic for the PS module */
+	UFUNCTION(BlueprintNativeEvent, Category= "C++", meta = (BlueprintProtected))
+	void OnWorldSubSystemInitialize();
 
 	/** Cleanup used on unloading module to remove properties that should not be available by other objects. */
 	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
