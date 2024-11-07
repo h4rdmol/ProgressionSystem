@@ -15,7 +15,6 @@ public class ProgressionSystemRuntime : ModuleRules
 				, "GameFeatures"
 				// Bomber modules
 				, "Bomber" // Is included in header files
-				
 			}
 		);
 
