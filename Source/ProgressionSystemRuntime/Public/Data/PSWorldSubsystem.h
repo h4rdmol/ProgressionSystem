@@ -155,9 +155,9 @@ protected:
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void WolrdSubSystemInitialize();
 
-	/** Used on unloading module to destroy all star actors that should not be available by other objects. */
+	/** Cleanup used on unloading module to remove properties that should not be available by other objects. */
 	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
-	void DestroyAllStarActors();
+	void PerformCleanup();
 	
 	/** Is called when a player character is ready */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
