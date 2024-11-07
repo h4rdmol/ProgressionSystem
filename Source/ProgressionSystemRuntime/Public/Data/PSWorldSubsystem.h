@@ -5,7 +5,6 @@
 #include "PSTypes.h"
 #include "Subsystems/WorldSubsystem.h"
 #include "PoolManagerTypes.h"
-#include "Materials/MaterialInstanceDynamic.h"
 #include "GameFeatureStateChangeObserver.h"
 #include "PSWorldSubsystem.generated.h"
 
