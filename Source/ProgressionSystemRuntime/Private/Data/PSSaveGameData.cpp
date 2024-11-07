@@ -103,9 +103,13 @@ void UPSSaveGameData::UnlockAllLevels()
 // Retrieves the progression reward based on the end game state for the current level.
 float UPSSaveGameData::GetProgressionReward(EEndGameState EndGameState)
 {
-	// Verify that the current row exists in the map to prevent creating a new entry
+	constexpr float DefaultMultiplier = 1.0f;
+	const float DifficultyMultiplier = UPSWorldSubsystem::Get().GetDifficultyMultiplier();
 	const FPSRowData& CurrentProgressionSettingsRowData = UPSWorldSubsystem::Get().GetCurrentProgressionSettingsRowByName();
-	return *CurrentProgressionSettingsRowData.ProgressionEndGameState.Find(EndGameState) * UPSWorldSubsystem::Get().GetDifficultyMultiplier();
+
+	const float* LevelReward = CurrentProgressionSettingsRowData.ProgressionEndGameState.Find(EndGameState);
+	const float ProgressionReward = LevelReward ? *LevelReward : DefaultMultiplier;
+	return ProgressionReward * DifficultyMultiplier;
 }
 
 // Returns the current save to disk data by name
