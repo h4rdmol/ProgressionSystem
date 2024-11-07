@@ -157,7 +157,7 @@ protected:
 
 	/** Cleanup used on unloading module to remove properties that should not be available by other objects. */
 	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
-	void PerformCleanup();
+	void PerformCleanUp();
 	
 	/** Is called when a player character is ready */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))

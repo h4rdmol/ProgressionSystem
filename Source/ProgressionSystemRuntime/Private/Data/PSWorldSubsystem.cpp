@@ -159,7 +159,7 @@ void UPSWorldSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 // Clears all transient data created by this subsystem
 void UPSWorldSubsystem::Deinitialize()
 {
-	PerformCleanup();
+	PerformCleanUp();
 	Super::Deinitialize();
 }
 
@@ -169,7 +169,7 @@ void UPSWorldSubsystem::OnGameFeatureUnloading(const UGameFeatureData* GameFeatu
 	const FString ProgressionPlugin = TEXT("ProgressionSystem");
 	if (PluginURL.Contains(ProgressionPlugin))
 	{
-		PerformCleanup();
+		PerformCleanUp();
 #if !WITH_EDITOR
 		// Execute only if it's editor. In the editor subsystem is not unloaded fully so re-subscribe is not executed
 		UGameFeaturesSubsystem::Get().RemoveObserver(this);
@@ -365,7 +365,7 @@ void UPSWorldSubsystem::OnSpotComponentLoad(UPSSpotComponent* SpotComponent)
 }
 
 // Destroy all star actors that should not be available by other objects anymore.
-void UPSWorldSubsystem::PerformCleanup()
+void UPSWorldSubsystem::PerformCleanUp()
 {
 	// Destroying Star Actors 
 	UPoolManagerSubsystem::Get().ReturnToPoolArray(PoolActorHandlersInternal);
