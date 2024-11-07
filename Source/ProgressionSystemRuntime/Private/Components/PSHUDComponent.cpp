@@ -183,19 +183,21 @@ void UPSHUDComponent::DisplayLevelUIOverlay(bool IsLevelLocked)
 		return;
 	}
 
-	USettingsWidget* SettingsWidget = UMyBlueprintFunctionLibrary::GetSettingsWidget();
-	FString InstantCharacterSwitchSetting;
-	SettingsWidget->GetSettingRow(UPSDataAsset::Get().GetInstantCharacterSwitchTag()).Checkbox.GetSettingValue(*SettingsWidget, UPSDataAsset::Get().GetInstantCharacterSwitchTag(), InstantCharacterSwitchSetting);
+	if (USettingsWidget* SettingsWidget = UMyBlueprintFunctionLibrary::GetSettingsWidget())
+	{
+		FString InstantCharacterSwitchSetting;
+		SettingsWidget->GetSettingRow(UPSDataAsset::Get().GetInstantCharacterSwitchTag()).Checkbox.GetSettingValue(*SettingsWidget, UPSDataAsset::Get().GetInstantCharacterSwitchTag(), InstantCharacterSwitchSetting);
 
-	const bool bShouldPlayFadeAnimation = InstantCharacterSwitchSetting.Equals("false", ESearchCase::IgnoreCase);
-	if (IsLevelLocked)
-	{
-		// Level is locked show the blocking overlay
-		ProgressionMenuOverlayWidgetInternal->SetOverlayVisibility(ESlateVisibility::Visible, bShouldPlayFadeAnimation);
-	}
-	else
-	{
-		// Level is unlocked hide the blocking overlay
-		ProgressionMenuOverlayWidgetInternal->SetOverlayVisibility(ESlateVisibility::Collapsed, bShouldPlayFadeAnimation);
+		const bool bShouldPlayFadeAnimation = InstantCharacterSwitchSetting.Equals("false", ESearchCase::IgnoreCase);
+		if (IsLevelLocked)
+		{
+			// Level is locked show the blocking overlay
+			ProgressionMenuOverlayWidgetInternal->SetOverlayVisibility(ESlateVisibility::Visible, bShouldPlayFadeAnimation);
+		}
+		else
+		{
+			// Level is unlocked hide the blocking overlay
+			ProgressionMenuOverlayWidgetInternal->SetOverlayVisibility(ESlateVisibility::Collapsed, bShouldPlayFadeAnimation);
+		}	
 	}
 }
