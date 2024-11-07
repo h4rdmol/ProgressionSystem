@@ -153,7 +153,7 @@ protected:
 
 	/** Is called to initialize the world subsystem */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
-	void WolrdSubSystemInitialize();
+	void WorldSubSystemInitialize();
 
 	/** Cleanup used on unloading module to remove properties that should not be available by other objects. */
 	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))

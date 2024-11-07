@@ -140,7 +140,7 @@ void UPSWorldSubsystem::SetCurrentSpotComponent(UPSSpotComponent* MyHUDComponent
 void UPSWorldSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 {
 	Super::OnWorldBeginPlay(InWorld);
-	WolrdSubSystemInitialize();
+	WorldSubSystemInitialize();
 }
 
 // Clears all transient data created by this subsystem
@@ -171,12 +171,12 @@ void UPSWorldSubsystem::OnGameFeatureLoading(const UGameFeatureData* GameFeature
 	const FString ProgressionPlugin = TEXT("ProgressionSystem");
 	if (PluginURL.Contains(ProgressionPlugin))
 	{
-		WolrdSubSystemInitialize();
+		WorldSubSystemInitialize();
 	}
 }
 
 // Is called to initialize the world subsystem
-void UPSWorldSubsystem::WolrdSubSystemInitialize()
+void UPSWorldSubsystem::WorldSubSystemInitialize()
 {
 	UGameFeaturesSubsystem::Get().AddObserver(this);
 	
