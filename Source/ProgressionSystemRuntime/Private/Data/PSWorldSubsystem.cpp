@@ -191,8 +191,7 @@ void UPSWorldSubsystem::OnGameFeatureLoading(const UGameFeatureData* GameFeature
 void UPSWorldSubsystem::WolrdSubSystemInitialize()
 {
 	UGameFeaturesSubsystem::Get().AddObserver(this);
-
-	UPSDataAsset::Get();
+	
 	// Subscribe events on player type changed and Character spawned
 	BIND_ON_LOCAL_CHARACTER_READY(this, ThisClass::OnCharacterReady);
 
