@@ -185,10 +185,7 @@ void UPSHUDComponent::DisplayLevelUIOverlay(bool IsLevelLocked)
 
 	if (USettingsWidget* SettingsWidget = UMyBlueprintFunctionLibrary::GetSettingsWidget())
 	{
-		FString InstantCharacterSwitchSetting;
-		SettingsWidget->GetSettingRow(UPSDataAsset::Get().GetInstantCharacterSwitchTag()).Checkbox.GetSettingValue(*SettingsWidget, UPSDataAsset::Get().GetInstantCharacterSwitchTag(), InstantCharacterSwitchSetting);
-
-		const bool bShouldPlayFadeAnimation = InstantCharacterSwitchSetting.Equals("false", ESearchCase::IgnoreCase);
+		const bool bShouldPlayFadeAnimation = !SettingsWidget->GetCheckboxValue(UPSDataAsset::Get().GetInstantCharacterSwitchTag());
 		if (IsLevelLocked)
 		{
 			// Level is locked show the blocking overlay
