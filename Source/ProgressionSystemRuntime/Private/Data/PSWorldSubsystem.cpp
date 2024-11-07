@@ -168,7 +168,7 @@ void UPSWorldSubsystem::OnGameFeatureUnloading(const UGameFeatureData* GameFeatu
 	const FString ProgressionPlugin = TEXT("ProgressionSystem");
 	if (PluginURL.Contains(ProgressionPlugin))
 	{
-		DestroyStarActors();
+		DestroyAllStarActors();
 #if !WITH_EDITOR
 		// Execute only if it's editor. In the editor subsystem is not unloaded fully so re-subscribe is not executed
 		UGameFeaturesSubsystem::Get().RemoveObserver(this);
@@ -364,7 +364,7 @@ void UPSWorldSubsystem::OnSpotComponentLoad(UPSSpotComponent* SpotComponent)
 }
 
 // Destroy all star actors that should not be available by other objects anymore.
-void UPSWorldSubsystem::DestroyStarActors()
+void UPSWorldSubsystem::DestroyAllStarActors()
 {
 	UPoolManagerSubsystem::Get().ReturnToPoolArray(PoolActorHandlersInternal);
 	UPoolManagerSubsystem::Get().EmptyPool(UPSDataAsset::Get().GetStarActorClass());

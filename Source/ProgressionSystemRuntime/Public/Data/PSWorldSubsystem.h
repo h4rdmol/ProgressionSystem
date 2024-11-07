@@ -93,10 +93,6 @@ public:
 	/** Returns difficultyMultiplier */
 	UFUNCTION(BlueprintCallable, Category="C++")
 	float GetDifficultyMultiplier();
-	
-	/** Destroy all star actors that should not be available by other objects anymore. */
-	UFUNCTION(BlueprintCallable, Category = "C++")
-	void DestroyStarActors();
 
 protected:
 	/** Contains all the assets and tweaks of Progression System game feature.
@@ -159,6 +155,9 @@ protected:
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void WolrdSubSystemInitialize();
 
+	/** Used on unloading module to destroy all star actors that should not be available by other objects. */
+	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
+	void DestroyAllStarActors();
 	
 	/** Is called when a player character is ready */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
