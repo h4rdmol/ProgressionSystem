@@ -140,20 +140,7 @@ void UPSWorldSubsystem::SetCurrentSpotComponent(UPSSpotComponent* MyHUDComponent
 void UPSWorldSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 {
 	Super::OnWorldBeginPlay(InWorld);
-
-	const TArray<FName>& GameFeaturesToEnable = UGameStateDataAsset::Get().GetGameFeaturesToEnable();
-	for (const FName GameFeatureName : GameFeaturesToEnable)
-	{
-		if (GameFeatureName.IsNone())
-		{
-			continue;
-		}
-
-		if (GameFeatureName == "ProgressionSystem")
-		{
-			WolrdSubSystemInitialize();
-		}
-	}
+	WolrdSubSystemInitialize();
 }
 
 // Clears all transient data created by this subsystem
