@@ -74,7 +74,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "C++")
 	FORCEINLINE float GetStarMaterialFractionalDivisor() const { return StarMaterialFractionalDivisorInternal; }
 
-	/** Returns Instant Character Switch Tag to find in the settings widget constructor */
+	/** Returns Instant Character Switch Tag. When Instant character switch setting enabled fade animation will not be played */
 	UFUNCTION(BlueprintPure, Category = "C++")
 	FORCEINLINE FSettingTag GetInstantCharacterSwitchTag() const { return InstantCharacterSwitchTagInternal; }
 protected:
@@ -135,7 +135,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Star Material Fractional Divisor Temporary"))
 	float StarMaterialFractionalDivisorInternal = 1.f;
 
-	/** Instant character switch tag. Required to get the value from settings */
+	/** When Instant character switch setting enabled fade animation will not be played */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++", AdvancedDisplay, meta = (BlueprintProtected, DisplayName = "Instant Character Switch Tag"))
-	FSettingTag InstantCharacterSwitchTagInternal;
+	FSettingTag InstantCharacterSwitchTagInternal = FSettingTag::EmptySettingTag;
 };
