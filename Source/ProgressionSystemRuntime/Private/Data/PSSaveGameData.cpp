@@ -107,7 +107,7 @@ float UPSSaveGameData::GetProgressionReward(EEndGameState EndGameState)
 	const float DifficultyMultiplier = UPSWorldSubsystem::Get().GetDifficultyMultiplier();
 	const FPSRowData& CurrentProgressionSettingsRowData = UPSWorldSubsystem::Get().GetCurrentProgressionSettingsRowByName();
 
-	const float* LevelReward = CurrentProgressionSettingsRowData.ProgressionEndGameState.Find(EndGameState);
+	const float* LevelReward = CurrentProgressionSettingsRowData.ProgressionEndGameValues.Find(EndGameState);
 	const float ProgressionReward = LevelReward ? *LevelReward : DefaultMultiplier;
 	return ProgressionReward * DifficultyMultiplier;
 }
