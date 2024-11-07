@@ -100,7 +100,7 @@ void UPSHUDComponent::OnGameStateChanged(ECurrentGameState CurrentGameState)
 		return;
 	}
 
-	switch (AMyGameStateBase::GetCurrentGameState())
+	switch (CurrentGameState)
 	{
 	case ECurrentGameState::GameStarting:
 		ProgressionMenuWidgetInternal->SetVisibility(ESlateVisibility::Collapsed);
