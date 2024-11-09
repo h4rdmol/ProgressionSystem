@@ -165,8 +165,6 @@ void UPSWorldSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 
 		if (GameFeatureName == "ProgressionSystem")
 		{
-			OnInitialize.AddDynamic(this, &ThisClass::OnInitialized);
-			
 			// Load save game data of the Main Menu
 			FAsyncLoadGameFromSlotDelegate AsyncLoadGameFromSlotDelegate;
 			AsyncLoadGameFromSlotDelegate.BindUObject(this, &ThisClass::OnAsyncLoadGameFromSlotCompleted);
@@ -365,7 +363,7 @@ void UPSWorldSubsystem::OnAsyncLoadGameFromSlotCompleted_Implementation(const FS
 	}
 
 	SetFirstElementAsCurrent();
-
+	OnInitialized();
 	OnInitialize.Broadcast();
 }
 
