@@ -168,7 +168,7 @@ void UPSWorldSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 			// Load save game data of the Main Menu
 			FAsyncLoadGameFromSlotDelegate AsyncLoadGameFromSlotDelegate;
 			AsyncLoadGameFromSlotDelegate.BindUObject(this, &ThisClass::OnAsyncLoadGameFromSlotCompleted);
-			UGameplayStatics::AsyncLoadGameFromSlot(SaveGameDataInternal->GetSaveSlotName(), SaveGameDataInternal->GetSaveSlotIndex(), AsyncLoadGameFromSlotDelegate);
+			UGameplayStatics::AsyncLoadGameFromSlot(UPSSaveGameData::GetSaveSlotName(), UPSSaveGameData::GetSaveSlotIndex(), AsyncLoadGameFromSlotDelegate);
 		}
 	}
 }
@@ -238,9 +238,9 @@ void UPSWorldSubsystem::LoadGameFromSave()
 	UMyDataTable::GetRows(*ProgressionDataTable, ProgressionSettingsDataInternal);
 
 	// Check if the save game file exists
-	if (UGameplayStatics::DoesSaveGameExist(SaveGameDataInternal->GetSaveSlotName(), SaveGameDataInternal->GetSaveSlotIndex()))
+	if (UGameplayStatics::DoesSaveGameExist(UPSSaveGameData::GetSaveSlotName(), UPSSaveGameData::GetSaveSlotIndex()))
 	{
-		SaveGameDataInternal = Cast<UPSSaveGameData>(UGameplayStatics::LoadGameFromSlot(SaveGameDataInternal->GetSaveSlotName(), SaveGameDataInternal->GetSaveSlotIndex()));
+		SaveGameDataInternal = Cast<UPSSaveGameData>(UGameplayStatics::LoadGameFromSlot(UPSSaveGameData::GetSaveSlotName(), UPSSaveGameData::GetSaveSlotIndex()));
 	}
 	else
 	{
@@ -380,14 +380,14 @@ void UPSWorldSubsystem::SaveDataAsync() const
 	{
 		return;
 	}
-	UGameplayStatics::AsyncSaveGameToSlot(SaveGameDataInternal, SaveGameDataInternal->GetSaveSlotName(), SaveGameDataInternal->GetSaveSlotIndex());
+	UGameplayStatics::AsyncSaveGameToSlot(SaveGameDataInternal, UPSSaveGameData::GetSaveSlotName(), SaveGameDataInternal->GetSaveSlotIndex());
 }
 
 // Removes all saved data of the Progression system and creates a new empty data
 void UPSWorldSubsystem::ResetSaveGameData()
 {
-	const FString& SlotName = SaveGameDataInternal->GetSaveSlotName();
-	const int32 UserIndex = SaveGameDataInternal->GetSaveSlotIndex();
+	const FString& SlotName = UPSSaveGameData::GetSaveSlotName();
+	const int32 UserIndex = UPSSaveGameData::GetSaveSlotIndex();
 
 	UGameplayUtilsLibrary::ResetSaveGameData(SaveGameDataInternal, SlotName, UserIndex);
 
