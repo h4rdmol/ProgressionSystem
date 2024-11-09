@@ -7,8 +7,6 @@
 #include "Data/PSTypes.h"
 #include "PSOverlayWidget.generated.h"
 
-enum class EPSOverlayWidgetFadeState : uint8;
-
 /**
  * 
  * Overlay widget which is displayed for the locked/unlocked levels in the main menu
