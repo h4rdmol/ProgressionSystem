@@ -251,7 +251,7 @@ void UPSWorldSubsystem::LoadGameFromSave()
 
 		if (SaveGameDataInternal)
 		{
-			for (TTuple<FName, FPSRowData> Row : ProgressionSettingsDataInternal)
+			for (const TTuple<FName, FPSRowData>& Row : ProgressionSettingsDataInternal)
 			{
 				SaveGameDataInternal->SetProgressionMap(Row.Key, FPSSaveToDiskData::EmptyData);
 			}
@@ -361,7 +361,7 @@ void UPSWorldSubsystem::OnAsyncLoadGameFromSlotCompleted_Implementation(const FS
 
 		if (SaveGameDataInternal)
 		{
-			for (TTuple<FName, FPSRowData> Row : ProgressionSettingsDataInternal)
+			for (const TTuple<FName, FPSRowData>& Row : ProgressionSettingsDataInternal)
 			{
 				SaveGameDataInternal->SetProgressionMap(Row.Key, FPSSaveToDiskData::EmptyData);
 			}
