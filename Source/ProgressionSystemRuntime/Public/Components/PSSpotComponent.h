@@ -47,11 +47,11 @@ protected:
 	virtual void OnUnregister() override;
 
 	/** Is called when a player has been changed */
-	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
+	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintNativeEvent, BlueprintProtected))
 	void OnPlayerTypeChanged(FPlayerTag PlayerTag);
 
 	/** Is called when a player has been changed */
-	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
+	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintNativeEvent, BlueprintProtected))
 	void OnCharacterReady(class APlayerCharacter* PlayerCharacter, int32 CharacterID);
 
 	/** Locks the player spot when progression for level achieved */

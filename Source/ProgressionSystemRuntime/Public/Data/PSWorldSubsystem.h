@@ -145,7 +145,7 @@ protected:
 protected:
 	/** Called when progression module ready
 	 * Once the save file is loaded it activates the functionality of this class */
-	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
+	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintNativeEvent, BlueprintProtected))
 	void OnInitialized();
 	
 	/** Called when world is ready to start gameplay before the game mode transitions to the correct state and call BeginPlay on all actors */
@@ -155,15 +155,15 @@ protected:
 	virtual void Deinitialize() override;
 
 	/** Is called when a player character is ready */
-	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
+	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintNativeEvent, BlueprintProtected))
 	void OnCharacterReady(class APlayerCharacter* PlayerCharacter, int32 CharacterID);
 
 	/** Is called when a player has been changed */
-	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
+	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintNativeEvent, BlueprintProtected))
 	void OnPlayerTypeChanged(FPlayerTag PlayerTag);
 
 	/** Called when the current game state was changed. */
-	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
+	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintNativeEvent, BlueprintProtected))
 	void OnGameStateChanged(ECurrentGameState CurrentGameState);
 
 	/** Load game from save file or create a new one (does initial load from data table) */

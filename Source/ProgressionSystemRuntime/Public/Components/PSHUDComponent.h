@@ -56,7 +56,7 @@ protected:
 protected:
 	/** Called when progression module ready
 	 * Once the save file is loaded it activates the functionality of this class */
-	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
+	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintNativeEvent, BlueprintProtected))
 	void OnInitialized(); 
 	
 	/** Subscribes to the end game state change notification on the player state. */
@@ -70,15 +70,15 @@ protected:
 	virtual void OnUnregister() override;
 
 	/** Called when the current game state was changed. */
-	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
+	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintNativeEvent, BlueprintProtected))
 	void OnGameStateChanged(ECurrentGameState CurrentGameState);
 
 	/** Called when the end game state was changed. */
-	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
+	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintNativeEvent, BlueprintProtected))
 	void OnEndGameStateChanged(EEndGameState EndGameState);
 
 	/** Is called when a player has been changed */
-	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
+	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintNativeEvent, BlueprintProtected))
 	void OnPlayerTypeChanged(FPlayerTag PlayerTag);
 
 	/** Show locked level ui overlay */
