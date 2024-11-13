@@ -24,7 +24,7 @@ UPSSpotComponent::UPSSpotComponent()
 }
 
 // Called when progression module ready
-void UPSSpotComponent::OnInitialized()
+void UPSSpotComponent::OnInitialized_Implementation()
 {
 	// Ensure the component's mesh is properly assigned and not null.
 	PlayerSpotOnLevelInternal = GetMeshChecked();
@@ -68,7 +68,7 @@ UMySkeletalMeshComponent& UPSSpotComponent::GetMeshChecked() const
 }
 
 // Is called when a player has been changed
-void UPSSpotComponent::OnPlayerTypeChanged(FPlayerTag PlayerTag)
+void UPSSpotComponent::OnPlayerTypeChanged_Implementation(FPlayerTag PlayerTag)
 {
 	UMySkeletalMeshComponent& Mesh = GetMeshChecked();
 	if (Mesh.GetPlayerTag() == PlayerTag)
@@ -82,7 +82,7 @@ void UPSSpotComponent::OnPlayerTypeChanged(FPlayerTag PlayerTag)
 }
 
 //  Is called when a player has been changed 
-void UPSSpotComponent::OnCharacterReady(APlayerCharacter* PlayerCharacter, int32 CharacterID)
+void UPSSpotComponent::OnCharacterReady_Implementation(APlayerCharacter* PlayerCharacter, int32 CharacterID)
 {
 	if (PlayerCharacter->GetPlayerTag() == GetMeshChecked().GetPlayerTag())
 	{

@@ -28,7 +28,7 @@ UPSHUDComponent::UPSHUDComponent()
 }
 
 // Called when main save game file is loaded
-void UPSHUDComponent::OnInitialized()
+void UPSHUDComponent::OnInitialized_Implementation()
 {
 	ProgressionMenuWidgetInternal = Cast<UPSMenuWidget>(FWidgetUtilsLibrary::CreateWidgetChecked(UPSDataAsset::Get().GetProgressionMenuWidget(), true, -10));
 
@@ -51,7 +51,7 @@ void UPSHUDComponent::OnInitialized()
 }
 
 // Subscribes to the end game state change notification on the player state.
-void UPSHUDComponent::OnLocalPlayerStateReady(AMyPlayerState* PlayerState, int32 CharacterID)
+void UPSHUDComponent::OnLocalPlayerStateReady_Implementation(AMyPlayerState* PlayerState, int32 CharacterID)
 {
 	// Ensure that PlayerState is not null before subscribing to the event
 	if (!ensureMsgf(PlayerState, TEXT("ASSERT: [%i] %hs:\n'PlayerState' is null!"), __LINE__, __FUNCTION__))
@@ -99,7 +99,7 @@ void UPSHUDComponent::SavePoints(EEndGameState EndGameState)
 }
 
 // Listening game states changes events 
-void UPSHUDComponent::OnGameStateChanged(ECurrentGameState CurrentGameState)
+void UPSHUDComponent::OnGameStateChanged_Implementation(ECurrentGameState CurrentGameState)
 {
 	CurrentGameStateInternal = CurrentGameState;
 	if (!ensureMsgf(ProgressionMenuWidgetInternal, TEXT("ASSERT: [%i] %hs:\n'ProgressionMenuWidgetInternal' is null!"), __LINE__, __FUNCTION__))
@@ -120,7 +120,7 @@ void UPSHUDComponent::OnGameStateChanged(ECurrentGameState CurrentGameState)
 }
 
 // Listening end game states changes events (win, lose, draw) 
-void UPSHUDComponent::OnEndGameStateChanged(EEndGameState EndGameState)
+void UPSHUDComponent::OnEndGameStateChanged_Implementation(EEndGameState EndGameState)
 {
 	if (EndGameState != EEndGameState::None)
 	{
@@ -134,7 +134,7 @@ void UPSHUDComponent::OnEndGameStateChanged(EEndGameState EndGameState)
 }
 
 // Handle events when player type changes
-void UPSHUDComponent::OnPlayerTypeChanged(FPlayerTag PlayerTag)
+void UPSHUDComponent::OnPlayerTypeChanged_Implementation(FPlayerTag PlayerTag)
 {
 	UpdateProgressionWidgetForPlayer();
 }

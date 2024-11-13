@@ -135,7 +135,7 @@ void UPSWorldSubsystem::SetCurrentSpotComponent(UPSSpotComponent* MyHUDComponent
 }
 
 // Called when progression module ready
-void UPSWorldSubsystem::OnInitialized()
+void UPSWorldSubsystem::OnInitialized_Implementation()
 {
 	// Subscribe events on player type changed and Character spawned
 	BIND_ON_LOCAL_CHARACTER_READY(this, ThisClass::OnCharacterReady);
@@ -185,7 +185,7 @@ void UPSWorldSubsystem::Deinitialize()
 }
 
 // Is called when a player character is ready
-void UPSWorldSubsystem::OnCharacterReady(APlayerCharacter* PlayerCharacter, int32 CharacterID)
+void UPSWorldSubsystem::OnCharacterReady_Implementation(APlayerCharacter* PlayerCharacter, int32 CharacterID)
 {
 	if (!ensureMsgf(PlayerCharacter, TEXT("ASSERT: [%i] %s:\n'PlayerCharacter' is not valid!"), __LINE__, *FString(__FUNCTION__)))
 	{
@@ -195,7 +195,7 @@ void UPSWorldSubsystem::OnCharacterReady(APlayerCharacter* PlayerCharacter, int3
 }
 
 // Is called when a player has been changed
-void UPSWorldSubsystem::OnPlayerTypeChanged(FPlayerTag PlayerTag)
+void UPSWorldSubsystem::OnPlayerTypeChanged_Implementation(FPlayerTag PlayerTag)
 {
 	SetCurrentRowByTag(PlayerTag);
 
@@ -210,7 +210,7 @@ void UPSWorldSubsystem::OnPlayerTypeChanged(FPlayerTag PlayerTag)
 }
 
 // Called when the current game state was changed
-void UPSWorldSubsystem::OnGameStateChanged(ECurrentGameState CurrentGameState)
+void UPSWorldSubsystem::OnGameStateChanged_Implementation(ECurrentGameState CurrentGameState)
 {
 	switch (CurrentGameState)
 	{
@@ -332,7 +332,7 @@ void UPSWorldSubsystem::OnTakeActorsFromPoolCompleted(const TArray<FPoolObjectDa
 }
 
 // Triggers when a spot is loaded
-void UPSWorldSubsystem::OnSpotComponentLoad(UPSSpotComponent* SpotComponent)
+void UPSWorldSubsystem::OnSpotComponentLoad_Implementation(UPSSpotComponent* SpotComponent)
 {
 	if (!ensureMsgf(SpotComponent, TEXT("ASSERT: [%i] %s:\n'SpotComponent' is not valid!"), __LINE__, *FString(__FUNCTION__)))
 	{
