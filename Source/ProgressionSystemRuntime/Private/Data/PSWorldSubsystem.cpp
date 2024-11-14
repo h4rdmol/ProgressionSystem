@@ -281,7 +281,6 @@ void UPSWorldSubsystem::UpdateProgressionActorsForSpot()
 // Spawn/add the stars actors for a spot
 void UPSWorldSubsystem::AddProgressionStarActors()
 {
-	const FPSRowData& CurrentSettingsRowData = GetCurrentProgressionSettingsRowByName();
 	//Return to Pool Manager the list of handles which is not needed (if there are any) 
 	UPoolManagerSubsystem::Get().ReturnToPoolArray(PoolActorHandlersInternal);
 	if (!PoolActorHandlersInternal.IsEmpty())
@@ -299,6 +298,7 @@ void UPSWorldSubsystem::AddProgressionStarActors()
 	};
 
 	// --- Spawn actors
+	const FPSRowData& CurrentSettingsRowData = GetCurrentProgressionSettingsRowByName();
 	UPoolManagerSubsystem::Get().TakeFromPoolArray(PoolActorHandlersInternal, UPSDataAsset::Get().GetStarActorClass(), CurrentSettingsRowData.PointsToUnlock, OnTakeActorsFromPoolCompleted, ESpawnRequestPriority::High);
 }
 
@@ -426,10 +426,11 @@ void UPSWorldSubsystem::UnlockAllLevels()
 float UPSWorldSubsystem::GetDifficultyMultiplier()
 {
 	const TMap<EGameDifficulty, float>& DifficultyMap = UPSDataAsset::Get().GetProgressionDifficultyMultiplier();
+	constexpr float DefaultDifficulty = 0.f;
 	if (!ensureMsgf(!DifficultyMap.IsEmpty(), TEXT("ASSERT: [%i] %s:\n'DifficultyMap' is empty!"), __LINE__, *FString(__FUNCTION__)))
 	{
-		return 0.0f;
+		return DefaultDifficulty;
 	}
-
-	return *DifficultyMap.Find(UGameDifficultySubsystem::Get().GetDifficultyType());
+	const float* FoundDifficulty = DifficultyMap.Find(UGameDifficultySubsystem::Get().GetDifficultyType());
+	return FoundDifficulty ? *FoundDifficulty : DefaultDifficulty;
 }
