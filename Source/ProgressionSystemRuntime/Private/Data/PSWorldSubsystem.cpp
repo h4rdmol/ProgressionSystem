@@ -257,6 +257,12 @@ void UPSWorldSubsystem::LoadGameFromSave()
 			}
 		}
 	}
+
+	if (!ensureMsgf(SaveGameDataInternal, TEXT("ASSERT: [%i] %hs:\n'SaveGameDataInternal' failed to create!"), __LINE__, __FUNCTION__))
+	{
+		return;
+	}
+
 	SetFirstElementAsCurrent();
 }
 
@@ -435,5 +441,11 @@ float UPSWorldSubsystem::GetDifficultyMultiplier()
 		return DefaultDifficulty;
 	}
 	const float* FoundDifficulty = DifficultyMap.Find(UGameDifficultySubsystem::Get().GetDifficultyType());
+	if (!FoundDifficulty)
+	{
+		// No difficulty found, try to apply Any scenario
+		FoundDifficulty = DifficultyMap.Find(EGameDifficulty::Any);
+	}
+	
 	return FoundDifficulty ? *FoundDifficulty : DefaultDifficulty;
 }
