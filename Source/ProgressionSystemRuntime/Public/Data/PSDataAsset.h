@@ -2,7 +2,10 @@
 
 #pragma once
 #include "Engine/DataAsset.h"
+#include "Data/SettingTag.h"
 #include "PSDataAsset.generated.h"
+
+enum class EGameDifficulty : uint8;
 
 /**
  * Contains all progression assets used in the module 
@@ -59,7 +62,7 @@ public:
 
 	/** Returns progression difficulty multiplier */
 	UFUNCTION(BlueprintPure, Category = "C++")
-	FORCEINLINE TMap<EGameDifficulty, float> GetProgressionDifficultyMultiplier() const { return ProgressionDifficultyMultiplierInternal; }
+	const FORCEINLINE TMap<EGameDifficulty, float>& GetProgressionDifficultyMultiplier() const { return ProgressionDifficultyMultiplierInternal; }
 
 	/** Returns the duration of fade-in/fade-out overlay animation in the main menu when cinematic started */
 	UFUNCTION(BlueprintPure, Category = "C++")
@@ -73,6 +76,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "C++")
 	FORCEINLINE float GetStarMaterialFractionalDivisor() const { return StarMaterialFractionalDivisorInternal; }
 
+	/** Returns Instant Character Switch Tag. When Instant character switch setting enabled fade animation will not be played */
+	UFUNCTION(BlueprintPure, Category = "C++")
+	FORCEINLINE FSettingTag GetInstantCharacterSwitchTag() const { return InstantCharacterSwitchTagInternal; }
 protected:
 	/** The Progression Data Table that is responsible for progression configuration. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BlueprintProtected, DisplayName = "Progression Data Table", ShowOnlyInnerProperties))
@@ -130,4 +136,8 @@ protected:
 	 * Since it's a divisor couldn't be 0 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++", meta = (BlueprintProtected, DisplayName = "Star Material Fractional Divisor Temporary"))
 	float StarMaterialFractionalDivisorInternal = 1.f;
+
+	/** When Instant character switch setting enabled fade animation will not be played */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++", AdvancedDisplay, meta = (BlueprintProtected, DisplayName = "Instant Character Switch Tag"))
+	FSettingTag InstantCharacterSwitchTagInternal = FSettingTag::EmptySettingTag;
 };

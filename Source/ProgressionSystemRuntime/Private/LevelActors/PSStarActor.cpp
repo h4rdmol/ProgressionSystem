@@ -12,6 +12,7 @@
 #include "Engine/World.h"
 #include "GameFramework/MyGameStateBase.h"
 #include "LevelActors/PlayerCharacter.h"
+#include "Materials/MaterialInstanceDynamic.h"
 #include "MyUtilsLibraries/GameplayUtilsLibrary.h"
 #include "Subsystems/GlobalEventsSubsystem.h"
 #include "UtilityLibraries/MyBlueprintFunctionLibrary.h"
@@ -58,7 +59,7 @@ void APSStarActor::Tick(float DeltaTime)
 }
 
 // When a local character load finished
-void APSStarActor::OnLocalCharacterReady(APlayerCharacter* Character, int32 CharacterID)
+void APSStarActor::OnLocalCharacterReady_Implementation(APlayerCharacter* Character, int32 CharacterID)
 {
 	AMyPlayerController* LocalPC = Character ? Character->GetController<AMyPlayerController>() : nullptr;
 	if (ensureMsgf(LocalPC, TEXT("ASSERT: [%i] %hs:\n'LocalPC' is null!"), __LINE__, __FUNCTION__))
@@ -68,7 +69,7 @@ void APSStarActor::OnLocalCharacterReady(APlayerCharacter* Character, int32 Char
 }
 
 // Called when the current game state was changed
-void APSStarActor::OnGameStateChanged(ECurrentGameState GameState)
+void APSStarActor::OnGameStateChanged_Implementation(ECurrentGameState GameState)
 {
 	if (GameState == ECurrentGameState::Menu)
 	{
@@ -82,7 +83,7 @@ void APSStarActor::OnGameStateChanged(ECurrentGameState GameState)
 }
 
 // Is called when any cinematic started
-void APSStarActor::OnAnyCinematicStarted(const UObject* LevelSequence, const UObject* FromInstigator)
+void APSStarActor::OnAnyCinematicStarted_Implementation(const UObject* LevelSequence, const UObject* FromInstigator)
 {
 	SetStartTimeHideStars();
 	TryPlayHideStarAnimation();
@@ -160,7 +161,7 @@ void APSStarActor::OnInitialized(const FVector& PreviousActorLocation)
 }
 
 //  Updates star actors Mesh material to the Locked Star, Unlocked or partially achieved
-void APSStarActor::UpdateStarActorMeshMaterial(UMaterialInstanceDynamic* StarDynamicProgressMaterial, float AmountOfStars, bool bIsLockedStar)
+void APSStarActor::UpdateStarActorMeshMaterial(UMaterialInstanceDynamic* StarDynamicProgressMaterial, float AmountOfStars, EPSStarActorState StarActorState)
 {
 	if (!ensureMsgf(StarDynamicProgressMaterial, TEXT("ASSERT: [%i] %hs:\n'StarDynamicProgressMaterial' is not valid!"), __LINE__, __FUNCTION__)
 		|| !ensureMsgf(StarMeshComponent, TEXT("ASSERT: [%i] %hs:\n'StarMeshComponent' is not valid!"), __LINE__, __FUNCTION__))
@@ -169,7 +170,7 @@ void APSStarActor::UpdateStarActorMeshMaterial(UMaterialInstanceDynamic* StarDyn
 	}
 
 	// locked stars
-	if (bIsLockedStar)
+	if (StarActorState == EPSStarActorState::Locked)
 	{
 		StarMeshComponent->SetMaterial(0, UPSDataAsset::Get().GetLockedProgressionMaterial());
 		return;
@@ -183,6 +184,6 @@ void APSStarActor::UpdateStarActorMeshMaterial(UMaterialInstanceDynamic* StarDyn
 		return; // Early return for fractional stars
 	}
 
-	// unlocked stars
+	// unlocked stars EPSStarActorState::Unlocked
 	StarMeshComponent->SetMaterial(0, UPSDataAsset::Get().GetUnlockedProgressionMaterial());
 }

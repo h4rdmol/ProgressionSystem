@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Valerii Rotermel & Yevhenii Selivanov
 
 #pragma once
-
+#include "CoreMinimal.h"
 #include "Modules/ModuleInterface.h"
 
 class PROGRESSIONSYSTEMRUNTIME_API FProgressionSystemRuntimeModule : public IModuleInterface

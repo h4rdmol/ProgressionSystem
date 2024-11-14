@@ -55,9 +55,9 @@ void UPSSaveGameData::SavePoints(EEndGameState EndGameState)
 	{
 		// Increase the current level's progression by the reward from the end game state
 		FName CurrentRowName = UPSWorldSubsystem::Get().GetCurrentRowName();
-		FPSSaveToDiskData* CurrentSaveToDiskDataRowRef =  ProgressionSettingsRowDataInternal.Find(CurrentRowName);
+		FPSSaveToDiskData* CurrentSaveToDiskDataRowRef = ProgressionSettingsRowDataInternal.Find(CurrentRowName);
 		CurrentSaveToDiskDataRowRef->CurrentLevelProgression += GetProgressionReward(EndGameState);
-		
+
 		const FPSRowData& CurrentProgressionSettingsRowData = UPSWorldSubsystem::Get().GetCurrentProgressionSettingsRowByName();
 
 		// Check if the current level progression has reached or surpassed the points needed to unlock
@@ -103,24 +103,22 @@ void UPSSaveGameData::UnlockAllLevels()
 // Retrieves the progression reward based on the end game state for the current level.
 float UPSSaveGameData::GetProgressionReward(EEndGameState EndGameState)
 {
-	// Verify that the current row exists in the map to prevent creating a new entry
+	constexpr float DefaultMultiplier = 1.0f;
+	const float DifficultyMultiplier = UPSWorldSubsystem::Get().GetDifficultyMultiplier();
 	const FPSRowData& CurrentProgressionSettingsRowData = UPSWorldSubsystem::Get().GetCurrentProgressionSettingsRowByName();
 
-	switch (EndGameState)
-	{
-	case EEndGameState::Win:
-		return CurrentProgressionSettingsRowData.WinReward * UPSWorldSubsystem::Get().GetDifficultyMultiplier();
-	case EEndGameState::Draw:
-		return CurrentProgressionSettingsRowData.DrawReward * UPSWorldSubsystem::Get().GetDifficultyMultiplier();
-	case EEndGameState::Lose:
-		return CurrentProgressionSettingsRowData.LossReward * UPSWorldSubsystem::Get().GetDifficultyMultiplier();
-	default:
-		return 0.f; // Return a default reward of 0.f if the row does not exist
-	}
+	const float* LevelReward = CurrentProgressionSettingsRowData.ProgressionEndGameValues.Find(EndGameState);
+	const float ProgressionReward = LevelReward ? *LevelReward : DefaultMultiplier;
+	return ProgressionReward * DifficultyMultiplier;
 }
 
 // Returns the current save to disk data by name
-FPSSaveToDiskData& UPSSaveGameData::GetSaveToDiskDataByName(FName CurrentRowName)
+const FPSSaveToDiskData& UPSSaveGameData::GetSaveToDiskDataByName(FName CurrentRowName)
 {
-	return *ProgressionSettingsRowDataInternal.Find(CurrentRowName);
+	if (const FPSSaveToDiskData* FoundSeeting = ProgressionSettingsRowDataInternal.Find(CurrentRowName))
+	{
+		return *FoundSeeting;
+	}
+
+	return  FPSSaveToDiskData::EmptyData;
 }

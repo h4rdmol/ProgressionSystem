@@ -20,7 +20,12 @@
 void UPSMenuWidget::AddImagesToHorizontalBox(float AmountOfUnlockedPoints, float AmountOfLockedPoints, float MaxLevelPoints)
 {
 	//Return to Pool Manager the list of handles which is not needed (if there are any) 
-	UPoolManagerSubsystem::Get().ReturnToPoolArray(PoolWidgetHandlersInternal);
+	
+	if (!PoolWidgetHandlersInternal.IsEmpty())
+	{
+		UPoolManagerSubsystem::Get().ReturnToPoolArray(PoolWidgetHandlersInternal);
+		PoolWidgetHandlersInternal.Empty();	
+	}
 	
 	// --- Prepare spawn request
 	const TWeakObjectPtr<ThisClass> WeakThis = this;
@@ -34,6 +39,11 @@ void UPSMenuWidget::AddImagesToHorizontalBox(float AmountOfUnlockedPoints, float
 	
 	// --- Spawn widgets
 	const int32 TotalRequests = AmountOfLockedPoints + AmountOfUnlockedPoints;
+	if (TotalRequests == 0)
+	{
+		// no items to request nothing to add
+		return;
+	}
 	UPoolManagerSubsystem::Get().TakeFromPoolArray(PoolWidgetHandlersInternal, UPSDataAsset::Get().GetStarWidgetClass(), TotalRequests, OnTakeFromPoolCompleted);
 }
 
