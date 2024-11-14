@@ -284,6 +284,10 @@ void UPSWorldSubsystem::AddProgressionStarActors()
 	const FPSRowData& CurrentSettingsRowData = GetCurrentProgressionSettingsRowByName();
 	//Return to Pool Manager the list of handles which is not needed (if there are any) 
 	UPoolManagerSubsystem::Get().ReturnToPoolArray(PoolActorHandlersInternal);
+	if (!PoolActorHandlersInternal.IsEmpty())
+	{
+		PoolActorHandlersInternal.Empty();	
+	}
 	// --- Prepare spawn request
 	const TWeakObjectPtr<ThisClass> WeakThis = this;
 	const FOnSpawnAllCallback OnTakeActorsFromPoolCompleted = [WeakThis](const TArray<FPoolObjectData>& CreatedObjects)
@@ -421,23 +425,11 @@ void UPSWorldSubsystem::UnlockAllLevels()
 // Returns difficultyMultiplier
 float UPSWorldSubsystem::GetDifficultyMultiplier()
 {
-	TMap<EGameDifficulty, float> DifficultyMap = UPSDataAsset::Get().GetProgressionDifficultyMultiplier();
-	if (!ensureMsgf(DifficultyMap.IsEmpty(), TEXT("ASSERT: [%i] %s:\n'DifficultyMap' is empty!"), __LINE__, *FString(__FUNCTION__)))
+	const TMap<EGameDifficulty, float>& DifficultyMap = UPSDataAsset::Get().GetProgressionDifficultyMultiplier();
+	if (!ensureMsgf(!DifficultyMap.IsEmpty(), TEXT("ASSERT: [%i] %s:\n'DifficultyMap' is empty!"), __LINE__, *FString(__FUNCTION__)))
 	{
-		return 1.0f;
+		return 0.0f;
 	}
 
-	switch (UGameDifficultySubsystem::GetGameDifficultySubsystem()->GetDifficultyType())
-	{
-	case EGameDifficulty::Easy:
-		return *DifficultyMap.Find(EGameDifficulty::Easy);
-	case EGameDifficulty::Normal:
-		return *DifficultyMap.Find(EGameDifficulty::Normal);
-	case EGameDifficulty::Hard:
-		return *DifficultyMap.Find(EGameDifficulty::Hard);
-	case EGameDifficulty::Vanilla:
-		return 1.0f;
-	default:
-		return 1.0f;
-	}
+	return *DifficultyMap.Find(UGameDifficultySubsystem::Get().GetDifficultyType());
 }

@@ -21,6 +21,10 @@ void UPSMenuWidget::AddImagesToHorizontalBox(float AmountOfUnlockedPoints, float
 {
 	//Return to Pool Manager the list of handles which is not needed (if there are any) 
 	UPoolManagerSubsystem::Get().ReturnToPoolArray(PoolWidgetHandlersInternal);
+	if (!PoolWidgetHandlersInternal.IsEmpty())
+	{
+		PoolWidgetHandlersInternal.Empty();	
+	}
 	
 	// --- Prepare spawn request
 	const TWeakObjectPtr<ThisClass> WeakThis = this;
