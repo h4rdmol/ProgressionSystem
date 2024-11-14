@@ -288,9 +288,10 @@ void UPSWorldSubsystem::UpdateProgressionActorsForSpot()
 void UPSWorldSubsystem::AddProgressionStarActors()
 {
 	//Return to Pool Manager the list of handles which is not needed (if there are any) 
-	UPoolManagerSubsystem::Get().ReturnToPoolArray(PoolActorHandlersInternal);
+	
 	if (!PoolActorHandlersInternal.IsEmpty())
 	{
+		UPoolManagerSubsystem::Get().ReturnToPoolArray(PoolActorHandlersInternal);
 		PoolActorHandlersInternal.Empty();
 	}
 	// --- Prepare spawn request
