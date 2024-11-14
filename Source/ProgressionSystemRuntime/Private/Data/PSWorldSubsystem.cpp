@@ -285,7 +285,7 @@ void UPSWorldSubsystem::AddProgressionStarActors()
 	UPoolManagerSubsystem::Get().ReturnToPoolArray(PoolActorHandlersInternal);
 	if (!PoolActorHandlersInternal.IsEmpty())
 	{
-		PoolActorHandlersInternal.Empty();	
+		PoolActorHandlersInternal.Empty();
 	}
 	// --- Prepare spawn request
 	const TWeakObjectPtr<ThisClass> WeakThis = this;
@@ -299,7 +299,10 @@ void UPSWorldSubsystem::AddProgressionStarActors()
 
 	// --- Spawn actors
 	const FPSRowData& CurrentSettingsRowData = GetCurrentProgressionSettingsRowByName();
-	UPoolManagerSubsystem::Get().TakeFromPoolArray(PoolActorHandlersInternal, UPSDataAsset::Get().GetStarActorClass(), CurrentSettingsRowData.PointsToUnlock, OnTakeActorsFromPoolCompleted, ESpawnRequestPriority::High);
+	if (CurrentSettingsRowData.PointsToUnlock)
+	{
+		UPoolManagerSubsystem::Get().TakeFromPoolArray(PoolActorHandlersInternal, UPSDataAsset::Get().GetStarActorClass(), CurrentSettingsRowData.PointsToUnlock, OnTakeActorsFromPoolCompleted, ESpawnRequestPriority::High);
+	}
 }
 
 // Dynamically adds Star actors which representing unlocked and locked progression above the character
