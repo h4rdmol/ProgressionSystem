@@ -387,10 +387,10 @@ void UPSWorldSubsystem::PerformCleanUp()
 	if (!PoolActorHandlersInternal.IsEmpty())
 	{
 		UPoolManagerSubsystem::Get().ReturnToPoolArray(PoolActorHandlersInternal);
+		PoolActorHandlersInternal.Empty();
 		UPoolManagerSubsystem::Get().EmptyPool(UPSDataAsset::Get().GetStarActorClass());
 	}
-
-	PoolActorHandlersInternal.Empty();
+	
 	ProgressionSettingsDataInternal.Empty();
 	StarDynamicProgressMaterial = nullptr;
 
