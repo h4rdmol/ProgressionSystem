@@ -25,6 +25,14 @@ public:
 	static UPSWorldSubsystem& Get();
 	static UPSWorldSubsystem& Get(const UObject& WorldContextObject);
 
+	/** Is called to initialize the world subsystem. It's a BeginPlay logic for the PS module */
+	UFUNCTION(BlueprintNativeEvent, Category= "C++", meta = (BlueprintProtected))
+	void OnWorldSubSystemInitialize();
+
+	/** Cleanup used on unloading module to remove properties that should not be available by other objects. */
+	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
+	void PerformCleanUp();
+	
 	/** Set current row of progression system by tag*/
 	UFUNCTION(BlueprintCallable, Category = "C++")
 	void SetCurrentRowByTag(FPlayerTag NewRowPlayerTag);
@@ -144,20 +152,6 @@ protected:
 	/** Clears all transient data created by this subsystem. */
 	virtual void Deinitialize() override;
 
-	/** Invoked after a game feature plugin is unloaded */
-	virtual void OnGameFeatureUnloading(const UGameFeatureData* GameFeatureData, const FString& PluginURL) override;
-
-	/** Invoked in the early stages of the game feature plugin loading phase */
-	virtual void OnGameFeatureLoading(const UGameFeatureData* GameFeatureData, const FString& PluginURL) override;
-
-	/** Is called to initialize the world subsystem. It's a BeginPlay logic for the PS module */
-	UFUNCTION(BlueprintNativeEvent, Category= "C++", meta = (BlueprintProtected))
-	void OnWorldSubSystemInitialize();
-
-	/** Cleanup used on unloading module to remove properties that should not be available by other objects. */
-	UFUNCTION(BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
-	void PerformCleanUp();
-	
 	/** Is called when a player character is ready */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void OnCharacterReady(class APlayerCharacter* PlayerCharacter, int32 CharacterID);

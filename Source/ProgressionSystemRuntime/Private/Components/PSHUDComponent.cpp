@@ -43,6 +43,8 @@ void UPSHUDComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	UPSWorldSubsystem::Get().OnWorldSubSystemInitialize();
+	
 	ProgressionMenuWidgetInternal = Cast<UPSMenuWidget>(FWidgetUtilsLibrary::CreateWidgetChecked(UPSDataAsset::Get().GetProgressionMenuWidget(), true, -10));
 
 	ProgressionMenuOverlayWidgetInternal = Cast<UPSOverlayWidget>(FWidgetUtilsLibrary::CreateWidgetChecked(UPSDataAsset::Get().GetProgressionOverlayWidget(), true, 1));
@@ -66,6 +68,8 @@ void UPSHUDComponent::BeginPlay()
 // Called when the component is unregistered, used to clean up resources
 void UPSHUDComponent::OnUnregister()
 {
+	UPSWorldSubsystem::Get().PerformCleanUp();
+	
 	if (ProgressionMenuWidgetInternal)
 	{
 		FWidgetUtilsLibrary::DestroyWidget(*ProgressionMenuWidgetInternal);

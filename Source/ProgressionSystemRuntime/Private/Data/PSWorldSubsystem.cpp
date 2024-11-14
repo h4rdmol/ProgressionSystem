@@ -7,7 +7,6 @@
 #include "Components/MySkeletalMeshComponent.h"
 #include "Components/PSHUDComponent.h"
 #include "Components/PSSpotComponent.h"
-#include "Components/StaticMeshComponent.h"
 #include "Data/PSDataAsset.h"
 #include "Data/PSSaveGameData.h"
 #include "Kismet/GameplayStatics.h"
@@ -150,36 +149,11 @@ void UPSWorldSubsystem::Deinitialize()
 	Super::Deinitialize();
 }
 
-// Invoked after a game feature plugin is unloaded
-void UPSWorldSubsystem::OnGameFeatureUnloading(const UGameFeatureData* GameFeatureData, const FString& PluginURL)
-{
-	const FString ProgressionPlugin = TEXT("ProgressionSystem");
-	if (PluginURL.Contains(ProgressionPlugin))
-	{
-		PerformCleanUp();
-#if !WITH_EDITOR
-		// Execute only if it's editor. In the editor subsystem is not unloaded fully so re-subscribe is not executed
-		UGameFeaturesSubsystem::Get().RemoveObserver(this);
-#endif
-		
-	}
-}
-
-// Invoked in the early stages of the game feature plugin loading phase
-void UPSWorldSubsystem::OnGameFeatureLoading(const UGameFeatureData* GameFeatureData, const FString& PluginURL)
-{
-	const FString ProgressionPlugin = TEXT("ProgressionSystem");
-	if (PluginURL.Contains(ProgressionPlugin))
-	{
-		OnWorldSubSystemInitialize();
-	}
-}
-
 // Is called to initialize the world subsystem. It's a BeginPlay logic for the PS module
 void UPSWorldSubsystem::OnWorldSubSystemInitialize_Implementation()
 {
 	UGameFeaturesSubsystem::Get().AddObserver(this);
-	
+
 	// Subscribe events on player type changed and Character spawned
 	BIND_ON_LOCAL_CHARACTER_READY(this, ThisClass::OnCharacterReady);
 
@@ -354,9 +328,13 @@ void UPSWorldSubsystem::OnSpotComponentLoad(UPSSpotComponent* SpotComponent)
 // Destroy all star actors that should not be available by other objects anymore.
 void UPSWorldSubsystem::PerformCleanUp()
 {
-	// Destroying Star Actors 
-	UPoolManagerSubsystem::Get().ReturnToPoolArray(PoolActorHandlersInternal);
+	// Destroying Star Actors
+	if (!PoolActorHandlersInternal.IsEmpty())
+	{
+		UPoolManagerSubsystem::Get().ReturnToPoolArray(PoolActorHandlersInternal);
+	}
 	UPoolManagerSubsystem::Get().EmptyPool(UPSDataAsset::Get().GetStarActorClass());
+
 	PoolActorHandlersInternal.Empty();
 	ProgressionSettingsDataInternal.Empty();
 	StarDynamicProgressMaterial = nullptr;
