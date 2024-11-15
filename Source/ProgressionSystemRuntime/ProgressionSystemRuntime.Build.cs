@@ -12,9 +12,8 @@ public class ProgressionSystemRuntime : ModuleRules
 		PublicDependencyModuleNames.AddRange(new[]
 			{
 				"Core", "UMG" 
-				, "GameFeatures"
 				// Bomber modules
-				, "Bomber" // Is included in header files
+				, "Bomber", "SettingsWidgetConstructor"
 			}
 		);
 

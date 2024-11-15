@@ -5,7 +5,6 @@
 #include "PSTypes.h"
 #include "Subsystems/WorldSubsystem.h"
 #include "PoolManagerTypes.h"
-#include "GameFeatureStateChangeObserver.h"
 #include "PSWorldSubsystem.generated.h"
 
 enum class ECurrentGameState : uint8;
@@ -15,7 +14,7 @@ enum class EPSStarActorState : uint8;
  * Implements the world subsystem to access different components in the module 
  */
 UCLASS(BlueprintType, Blueprintable, Config = "ProgressionSystem", DefaultConfig)
-class PROGRESSIONSYSTEMRUNTIME_API UPSWorldSubsystem : public UWorldSubsystem, public IGameFeatureStateChangeObserver
+class PROGRESSIONSYSTEMRUNTIME_API UPSWorldSubsystem : public UWorldSubsystem
 {
 	GENERATED_BODY()
 
