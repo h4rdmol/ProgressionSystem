@@ -57,12 +57,6 @@ void UPSSpotComponent::OnUnregister()
 		PlayerSpotOnLevelInternal = nullptr;
 	}
 
-	if (SaveGameInstanceInternal)
-	{
-		SaveGameInstanceInternal->ConditionalBeginDestroy();
-		SaveGameInstanceInternal = nullptr;
-	}
-
 	Super::OnUnregister();
 }
 
