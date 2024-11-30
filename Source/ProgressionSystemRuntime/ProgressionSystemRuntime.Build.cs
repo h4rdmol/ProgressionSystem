@@ -13,7 +13,8 @@ public class ProgressionSystemRuntime : ModuleRules
 			{
 				"Core", "UMG" 
 				// Bomber modules
-				, "Bomber", "SettingsWidgetConstructor"
+				, "Bomber"
+				,"SettingsWidgetConstructor"
 			}
 		);
 
