@@ -305,7 +305,7 @@ void UPSWorldSubsystem::OnTakeActorsFromPoolCompleted(const TArray<FPoolObjectDa
 
 	float CurrentAmountOfUnlocked = CurrentSaveToDiskRowData.CurrentLevelProgression;
 
-	FVector PreviousActorLocation;
+	FVector PreviousActorLocation = FVector::Zero();
 
 	// Setup spawned widget
 	for (const FPoolObjectData& CreatedObject : CreatedObjects)
