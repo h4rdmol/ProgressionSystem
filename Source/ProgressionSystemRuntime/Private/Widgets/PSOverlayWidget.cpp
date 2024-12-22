@@ -33,7 +33,7 @@ void UPSOverlayWidget::SetOverlayVisibility(ESlateVisibility VisibilitySlate, bo
 			return;
 		}
 
-		ESlateVisibility PrevOverlayOpacity = PSCOverlay->GetVisibility();
+		ESlateVisibility PrevOverlayOpacity = this->GetVisibility();
 
 		//if new visibility is same as previous animation is not required 
 		if (PrevOverlayOpacity == VisibilitySlate)
@@ -62,12 +62,11 @@ void UPSOverlayWidget::SetOverlayVisibility(ESlateVisibility VisibilitySlate, bo
 void UPSOverlayWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
-	if (PSCOverlay->GetVisibility() != ESlateVisibility::Visible)
+	if (this->GetVisibility() != ESlateVisibility::Visible)
 	{
 		this->SetVisibility(ESlateVisibility::Collapsed);
 		return;
 	}
-
 
 	TickPlayFadeOverlayAnimation();
 }
@@ -101,7 +100,7 @@ void UPSOverlayWidget::TickPlayFadeOverlayAnimation()
 		bShouldPlayFadeAnimationInternal = false;
 		if (OverlayWidgetFadeStateInternal == EPSOverlayWidgetFadeState::FadeOut)
 		{
-			PSCOverlay->SetVisibility(ESlateVisibility::Collapsed);
+			this->SetVisibility(ESlateVisibility::Collapsed);
 		}
 		return;
 	}
@@ -116,4 +115,5 @@ void UPSOverlayWidget::SetOverlayItemsVisibility(ESlateVisibility VisibilitySlat
 {
 	// Level is unlocked hide the blocking overlay
 	this->SetVisibility(VisibilitySlate);
+	PSCOverlay->SetVisibility(VisibilitySlate);
 }
