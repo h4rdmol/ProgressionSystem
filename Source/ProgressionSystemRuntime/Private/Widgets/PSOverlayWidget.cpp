@@ -38,7 +38,7 @@ void UPSOverlayWidget::SetOverlayVisibility(ESlateVisibility VisibilitySlate, bo
 		//if new visibility is same as previous animation is not required 
 		if (PrevOverlayOpacity == VisibilitySlate)
 		{
-			bShouldPlayFadeAnimationInternal = true;
+			bShouldPlayFadeAnimationInternal = false;
 			OverlayWidgetFadeStateInternal = EPSOverlayWidgetFadeState::None;
 		}
 		OverlayWidgetFadeStateInternal = EPSOverlayWidgetFadeState::FadeIn;
@@ -64,7 +64,6 @@ void UPSOverlayWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime
 	Super::NativeTick(MyGeometry, InDeltaTime);
 	if (GetVisibility() != ESlateVisibility::Visible)
 	{
-		SetVisibility(ESlateVisibility::Collapsed);
 		return;
 	}
 
