@@ -114,5 +114,4 @@ void UPSOverlayWidget::SetOverlayItemsVisibility(ESlateVisibility VisibilitySlat
 {
 	// Level is unlocked hide the blocking overlay
 	SetVisibility(VisibilitySlate);
-	PSCOverlay->SetVisibility(VisibilitySlate);
 }
