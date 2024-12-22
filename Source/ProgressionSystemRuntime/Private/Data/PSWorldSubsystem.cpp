@@ -366,8 +366,7 @@ void UPSWorldSubsystem::OnAsyncLoadGameFromSlotCompleted_Implementation(const FS
 			}
 		}
 	}
-	
-	
+
 
 	SetFirstElementAsCurrent();
 	OnInitialized();
@@ -384,7 +383,7 @@ void UPSWorldSubsystem::PerformCleanUp()
 		PoolActorHandlersInternal.Empty();
 		UPoolManagerSubsystem::Get().EmptyPool(UPSDataAsset::Get().GetStarActorClass());
 	}
-	
+
 	ProgressionSettingsDataInternal.Empty();
 	StarDynamicProgressMaterial = nullptr;
 
@@ -427,6 +426,13 @@ void UPSWorldSubsystem::ResetSaveGameData()
 	{
 		return;
 	}
+
+	if (!ensureMsgf(PSCurrentSpotComponentInternal, TEXT("ASSERT: [%i] %hs:\n'PSCurrentSpotComponentInternal' is null!"), __LINE__, __FUNCTION__))
+	{
+		return;
+	}
+	SetCurrentRowByTag(PSCurrentSpotComponentInternal->GetMeshChecked().GetPlayerTag());
+	PSCurrentSpotComponentInternal->ChangeSpotVisibilityStatus();
 	PSHUDComponent->UpdateProgressionWidgetForPlayer();
 	UpdateProgressionActorsForSpot();
 }
@@ -445,6 +451,12 @@ void UPSWorldSubsystem::UnlockAllLevels()
 	{
 		return;
 	}
+
+	if (!ensureMsgf(PSCurrentSpotComponentInternal, TEXT("ASSERT: [%i] %hs:\n'PSCurrentSpotComponentInternal' is null!"), __LINE__, __FUNCTION__))
+	{
+		return;
+	}
+	PSCurrentSpotComponentInternal->ChangeSpotVisibilityStatus();
 	PSHUDComponent->UpdateProgressionWidgetForPlayer();
 	UpdateProgressionActorsForSpot();
 }
