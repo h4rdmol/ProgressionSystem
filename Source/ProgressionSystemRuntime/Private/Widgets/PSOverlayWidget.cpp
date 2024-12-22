@@ -62,14 +62,12 @@ void UPSOverlayWidget::SetOverlayVisibility(ESlateVisibility VisibilitySlate, bo
 void UPSOverlayWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
-	if (PSCOverlay)
+	if (PSCOverlay->GetVisibility() != ESlateVisibility::Visible)
 	{
-		if (PSCOverlay->GetVisibility() != ESlateVisibility::Visible)
-		{
-			this->SetVisibility(ESlateVisibility::Collapsed);
-			return;
-		}
+		this->SetVisibility(ESlateVisibility::Collapsed);
+		return;
 	}
+
 
 	TickPlayFadeOverlayAnimation();
 }
