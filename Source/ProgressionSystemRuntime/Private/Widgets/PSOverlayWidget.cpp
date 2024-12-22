@@ -66,6 +66,7 @@ void UPSOverlayWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime
 	{
 		if (PSCOverlay->GetVisibility() != ESlateVisibility::Visible)
 		{
+			this->SetVisibility(ESlateVisibility::Collapsed);
 			return;
 		}
 	}
@@ -116,5 +117,6 @@ void UPSOverlayWidget::TickPlayFadeOverlayAnimation()
 void UPSOverlayWidget::SetOverlayItemsVisibility(ESlateVisibility VisibilitySlate)
 {
 	// Level is unlocked hide the blocking overlay
+	this->SetVisibility(VisibilitySlate);
 	PSCOverlay->SetVisibility(VisibilitySlate);
 }
