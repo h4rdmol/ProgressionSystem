@@ -103,6 +103,15 @@ void UPSHUDComponent::SavePoints(EEndGameState EndGameState)
 	}
 	UPSSaveGameData* SaveGameData = UPSWorldSubsystem::Get().GetCurrentSaveGameData();
 	SaveGameData->SavePoints(EndGameState);
+
+	// check if the progression is completed
+	if (EndGameState != EEndGameState::Lose)
+	{
+		if (SaveGameData->IsProgressionCompleted())
+		{
+			UGlobalEventsSubsystem::Get().OnGameProgressionCompleted.Broadcast();
+		}
+	}
 }
 
 // Listening game states changes events 

@@ -48,6 +48,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "C++")
 	void NextLevelProgressionRowData();
 
+	/** Checks if the progression fully accomplished */
+	UFUNCTION(BlueprintCallable, Category = "C++")
+	bool IsProgressionCompleted();
+
 	/** Unlocks all levels and set maximum allowed progression points */
 	UFUNCTION(BlueprintCallable, Category = "C++")
 	void UnlockAllLevels();

@@ -89,6 +89,26 @@ void UPSSaveGameData::NextLevelProgressionRowData()
 	}
 }
 
+// Checks if the progression fully accomplished
+bool UPSSaveGameData::IsProgressionCompleted()
+{
+	bool bNextRowFound = false;
+	FName CurrentRowName = UPSWorldSubsystem::Get().GetCurrentRowName();
+
+	for (const TTuple<FName, FPSSaveToDiskData>& KeyValue : ProgressionSettingsRowDataInternal)
+	{
+		if (bNextRowFound)
+		{
+			return false;
+		}
+		if (KeyValue.Key == UPSWorldSubsystem::Get().GetCurrentRowName())
+		{
+			bNextRowFound = true; // Indicate that the current row has been found
+		}
+	}
+	return true;
+}
+
 // Unlocks all levels and set maximum allowed progression points
 void UPSSaveGameData::UnlockAllLevels()
 {
@@ -120,5 +140,5 @@ const FPSSaveToDiskData& UPSSaveGameData::GetSaveToDiskDataByName(FName CurrentR
 		return *FoundSeeting;
 	}
 
-	return  FPSSaveToDiskData::EmptyData;
+	return FPSSaveToDiskData::EmptyData;
 }
