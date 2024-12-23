@@ -421,20 +421,8 @@ void UPSWorldSubsystem::ResetSaveGameData()
 
 	// Re-load a new save game object. Load game from save creates a save file if there is no such
 	LoadGameFromSave();
-	UPSHUDComponent* PSHUDComponent = GetProgressionSystemHUDComponent();
-	if (!ensureMsgf(PSHUDComponent, TEXT("ASSERT: [%i] %hs:\n'PSHUDComponent' is null!"), __LINE__, __FUNCTION__))
-	{
-		return;
-	}
-
-	if (!ensureMsgf(PSCurrentSpotComponentInternal, TEXT("ASSERT: [%i] %hs:\n'PSCurrentSpotComponentInternal' is null!"), __LINE__, __FUNCTION__))
-	{
-		return;
-	}
 	SetCurrentRowByTag(PSCurrentSpotComponentInternal->GetMeshChecked().GetPlayerTag());
-	PSCurrentSpotComponentInternal->ChangeSpotVisibilityStatus();
-	PSHUDComponent->UpdateProgressionWidgetForPlayer();
-	UpdateProgressionActorsForSpot();
+	RefreshProgressionUIElements();
 }
 
 // Unlocks all levels of the Progression System
@@ -446,6 +434,13 @@ void UPSWorldSubsystem::UnlockAllLevels()
 	}
 	SaveGameDataInternal->UnlockAllLevels();
 	SaveDataAsync();
+
+	RefreshProgressionUIElements();
+}
+
+// Is called to update the stars actors and in widgets
+void UPSWorldSubsystem::RefreshProgressionUIElements()
+{
 	UPSHUDComponent* PSHUDComponent = GetProgressionSystemHUDComponent();
 	if (!ensureMsgf(PSHUDComponent, TEXT("ASSERT: [%i] %hs:\n'PSHUDComponent' is null!"), __LINE__, __FUNCTION__))
 	{
@@ -456,6 +451,7 @@ void UPSWorldSubsystem::UnlockAllLevels()
 	{
 		return;
 	}
+
 	PSCurrentSpotComponentInternal->ChangeSpotVisibilityStatus();
 	PSHUDComponent->UpdateProgressionWidgetForPlayer();
 	UpdateProgressionActorsForSpot();
