@@ -35,7 +35,7 @@ public:
 	FPSSpotComponent OnSpotComponentReady;
 
 	/** Locks the player spot when progression for level achieved */
-	UFUNCTION(BlueprintCallable, Category= "C++", meta=(BlueprintProtected))
+	UFUNCTION(BlueprintCallable, Category= "C++")
 	void ChangeSpotVisibilityStatus();
 
 protected:
