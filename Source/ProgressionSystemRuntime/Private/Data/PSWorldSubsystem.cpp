@@ -329,6 +329,24 @@ void UPSWorldSubsystem::OnTakeActorsFromPoolCompleted(const TArray<FPoolObjectDa
 	}
 }
 
+// Returns spot component by the player tag, returns null if spot is not found
+UPSSpotComponent* UPSWorldSubsystem::GetSpotComponentByPlayerTag(FPlayerTag PlayerTag)
+{
+	if (PSSpotComponentArrayInternal.IsEmpty())
+	{
+		return nullptr;
+	}
+	
+	for (UPSSpotComponent* SpotComponent : PSSpotComponentArrayInternal)
+	{
+		if (SpotComponent->GetMeshChecked().GetPlayerTag() == PlayerTag)
+		{
+			return SpotComponent;
+		}
+	}
+	return nullptr;
+}
+
 // Triggers when a spot is loaded
 void UPSWorldSubsystem::OnSpotComponentLoad_Implementation(UPSSpotComponent* SpotComponent)
 {
@@ -421,8 +439,13 @@ void UPSWorldSubsystem::ResetSaveGameData()
 
 	// Re-load a new save game object. Load game from save creates a save file if there is no such
 	LoadGameFromSave();
-	SetCurrentRowByTag(PSCurrentSpotComponentInternal->GetMeshChecked().GetPlayerTag());
-	RefreshProgressionUIElements();
+
+	UPSSpotComponent* SpotComponent = GetSpotComponentByPlayerTag(UMyBlueprintFunctionLibrary::GetLocalPlayerCharacter()->GetPlayerTag());
+	if (!ensureMsgf(SpotComponent, TEXT("ASSERT: [%i] %hs:\n'SpotComponent' is null!"), __LINE__, __FUNCTION__))
+	{
+		return;
+	}
+	SetCurrentRowByTag(SpotComponent->GetMeshChecked().GetPlayerTag());
 }
 
 // Unlocks all levels of the Progression System
