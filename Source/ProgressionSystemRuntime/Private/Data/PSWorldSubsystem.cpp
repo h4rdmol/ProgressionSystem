@@ -470,12 +470,13 @@ void UPSWorldSubsystem::RefreshProgressionUIElements()
 		return;
 	}
 
-	if (!ensureMsgf(PSCurrentSpotComponentInternal, TEXT("ASSERT: [%i] %hs:\n'PSCurrentSpotComponentInternal' is null!"), __LINE__, __FUNCTION__))
+	UPSSpotComponent* SpotComponent = GetSpotComponentByPlayerTag(UMyBlueprintFunctionLibrary::GetLocalPlayerCharacter()->GetPlayerTag());
+	if (!ensureMsgf(SpotComponent, TEXT("ASSERT: [%i] %hs:\n'SpotComponent' is null!"), __LINE__, __FUNCTION__))
 	{
 		return;
 	}
 
-	PSCurrentSpotComponentInternal->ChangeSpotVisibilityStatus();
+	SpotComponent->ChangeSpotVisibilityStatus();
 	PSHUDComponent->UpdateProgressionWidgetForPlayer();
 	UpdateProgressionActorsForSpot();
 }
