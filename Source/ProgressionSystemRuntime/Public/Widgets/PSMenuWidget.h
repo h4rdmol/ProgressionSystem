@@ -39,7 +39,7 @@ protected:
 	 * May be called multiple times due to adding and removing from the hierarchy. */
 	virtual void NativeConstruct() override;
 
-	/** Called when the current game state was changed. */
+	/** Called when the end game state was changed to toggle progression widget visibility. */
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
 	void OnGameStateChanged(ECurrentGameState CurrentGameState);
 

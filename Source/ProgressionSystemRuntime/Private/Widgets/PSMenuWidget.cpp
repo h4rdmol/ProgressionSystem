@@ -34,7 +34,7 @@ void UPSMenuWidget::NativeConstruct()
 	BIND_ON_LOCAL_PLAYER_STATE_READY(this, ThisClass::OnLocalPlayerStateReady);
 }
 
-// Called when the current game state was changed
+// Called when the end game state was changed to toggle progression widget visibility
 void UPSMenuWidget::OnGameStateChanged_Implementation(ECurrentGameState CurrentGameState)
 {
 	switch (CurrentGameState)
