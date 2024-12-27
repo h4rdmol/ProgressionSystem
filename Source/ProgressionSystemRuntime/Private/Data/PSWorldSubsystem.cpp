@@ -339,7 +339,7 @@ UPSSpotComponent* UPSWorldSubsystem::FindSpotComponentByPlayerTag(FPlayerTag Pla
 	
 	for (UPSSpotComponent* SpotComponent : PSSpotComponentArrayInternal)
 	{
-		if (SpotComponent->GetMeshChecked().GetPlayerTag() == PlayerTag)
+		if (SpotComponent && SpotComponent->GetMeshChecked().GetPlayerTag() == PlayerTag)
 		{
 			return SpotComponent;
 		}
