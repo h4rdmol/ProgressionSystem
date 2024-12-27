@@ -332,7 +332,7 @@ void UPSWorldSubsystem::OnTakeActorsFromPoolCompleted(const TArray<FPoolObjectDa
 // Returns spot component by the player tag, returns null if spot is not found
 UPSSpotComponent* UPSWorldSubsystem::FindSpotComponentByPlayerTag(FPlayerTag PlayerTag) const
 {
-	if (PSSpotComponentArrayInternal.IsEmpty())
+	if (PSSpotComponentArrayInternal.IsEmpty() || !PlayerTag.IsValid())
 	{
 		return nullptr;
 	}
