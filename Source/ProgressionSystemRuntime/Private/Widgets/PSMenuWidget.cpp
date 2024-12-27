@@ -11,10 +11,61 @@
 #include "PoolManagerSubsystem.h"
 #include "PoolManagerTypes.h"
 #include "Components/StaticMeshComponent.h"
+#include "GameFramework/MyGameStateBase.h"
+#include "GameFramework/MyPlayerState.h"
+#include "Subsystems/GlobalEventsSubsystem.h"
 #include "UtilityLibraries/MyBlueprintFunctionLibrary.h"
 
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(PSMenuWidget)
+
+// Called after the underlying slate widget is constructed.
+void UPSMenuWidget::NativeConstruct()
+{
+	Super::NativeConstruct();
+
+	// Hide this widget by default
+	SetVisibility(ESlateVisibility::Collapsed);
+
+	// Listen to handle input for each game state
+	BIND_ON_GAME_STATE_CHANGED(this, ThisClass::OnGameStateChanged);
+
+	// Binds the local player state ready event to the handler
+	BIND_ON_LOCAL_PLAYER_STATE_READY(this, ThisClass::OnLocalPlayerStateReady);
+}
+
+// Called when the current game state was changed
+void UPSMenuWidget::OnGameStateChanged_Implementation(ECurrentGameState CurrentGameState)
+{
+	switch (CurrentGameState)
+	{
+	case ECurrentGameState::GameStarting:
+		SetVisibility(ESlateVisibility::Collapsed);
+	default: return;
+	}
+}
+
+// Subscribes to the end game state change notification on the player state
+void UPSMenuWidget::OnLocalPlayerStateReady_Implementation(AMyPlayerState* PlayerState, int32 CharacterID)
+{
+	// Ensure that PlayerState is not null before subscribing to the event
+	if (!ensureMsgf(PlayerState, TEXT("ASSERT: [%i] %hs:\n'PlayerState' is null!"), __LINE__, __FUNCTION__))
+	{
+		return;
+	}
+	PlayerState->OnEndGameStateChanged.AddUniqueDynamic(this, &ThisClass::OnEndGameStateChanged);
+}
+
+// Called when the end game state was changed
+void UPSMenuWidget::OnEndGameStateChanged_Implementation(EEndGameState EndGameState)
+{
+	if (EndGameState != EEndGameState::None)
+	{
+		// show the stars widget at the bottom.
+		SetVisibility(ESlateVisibility::Visible);
+		SetPadding(FMargin(0, 800, 0, 0));
+	}
+}
 
 // Dynamically populates a Horizontal Box with images representing unlocked and locked progression icons.
 void UPSMenuWidget::AddImagesToHorizontalBox(float AmountOfUnlockedPoints, float AmountOfLockedPoints, float MaxLevelPoints)
@@ -81,14 +132,6 @@ void UPSMenuWidget::OnTakeFromPoolCompleted(const TArray<FPoolObjectData>& Creat
 	}
 }
 
-// Called after the underlying slate widget is constructed.
-void UPSMenuWidget::NativeConstruct()
-{
-	Super::NativeConstruct();
-
-	// Hide this widget by default
-	SetVisibility(ESlateVisibility::Collapsed);
-}
 // Updates star images icon to locked/unlocked according to input amounnt
 void UPSMenuWidget::UpdateStarImages(const FPoolObjectData& CreatedData, float AmountOfUnlockedStars, float AmountOfLockedStars)
 {
