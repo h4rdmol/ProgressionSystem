@@ -441,12 +441,12 @@ void UPSWorldSubsystem::ResetSaveGameData()
 	// Re-load a new save game object. Load game from save creates a save file if there is no such
 	LoadGameFromSave();
 
-	UPSSpotComponent* SpotComponent = GetCurrentSpot();
-	if (!ensureMsgf(SpotComponent, TEXT("ASSERT: [%i] %hs:\n'SpotComponent' is null!"), __LINE__, __FUNCTION__))
+	const APlayerCharacter* LocalCharacter = UMyBlueprintFunctionLibrary::GetLocalPlayerCharacter();
+	if (!ensureMsgf(LocalCharacter, TEXT("ASSERT: [%i] %hs:\n'SpotComponent' is null!"), __LINE__, __FUNCTION__))
 	{
 		return;
 	}
-	SetCurrentRowByTag(SpotComponent->GetMeshChecked().GetPlayerTag());
+	SetCurrentRowByTag(LocalCharacter->GetPlayerTag());
 }
 
 // Unlocks all levels of the Progression System
