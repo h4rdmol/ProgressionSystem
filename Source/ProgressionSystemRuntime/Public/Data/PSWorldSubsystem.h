@@ -110,6 +110,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category="C++")
 	float GetDifficultyMultiplier();
 
+	/** Returns spot component by the player tag, returns null if spot is not found */
+	UFUNCTION(BlueprintCallable, Category="C++")
+	UPSSpotComponent* FindSpotComponentByPlayerTag(FPlayerTag PlayerTag) const;
+
 protected:
 	/** Contains all the assets and tweaks of Progression System game feature.
 	 * Note: Since Subsystem is code-only, there is config property set in BaseProgressionSystem.ini.
@@ -187,11 +191,11 @@ protected:
 	void SetFirstElementAsCurrent();
 
 	/** Updates the stars actors for a spot */
-	UFUNCTION(Blueprintable, Category="C++", meta=(BlueprintProtected))
+	UFUNCTION(BlueprintCallable, Category="C++", meta=(BlueprintProtected))
 	void UpdateProgressionActorsForSpot();
 
 	/** Spawn/add the stars actors for a spot */
-	UFUNCTION(Blueprintable, Category="C++", meta=(BlueprintProtected))
+	UFUNCTION(BlueprintCallable, Category="C++", meta=(BlueprintProtected))
 	void AddProgressionStarActors();
 
 	/**
@@ -202,14 +206,10 @@ protected:
 	void OnTakeActorsFromPoolCompleted(const TArray<FPoolObjectData>& CreatedObjects);
 
 	/** Triggers when a spot is loaded */
-	UFUNCTION(BlueprintNativeEvent, Blueprintable, Category="C++", meta=(BlueprintProtected))
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="C++", meta=(BlueprintProtected))
 	void OnSpotComponentLoad(class UPSSpotComponent* SpotComponent);
 
 	/** Is called from AsyncLoadGameFromSlot once Save Game is loaded, or null if it failed to load. */
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
 	void OnAsyncLoadGameFromSlotCompleted(const FString& SlotName, int32 UserIndex, class USaveGame* SaveGame);
-
-	/** Returns spot component by the player tag, returns null if spot is not found */
-	UFUNCTION(Blueprintable, Category="C++", meta=(BlueprintProtected))
-	UPSSpotComponent* GetSpotComponentByPlayerTag(FPlayerTag PlayerTag);
 };

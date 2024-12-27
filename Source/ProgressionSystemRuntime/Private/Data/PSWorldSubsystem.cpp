@@ -330,7 +330,7 @@ void UPSWorldSubsystem::OnTakeActorsFromPoolCompleted(const TArray<FPoolObjectDa
 }
 
 // Returns spot component by the player tag, returns null if spot is not found
-UPSSpotComponent* UPSWorldSubsystem::GetSpotComponentByPlayerTag(FPlayerTag PlayerTag)
+UPSSpotComponent* UPSWorldSubsystem::FindSpotComponentByPlayerTag(FPlayerTag PlayerTag) const
 {
 	if (PSSpotComponentArrayInternal.IsEmpty())
 	{
@@ -440,7 +440,7 @@ void UPSWorldSubsystem::ResetSaveGameData()
 	// Re-load a new save game object. Load game from save creates a save file if there is no such
 	LoadGameFromSave();
 
-	UPSSpotComponent* SpotComponent = GetSpotComponentByPlayerTag(UMyBlueprintFunctionLibrary::GetLocalPlayerCharacter()->GetPlayerTag());
+	UPSSpotComponent* SpotComponent = FindSpotComponentByPlayerTag(UMyBlueprintFunctionLibrary::GetLocalPlayerCharacter()->GetPlayerTag());
 	if (!ensureMsgf(SpotComponent, TEXT("ASSERT: [%i] %hs:\n'SpotComponent' is null!"), __LINE__, __FUNCTION__))
 	{
 		return;
@@ -470,7 +470,7 @@ void UPSWorldSubsystem::RefreshProgressionUIElements()
 		return;
 	}
 
-	UPSSpotComponent* SpotComponent = GetSpotComponentByPlayerTag(UMyBlueprintFunctionLibrary::GetLocalPlayerCharacter()->GetPlayerTag());
+	UPSSpotComponent* SpotComponent = FindSpotComponentByPlayerTag(UMyBlueprintFunctionLibrary::GetLocalPlayerCharacter()->GetPlayerTag());
 	if (!ensureMsgf(SpotComponent, TEXT("ASSERT: [%i] %hs:\n'SpotComponent' is null!"), __LINE__, __FUNCTION__))
 	{
 		return;
