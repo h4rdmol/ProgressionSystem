@@ -38,9 +38,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "C++")
 	void SetCurrentRowByTag(FPlayerTag NewRowPlayerTag);
 
-	/** Returns previous row of progression system */
-	const FPSRowData& GetPreviousRow() const;
-
 	/* Delegate for informing row data changed */
 	UPROPERTY(BlueprintAssignable, Transient, Category = "C++")
 	FCurrentRowDataChanged OnCurrentRowDataChanged;
@@ -92,7 +89,7 @@ public:
 
 	/** Saves the progression to the local files */
 	UFUNCTION()
-	void SaveDataAsync() const;
+	void SaveDataAsync();
 
 	/** Removes all saved data of the Progression system and creates a new empty data */
 	UFUNCTION(BlueprintCallable, Category = "C++")
@@ -101,10 +98,6 @@ public:
 	/** Unlocks all levels of the Progression System */
 	UFUNCTION(BlueprintCallable, Category = "C++")
 	void UnlockAllLevels();
-
-	/** Is called to update the stars actors and in widgets */
-	UFUNCTION(BlueprintCallable, Category = "C++")
-	void RefreshProgressionUIElements();
 
 	/** Returns difficultyMultiplier */
 	UFUNCTION(BlueprintCallable, Category="C++")
@@ -182,21 +175,13 @@ protected:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
 	void OnGameStateChanged(ECurrentGameState CurrentGameState);
 
-	/** Load game from save file or create a new one (does initial load from data table) */
-	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
-	void LoadGameFromSave();
-
 	/** Set first element as current active */
 	UFUNCTION(BlueprintCallable, Category= "C++", meta = (BlueprintProtected))
 	void SetFirstElementAsCurrent();
 
-	/** Updates the stars actors for a spot */
+	/** Updates the stars actors for a spot by Spawning/adding the stars actors for a spot */
 	UFUNCTION(BlueprintCallable, Category="C++", meta=(BlueprintProtected))
-	void UpdateProgressionActorsForSpot();
-
-	/** Spawn/add the stars actors for a spot */
-	UFUNCTION(BlueprintCallable, Category="C++", meta=(BlueprintProtected))
-	void AddProgressionStarActors();
+	void UpdateProgressionStarActors();
 
 	/**
 	 * Dynamically adds Star actors which representing unlocked and locked progression above the character
@@ -212,4 +197,8 @@ protected:
 	/** Is called from AsyncLoadGameFromSlot once Save Game is loaded, or null if it failed to load. */
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
 	void OnAsyncLoadGameFromSlotCompleted(const FString& SlotName, int32 UserIndex, class USaveGame* SaveGame);
+
+	/** Is called to update the stars actors and in widgets when finish to save date in save file */
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
+	void UpdateProgressionUI();
 };
