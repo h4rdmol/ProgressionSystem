@@ -50,10 +50,7 @@ void UPSMenuWidget::OnGameStateChanged_Implementation(ECurrentGameState CurrentG
 void UPSMenuWidget::OnLocalPlayerStateReady_Implementation(AMyPlayerState* PlayerState, int32 CharacterID)
 {
 	// Ensure that PlayerState is not null before subscribing to the event
-	if (!ensureMsgf(PlayerState, TEXT("ASSERT: [%i] %hs:\n'PlayerState' is null!"), __LINE__, __FUNCTION__))
-	{
-		return;
-	}
+	checkf(PlayerState, TEXT("ERROR: [%i] %hs:\n'PlayerState' is null!"), __LINE__, __FUNCTION__);
 	PlayerState->OnEndGameStateChanged.AddUniqueDynamic(this, &ThisClass::OnEndGameStateChanged);
 }
 
