@@ -42,7 +42,7 @@ void UPSMenuWidget::OnGameStateChanged_Implementation(ECurrentGameState CurrentG
 	case ECurrentGameState::GameStarting:
 		SetVisibility(ESlateVisibility::Collapsed);
 		break;
-	default: return;
+	default: break;
 	}
 }
 
