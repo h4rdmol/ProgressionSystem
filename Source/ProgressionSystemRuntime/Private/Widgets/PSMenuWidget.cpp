@@ -41,6 +41,7 @@ void UPSMenuWidget::OnGameStateChanged_Implementation(ECurrentGameState CurrentG
 	{
 	case ECurrentGameState::GameStarting:
 		SetVisibility(ESlateVisibility::Collapsed);
+		break;
 	default: return;
 	}
 }
@@ -71,13 +72,13 @@ void UPSMenuWidget::OnEndGameStateChanged_Implementation(EEndGameState EndGameSt
 void UPSMenuWidget::AddImagesToHorizontalBox(float AmountOfUnlockedPoints, float AmountOfLockedPoints, float MaxLevelPoints)
 {
 	//Return to Pool Manager the list of handles which is not needed (if there are any) 
-	
+
 	if (!PoolWidgetHandlersInternal.IsEmpty())
 	{
 		UPoolManagerSubsystem::Get().ReturnToPoolArray(PoolWidgetHandlersInternal);
-		PoolWidgetHandlersInternal.Empty();	
+		PoolWidgetHandlersInternal.Empty();
 	}
-	
+
 	// --- Prepare spawn request
 	const TWeakObjectPtr<ThisClass> WeakThis = this;
 	const FOnSpawnAllCallback OnTakeFromPoolCompleted = [WeakThis, AmountOfUnlockedPoints, AmountOfLockedPoints, MaxLevelPoints](const TArray<FPoolObjectData>& CreatedObjects)
@@ -87,7 +88,7 @@ void UPSMenuWidget::AddImagesToHorizontalBox(float AmountOfUnlockedPoints, float
 			This->OnTakeFromPoolCompleted(CreatedObjects, AmountOfUnlockedPoints, AmountOfLockedPoints, MaxLevelPoints);
 		}
 	};
-	
+
 	// --- Spawn widgets
 	const int32 TotalRequests = AmountOfLockedPoints + AmountOfUnlockedPoints;
 	if (TotalRequests == 0)
@@ -116,7 +117,7 @@ void UPSMenuWidget::OnTakeFromPoolCompleted(const TArray<FPoolObjectData>& Creat
 			// #1 Create MyFunction
 			UpdateStarImages(CreatedObject, 1, 0);
 			// more than 0 means that it's not an integer
-			if ((MaxLevelPoints - CurrentAmountOfUnlocked)  > 0)
+			if ((MaxLevelPoints - CurrentAmountOfUnlocked) > 0)
 			{
 				UpdateStarProgressBarValue(CreatedObject, CurrentAmountOfUnlocked);
 			}
@@ -136,7 +137,7 @@ void UPSMenuWidget::OnTakeFromPoolCompleted(const TArray<FPoolObjectData>& Creat
 void UPSMenuWidget::UpdateStarImages(const FPoolObjectData& CreatedData, float AmountOfUnlockedStars, float AmountOfLockedStars)
 {
 	UPSStarWidget& SpawnedWidget = CreatedData.GetChecked<UPSStarWidget>();
-	
+
 	if (AmountOfUnlockedStars > 0)
 	{
 		SpawnedWidget.SetStarImage(UPSDataAsset::Get().GetUnlockedProgressionIcon());
