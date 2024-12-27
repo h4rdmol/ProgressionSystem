@@ -402,8 +402,8 @@ void UPSWorldSubsystem::ResetSaveGameData()
 		return;
 	}
 	UMyDataTable::GetRows(*ProgressionDataTable, ProgressionSettingsDataInternal);
-
-	check(SaveGameDataInternal); // todo checkf
+	
+	checkf(SaveGameDataInternal, TEXT("ERROR: [%i] %hs:\n'SaveGameDataInternal' is null!"), __LINE__, __FUNCTION__);
 
 	for (const TTuple<FName, FPSRowData>& Row : ProgressionSettingsDataInternal)
 	{
