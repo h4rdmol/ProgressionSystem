@@ -33,11 +33,6 @@ UPSHUDComponent::UPSHUDComponent()
 // Called when main save game file is loaded
 void UPSHUDComponent::OnInitialized_Implementation()
 {
-	// Create widgets now as fast as possible, later we will register them in Widgets Subsystem
-	UWidgetsSubsystem& WidgetsSubsystem = UWidgetsSubsystem::Get();
-	ProgressionMenuWidgetInternal = WidgetsSubsystem.CreateManageableWidgetChecked<UPSMenuWidget>(UPSDataAsset::Get().GetProgressionMenuWidget());
-	ProgressionMenuOverlayWidgetInternal = WidgetsSubsystem.CreateManageableWidgetChecked<UPSOverlayWidget>(UPSDataAsset::Get().GetProgressionOverlayWidget());
-	
 	// Binds the local player state ready event to the handler
 	BIND_ON_LOCAL_PLAYER_STATE_READY(this, ThisClass::OnLocalPlayerStateReady);
 
@@ -191,11 +186,15 @@ void UPSHUDComponent::UpdateProgressionWidgetForPlayer()
 //Is called when local player character is ready to guarantee that they player controller is initialized for the Widget SubSystem
 void UPSHUDComponent::OnLocalCharacterReady_Implementation(APlayerCharacter* Character, int32 CharacterID)
 {
-	const APlayerCharacter* PlayerCharacter = UMyBlueprintFunctionLibrary::GetLocalPlayerCharacter();
-	if (PlayerCharacter && !PlayerCharacter->IsLocallyControlled())
+	if (Character && !Character->IsLocallyControlled())
 	{
 		return;
 	}
+
+	// Create widgets now as fast as possible, later we will register them in Widgets Subsystem
+	UWidgetsSubsystem& WidgetsSubsystem = UWidgetsSubsystem::Get();
+	ProgressionMenuWidgetInternal = WidgetsSubsystem.CreateManageableWidgetChecked<UPSMenuWidget>(UPSDataAsset::Get().GetProgressionMenuWidget());
+	ProgressionMenuOverlayWidgetInternal = WidgetsSubsystem.CreateManageableWidgetChecked<UPSOverlayWidget>(UPSDataAsset::Get().GetProgressionOverlayWidget());
 
 	UPSWorldSubsystem::Get().OnWorldSubSystemInitialize();
 	UPSWorldSubsystem::Get().OnInitialize.AddDynamic(this, &ThisClass::OnInitialized);
