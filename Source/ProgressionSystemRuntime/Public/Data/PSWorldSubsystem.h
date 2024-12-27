@@ -112,7 +112,7 @@ public:
 
 	/** Returns spot component by the player tag, returns null if spot is not found */
 	UFUNCTION(BlueprintCallable, Category="C++")
-	UPSSpotComponent* FindSpotComponentByPlayerTag(FPlayerTag PlayerTag) const;
+	UPSSpotComponent* GetCurrentSpot() const;
 
 protected:
 	/** Contains all the assets and tweaks of Progression System game feature.
