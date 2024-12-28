@@ -101,7 +101,7 @@ public:
 
 	/** Returns difficultyMultiplier */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category="C++")
-	float GetDifficultyMultiplier();
+	float GetDifficultyMultiplier() const;
 
 	/** Returns current spot component returns null if spot is not found */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category="C++")

@@ -444,7 +444,7 @@ void UPSWorldSubsystem::UnlockAllLevels()
 }
 
 // Returns difficultyMultiplier
-float UPSWorldSubsystem::GetDifficultyMultiplier()
+float UPSWorldSubsystem::GetDifficultyMultiplier() const
 {
 	const TMap<EGameDifficulty, float>& DifficultyMap = UPSDataAsset::Get().GetProgressionDifficultyMultiplier();
 	constexpr float DefaultDifficulty = 0.f;
