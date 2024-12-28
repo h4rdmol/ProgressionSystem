@@ -289,7 +289,13 @@ void UPSWorldSubsystem::OnTakeActorsFromPoolCompleted(const TArray<FPoolObjectDa
 // Returns current spot component returns null if spot is not found
 UPSSpotComponent* UPSWorldSubsystem::GetCurrentSpot() const
 {
-	FPlayerTag PlayerTag = UMyBlueprintFunctionLibrary::GetLocalPlayerCharacter()->GetPlayerTag();
+	APlayerCharacter* PlayerCharacter = UMyBlueprintFunctionLibrary::GetLocalPlayerCharacter();
+	if (!PlayerCharacter)
+	{
+		return nullptr;
+	}
+
+	const FPlayerTag& PlayerTag = PlayerCharacter->GetPlayerTag();
 	if (PSSpotComponentArrayInternal.IsEmpty() || !PlayerTag.IsValid())
 	{
 		return nullptr;
@@ -383,7 +389,7 @@ void UPSWorldSubsystem::SaveDataAsync()
 	{
 		return;
 	}
-	
+
 	UGameplayStatics::AsyncSaveGameToSlot(SaveGameDataInternal, UPSSaveGameData::GetSaveSlotName(), SaveGameDataInternal->GetSaveSlotIndex());
 }
 
@@ -402,7 +408,7 @@ void UPSWorldSubsystem::ResetSaveGameData()
 		return;
 	}
 	UMyDataTable::GetRows(*ProgressionDataTable, ProgressionSettingsDataInternal);
-	
+
 	checkf(SaveGameDataInternal, TEXT("ERROR: [%i] %hs:\n'SaveGameDataInternal' is null!"), __LINE__, __FUNCTION__);
 
 	for (const TTuple<FName, FPSRowData>& Row : ProgressionSettingsDataInternal)
