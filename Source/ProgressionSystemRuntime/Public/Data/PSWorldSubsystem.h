@@ -100,11 +100,11 @@ public:
 	void UnlockAllLevels();
 
 	/** Returns difficultyMultiplier */
-	UFUNCTION(BlueprintCallable, Category="C++")
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category="C++")
 	float GetDifficultyMultiplier();
 
 	/** Returns current spot component returns null if spot is not found */
-	UFUNCTION(BlueprintCallable, Category="C++")
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category="C++")
 	UPSSpotComponent* GetCurrentSpot() const;
 
 protected:
