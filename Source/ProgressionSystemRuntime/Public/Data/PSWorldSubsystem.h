@@ -103,7 +103,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category="C++")
 	float GetDifficultyMultiplier();
 
-	/** Returns spot component by the player tag, returns null if spot is not found */
+	/** Returns current spot component returns null if spot is not found */
 	UFUNCTION(BlueprintCallable, Category="C++")
 	UPSSpotComponent* GetCurrentSpot() const;
 

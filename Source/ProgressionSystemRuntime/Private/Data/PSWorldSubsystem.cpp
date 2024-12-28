@@ -286,7 +286,7 @@ void UPSWorldSubsystem::OnTakeActorsFromPoolCompleted(const TArray<FPoolObjectDa
 	}
 }
 
-// Returns spot component by the player tag, returns null if spot is not found
+// Returns current spot component returns null if spot is not found
 UPSSpotComponent* UPSWorldSubsystem::GetCurrentSpot() const
 {
 	FPlayerTag PlayerTag = UMyBlueprintFunctionLibrary::GetLocalPlayerCharacter()->GetPlayerTag();
