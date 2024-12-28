@@ -220,6 +220,10 @@ void UPSWorldSubsystem::SetFirstElementAsCurrent()
 	{
 		return;
 	}
+	if (!ensureMsgf(SaveGameDataInternal, TEXT("ASSERT: [%i] %s:\n'SaveGameDataInternal' is not valid!"), __LINE__, *FString(__FUNCTION__)))
+	{
+		return;
+	}
 
 	CurrentRowNameInternal = FirstSaveToDiskRow;
 	SaveGameDataInternal->UnlockLevelByName(CurrentRowNameInternal);
