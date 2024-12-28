@@ -61,7 +61,7 @@ void UPSMenuWidget::OnEndGameStateChanged_Implementation(EEndGameState EndGameSt
 	{
 		// show the stars widget at the bottom.
 		SetVisibility(ESlateVisibility::Visible);
-		SetPadding(FMargin(0, 800, 0, 0));
+		SetPadding(FMargin(0, 800, 0, 0)); // @todo h4rdmol gafWu8QJ PSMenuWidget Expose margin to a variable for the designer
 	}
 }
 
