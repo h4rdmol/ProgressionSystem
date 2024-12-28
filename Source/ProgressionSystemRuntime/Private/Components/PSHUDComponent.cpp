@@ -114,7 +114,8 @@ void UPSHUDComponent::OnGameStateChanged_Implementation(ECurrentGameState Curren
 	{
 	case ECurrentGameState::Menu:
 		UpdateProgressionWidgetForPlayer();
-	default: return;
+		break;
+	default: break;
 	}
 }
 

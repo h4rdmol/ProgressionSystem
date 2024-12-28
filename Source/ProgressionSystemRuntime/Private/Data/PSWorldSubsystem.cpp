@@ -207,7 +207,7 @@ void UPSWorldSubsystem::OnGameStateChanged_Implementation(ECurrentGameState Curr
 		// Show Progression Menu widget in Main Menu
 		break;
 	default:
-		return;
+		break;
 	}
 }
 
