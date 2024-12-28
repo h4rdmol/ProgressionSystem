@@ -108,8 +108,6 @@ void UPSHUDComponent::SavePoints(EEndGameState EndGameState)
 // Listening game states changes events 
 void UPSHUDComponent::OnGameStateChanged_Implementation(ECurrentGameState CurrentGameState)
 {
-	CurrentGameStateInternal = CurrentGameState;
-
 	switch (CurrentGameState)
 	{
 	case ECurrentGameState::Menu:
