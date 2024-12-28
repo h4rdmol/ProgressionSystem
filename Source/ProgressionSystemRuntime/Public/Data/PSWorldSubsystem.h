@@ -165,7 +165,7 @@ protected:
 
 	/** Is called when a player character is ready */
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "C++", meta = (BlueprintProtected))
-	void OnCharacterReady(class APlayerCharacter* PlayerCharacter, int32 CharacterID);
+	void OnLocalCharacterReady(class APlayerCharacter* PlayerCharacter, int32 CharacterID);
 
 	/** Is called when a player has been changed */
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "C++", meta = (BlueprintProtected))

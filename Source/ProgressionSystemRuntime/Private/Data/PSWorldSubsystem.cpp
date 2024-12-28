@@ -139,7 +139,7 @@ void UPSWorldSubsystem::OnInitialized_Implementation()
 	}
 
 	// Subscribe events on player type changed and Character spawned
-	BIND_ON_LOCAL_CHARACTER_READY(this, ThisClass::OnCharacterReady);
+	BIND_ON_LOCAL_CHARACTER_READY(this, ThisClass::OnLocalCharacterReady);
 
 	// Listen to handle input for each game state
 	BIND_ON_GAME_STATE_CHANGED(this, ThisClass::OnGameStateChanged);
@@ -167,7 +167,7 @@ void UPSWorldSubsystem::OnWorldSubSystemInitialize_Implementation()
 }
 
 // Is called when a player character is ready
-void UPSWorldSubsystem::OnCharacterReady_Implementation(APlayerCharacter* PlayerCharacter, int32 CharacterID)
+void UPSWorldSubsystem::OnLocalCharacterReady_Implementation(APlayerCharacter* PlayerCharacter, int32 CharacterID)
 {
 	if (!ensureMsgf(PlayerCharacter, TEXT("ASSERT: [%i] %s:\n'PlayerCharacter' is not valid!"), __LINE__, *FString(__FUNCTION__)))
 	{
