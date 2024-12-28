@@ -195,8 +195,9 @@ void UPSHUDComponent::OnLocalCharacterReady_Implementation(APlayerCharacter* Cha
 	ProgressionMenuWidgetInternal = WidgetsSubsystem.CreateManageableWidgetChecked<UPSMenuWidget>(UPSDataAsset::Get().GetProgressionMenuWidget());
 	ProgressionMenuOverlayWidgetInternal = WidgetsSubsystem.CreateManageableWidgetChecked<UPSOverlayWidget>(UPSDataAsset::Get().GetProgressionOverlayWidget());
 
-	UPSWorldSubsystem::Get().OnInitialize.AddDynamic(this, &ThisClass::OnInitialized);
-	UPSWorldSubsystem::Get().OnWorldSubSystemInitialize();
+	UPSWorldSubsystem& WorldSubsystem = UPSWorldSubsystem::Get();
+	WorldSubsystem.OnInitialize.AddUniqueDynamic(this, &ThisClass::OnInitialized);
+	WorldSubsystem.OnWorldSubSystemInitialize();
 }
 
 // Show or hide the LevelUIOverlay depends on the level lock state for current level
