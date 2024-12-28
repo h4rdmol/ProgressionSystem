@@ -214,9 +214,9 @@ void UPSWorldSubsystem::OnGameStateChanged_Implementation(ECurrentGameState Curr
 void UPSWorldSubsystem::SetFirstElementAsCurrent()
 {
 	FName FirstSaveToDiskRow = GetFirstSaveToDiskRowName();
-
+	
 	// early return if first element is not valid
-	if (FirstSaveToDiskRow.IsNone())
+	if (!ensureMsgf(!FirstSaveToDiskRow.IsNone(), TEXT("ASSERT: [%i] %s:\n'FirstSaveToDiskRow' is not valid!"), __LINE__, *FString(__FUNCTION__)))
 	{
 		return;
 	}
