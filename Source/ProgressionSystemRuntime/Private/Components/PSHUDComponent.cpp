@@ -2,6 +2,8 @@
 
 #include "Components/PSHUDComponent.h"
 //---
+#include <filesystem>
+
 #include "Bomber.h"
 #include "UtilityLibraries/MyBlueprintFunctionLibrary.h"
 #include "Data/PSDataAsset.h"
@@ -185,7 +187,7 @@ void UPSHUDComponent::UpdateProgressionWidgetForPlayer()
 //Is called when local player character is ready to guarantee that they player controller is initialized for the Widget SubSystem
 void UPSHUDComponent::OnLocalCharacterReady_Implementation(APlayerCharacter* Character, int32 CharacterID)
 {
-	if (Character || !Character->IsLocallyControlled())
+	if (!Character || !Character->IsLocallyControlled())
 	{
 		return;
 	}
