@@ -404,6 +404,7 @@ void UPSWorldSubsystem::ResetSaveGameData()
 	const int32 UserIndex = UPSSaveGameData::GetSaveSlotIndex();
 
 	SaveGameDataInternal = Cast<UPSSaveGameData>(UGameplayUtilsLibrary::ResetSaveGameData(SaveGameDataInternal, SlotName, UserIndex));
+	checkf(SaveGameDataInternal, TEXT("ERROR: [%i] %hs:\n'SaveGameDataInternal' is null!"), __LINE__, __FUNCTION__);
 
 	// load from data table
 	const UDataTable* ProgressionDataTable = UPSDataAsset::Get().GetProgressionDataTable();
@@ -412,8 +413,6 @@ void UPSWorldSubsystem::ResetSaveGameData()
 		return;
 	}
 	UMyDataTable::GetRows(*ProgressionDataTable, ProgressionSettingsDataInternal);
-
-	checkf(SaveGameDataInternal, TEXT("ERROR: [%i] %hs:\n'SaveGameDataInternal' is null!"), __LINE__, __FUNCTION__);
 
 	for (const TTuple<FName, FPSRowData>& Row : ProgressionSettingsDataInternal)
 	{
