@@ -462,7 +462,7 @@ float UPSWorldSubsystem::GetDifficultyMultiplier()
 	return FoundDifficulty ? *FoundDifficulty : DefaultDifficulty;
 }
 
-void UPSWorldSubsystem::UpdateProgressionUI_Implementation()
+void UPSWorldSubsystem::UpdateProgressionUI()
 {
 	UPSHUDComponent* PSHUDComponent = GetProgressionSystemHUDComponent();
 	if (!ensureMsgf(PSHUDComponent, TEXT("ASSERT: [%i] %hs:\n'PSHUDComponent' is null!"), __LINE__, __FUNCTION__))
