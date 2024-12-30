@@ -11,6 +11,8 @@
 #include "PoolManagerSubsystem.h"
 #include "PoolManagerTypes.h"
 #include "Components/StaticMeshComponent.h"
+#include "Curves/RealCurve.h"
+#include "Engine/CurveTable.h"
 #include "GameFramework/MyGameStateBase.h"
 #include "GameFramework/MyPlayerState.h"
 #include "Subsystems/GlobalEventsSubsystem.h"
@@ -61,7 +63,8 @@ void UPSMenuWidget::OnEndGameStateChanged_Implementation(EEndGameState EndGameSt
 	{
 		// show the stars widget at the bottom.
 		SetVisibility(ESlateVisibility::Visible);
-		SetPadding(FMargin(0, 800, 0, 0)); // @todo h4rdmol gafWu8QJ PSMenuWidget Expose margin to a variable for the designer
+		FMargin MenuWidgetPadding = UPSDataAsset::Get().GetMenuWidgetPadding();
+		SetPadding(MenuWidgetPadding);
 	}
 }
 
