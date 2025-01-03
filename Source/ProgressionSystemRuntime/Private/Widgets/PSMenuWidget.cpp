@@ -63,8 +63,6 @@ void UPSMenuWidget::OnEndGameStateChanged_Implementation(EEndGameState EndGameSt
 	{
 		// show the stars widget at the bottom.
 		SetVisibility(ESlateVisibility::Visible);
-		FMargin MenuWidgetPadding = UPSDataAsset::Get().GetMenuWidgetPadding();
-		SetPadding(MenuWidgetPadding);
 	}
 }
 
