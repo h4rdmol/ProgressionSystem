@@ -4,13 +4,13 @@
 
 #include "Blueprint/UserWidget.h"
 #include "PoolManagerTypes.h"
-#include "PSMenuWidget.generated.h"
+#include "PSEndGameWidget.generated.h"
 
 /**
  * Widget to display the progression as stars in the main menu.
  */
 UCLASS()
-class PROGRESSIONSYSTEMRUNTIME_API UPSMenuWidget : public UUserWidget
+class PROGRESSIONSYSTEMRUNTIME_API UPSEndGameWidget : public UUserWidget
 {
 	GENERATED_BODY()
 

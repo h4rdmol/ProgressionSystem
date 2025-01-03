@@ -4,6 +4,7 @@
 
 #include "Data/MyPrimaryDataAsset.h"
 #include "Data/SettingTag.h"
+#include "Layout/Margin.h"
 #include "Structures/ManageableWidgetData.h"
 #include "PSDataAsset.generated.h"
 
@@ -28,7 +29,7 @@ public:
 
 	/** Returns a progression menu widget to be displayed in the main menu*/
 	UFUNCTION(BlueprintPure, Category = "C++")
-	const FORCEINLINE FManageableWidgetData& GetProgressionMenuWidget() const { return ProgressionMenuWidgetInternal; }
+	const FORCEINLINE FManageableWidgetData& GetProgressionEndGameWidget() const { return ProgressionEndGameWidgetInternal; }
 
 	/** Returns a progression overlay widget to be displayed in the main menu for locked levels */
 	UFUNCTION(BlueprintPure, Category = "C++")
@@ -82,14 +83,18 @@ public:
 	UFUNCTION(BlueprintPure, Category = "C++")
 	FORCEINLINE FSettingTag GetInstantCharacterSwitchTag() const { return InstantCharacterSwitchTagInternal; }
 
+	/** Returns padding settings table for the Menu Widget displayed in the end game state/menu  */
+	UFUNCTION(BlueprintPure, Category = "C++")
+	FORCEINLINE FMargin GetMenuWidgetPadding() const { return MenuWidgetPaddingInternal; }
+
 protected:
 	/** The Progression Data Table that is responsible for progression configuration. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BlueprintProtected, DisplayName = "Progression Data Table", ShowOnlyInnerProperties))
 	TObjectPtr<UDataTable> ProgressionDataTableInternal = nullptr;
 
 	/** Main menu and end-game progression widget */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI", meta = (BlueprintProtected, DisplayName = "Main Menu and End Game Progression Widget"))
-	FManageableWidgetData ProgressionMenuWidgetInternal;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI", meta = (BlueprintProtected, DisplayName = "End Game Progression Widget"))
+	FManageableWidgetData ProgressionEndGameWidgetInternal;
 
 	/** Main Menu overlay widget */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI", meta = (BlueprintProtected, DisplayName = "Main Menu Overlay Widget"))
@@ -143,4 +148,8 @@ protected:
 	/** When Instant character switch setting enabled fade animation will not be played */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++", AdvancedDisplay, meta = (BlueprintProtected, DisplayName = "Instant Character Switch Tag"))
 	FSettingTag InstantCharacterSwitchTagInternal = FSettingTag::EmptySettingTag;
+
+	/** A padding setting for the Menu Widget displayed in the end game state/menu */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++", AdvancedDisplay, meta = (BlueprintProtected, DisplayName = "Padding for Stars Menu Widget"))
+	FMargin MenuWidgetPaddingInternal = FMargin(0, 0, 0, 0);
 };
