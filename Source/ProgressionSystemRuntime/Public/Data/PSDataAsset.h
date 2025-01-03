@@ -29,7 +29,7 @@ public:
 
 	/** Returns a progression menu widget to be displayed in the main menu*/
 	UFUNCTION(BlueprintPure, Category = "C++")
-	const FORCEINLINE FManageableWidgetData& GetProgressionMenuWidget() const { return ProgressionMenuWidgetInternal; }
+	const FORCEINLINE FManageableWidgetData& GetProgressionEndGameWidget() const { return ProgressionEndGameWidgetInternal; }
 
 	/** Returns a progression overlay widget to be displayed in the main menu for locked levels */
 	UFUNCTION(BlueprintPure, Category = "C++")
@@ -85,7 +85,7 @@ public:
 
 	/** Returns padding settings table for the Menu Widget displayed in the end game state/menu  */
 	UFUNCTION(BlueprintPure, Category = "C++")
-	FORCEINLINE FMargin GetMenuWidgetPadding() const {return MenuWidgetPaddingInternal;}
+	FORCEINLINE FMargin GetMenuWidgetPadding() const { return MenuWidgetPaddingInternal; }
 
 protected:
 	/** The Progression Data Table that is responsible for progression configuration. */
@@ -93,8 +93,8 @@ protected:
 	TObjectPtr<UDataTable> ProgressionDataTableInternal = nullptr;
 
 	/** Main menu and end-game progression widget */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI", meta = (BlueprintProtected, DisplayName = "Main Menu and End Game Progression Widget"))
-	FManageableWidgetData ProgressionMenuWidgetInternal;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI", meta = (BlueprintProtected, DisplayName = "End Game Progression Widget"))
+	FManageableWidgetData ProgressionEndGameWidgetInternal;
 
 	/** Main Menu overlay widget */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI", meta = (BlueprintProtected, DisplayName = "Main Menu Overlay Widget"))

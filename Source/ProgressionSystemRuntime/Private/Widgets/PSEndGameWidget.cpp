@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Valerii Rotermel & Yevhenii Selivanov
 
-#include "Widgets/PSMenuWidget.h"
+#include "Widgets/PSEndGameWidget.h"
 //---
 #include "Data/PSDataAsset.h"
 #include "Components/HorizontalBox.h"
@@ -19,10 +19,10 @@
 #include "UtilityLibraries/MyBlueprintFunctionLibrary.h"
 
 
-#include UE_INLINE_GENERATED_CPP_BY_NAME(PSMenuWidget)
+#include UE_INLINE_GENERATED_CPP_BY_NAME(PSEndGameWidget)
 
 // Called after the underlying slate widget is constructed.
-void UPSMenuWidget::NativeConstruct()
+void UPSEndGameWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
@@ -37,11 +37,14 @@ void UPSMenuWidget::NativeConstruct()
 }
 
 // Called when the end game state was changed to toggle progression widget visibility
-void UPSMenuWidget::OnGameStateChanged_Implementation(ECurrentGameState CurrentGameState)
+void UPSEndGameWidget::OnGameStateChanged_Implementation(ECurrentGameState CurrentGameState)
 {
 	switch (CurrentGameState)
 	{
 	case ECurrentGameState::GameStarting:
+		SetVisibility(ESlateVisibility::Collapsed);
+		break;
+	case ECurrentGameState::Menu:
 		SetVisibility(ESlateVisibility::Collapsed);
 		break;
 	default: break;
@@ -49,7 +52,7 @@ void UPSMenuWidget::OnGameStateChanged_Implementation(ECurrentGameState CurrentG
 }
 
 // Subscribes to the end game state change notification on the player state
-void UPSMenuWidget::OnLocalPlayerStateReady_Implementation(AMyPlayerState* PlayerState, int32 CharacterID)
+void UPSEndGameWidget::OnLocalPlayerStateReady_Implementation(AMyPlayerState* PlayerState, int32 CharacterID)
 {
 	// Ensure that PlayerState is not null before subscribing to the event
 	checkf(PlayerState, TEXT("ERROR: [%i] %hs:\n'PlayerState' is null!"), __LINE__, __FUNCTION__);
@@ -57,7 +60,7 @@ void UPSMenuWidget::OnLocalPlayerStateReady_Implementation(AMyPlayerState* Playe
 }
 
 // Called when the end game state was changed
-void UPSMenuWidget::OnEndGameStateChanged_Implementation(EEndGameState EndGameState)
+void UPSEndGameWidget::OnEndGameStateChanged_Implementation(EEndGameState EndGameState)
 {
 	if (EndGameState != EEndGameState::None)
 	{
@@ -67,7 +70,7 @@ void UPSMenuWidget::OnEndGameStateChanged_Implementation(EEndGameState EndGameSt
 }
 
 // Dynamically populates a Horizontal Box with images representing unlocked and locked progression icons.
-void UPSMenuWidget::AddImagesToHorizontalBox(float AmountOfUnlockedPoints, float AmountOfLockedPoints, float MaxLevelPoints)
+void UPSEndGameWidget::AddImagesToHorizontalBox(float AmountOfUnlockedPoints, float AmountOfLockedPoints, float MaxLevelPoints)
 {
 	//Return to Pool Manager the list of handles which is not needed (if there are any) 
 
@@ -81,7 +84,7 @@ void UPSMenuWidget::AddImagesToHorizontalBox(float AmountOfUnlockedPoints, float
 	const TWeakObjectPtr<ThisClass> WeakThis = this;
 	const FOnSpawnAllCallback OnTakeFromPoolCompleted = [WeakThis, AmountOfUnlockedPoints, AmountOfLockedPoints, MaxLevelPoints](const TArray<FPoolObjectData>& CreatedObjects)
 	{
-		if (UPSMenuWidget* This = WeakThis.Get())
+		if (UPSEndGameWidget* This = WeakThis.Get())
 		{
 			This->OnTakeFromPoolCompleted(CreatedObjects, AmountOfUnlockedPoints, AmountOfLockedPoints, MaxLevelPoints);
 		}
@@ -98,7 +101,7 @@ void UPSMenuWidget::AddImagesToHorizontalBox(float AmountOfUnlockedPoints, float
 }
 
 // Dynamically populates a Horizontal Box with images representing unlocked and locked progression icons
-void UPSMenuWidget::OnTakeFromPoolCompleted(const TArray<FPoolObjectData>& CreatedObjects, float AmountOfUnlockedPoints, float AmountOfLockedPoints, float MaxLevelPoints)
+void UPSEndGameWidget::OnTakeFromPoolCompleted(const TArray<FPoolObjectData>& CreatedObjects, float AmountOfUnlockedPoints, float AmountOfLockedPoints, float MaxLevelPoints)
 {
 	if (!ensureMsgf(HorizontalBox, TEXT("ASSERT: [%i] %hs:\n'HorizontalBox' is null!"), __LINE__, __FUNCTION__))
 	{
@@ -132,7 +135,7 @@ void UPSMenuWidget::OnTakeFromPoolCompleted(const TArray<FPoolObjectData>& Creat
 }
 
 // Updates star images icon to locked/unlocked according to input amounnt
-void UPSMenuWidget::UpdateStarImages(const FPoolObjectData& CreatedData, float AmountOfUnlockedStars, float AmountOfLockedStars)
+void UPSEndGameWidget::UpdateStarImages(const FPoolObjectData& CreatedData, float AmountOfUnlockedStars, float AmountOfLockedStars)
 {
 	UPSStarWidget& SpawnedWidget = CreatedData.GetChecked<UPSStarWidget>();
 
@@ -155,7 +158,7 @@ void UPSMenuWidget::UpdateStarImages(const FPoolObjectData& CreatedData, float A
 }
 
 // Updates Progress bar icon for unlocked icons 
-void UPSMenuWidget::UpdateStarProgressBarValue(const FPoolObjectData& CreatedData, float NewProgressBarValue)
+void UPSEndGameWidget::UpdateStarProgressBarValue(const FPoolObjectData& CreatedData, float NewProgressBarValue)
 {
 	UPSStarWidget& SpawnedWidget = CreatedData.GetChecked<UPSStarWidget>();
 	SpawnedWidget.UpdateProgressionBarPercentage(NewProgressBarValue);
